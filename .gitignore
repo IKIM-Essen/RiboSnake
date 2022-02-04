@@ -1,0 +1,16 @@
+*
+!config
+!config/*
+!resources
+!resources/*
+!workflow
+!workflow/**
+.gitignore
+!.gitattributes
+!.editorconfig
+!.test
+!LICENSE
+!README.md
+!.gitignore
+!.github
+!.github/**
