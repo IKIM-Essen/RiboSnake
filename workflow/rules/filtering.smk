@@ -26,7 +26,6 @@ rule chimera_filtering:
         direc = directory("results/{date}/out/uchime-dn-out"),
         table = "results/{date}/out/table-nonchimeric-wo-borderline.qza",
         seqs = "results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",
-        #nonchimeras = "results/{date}/out/uchime-dn-out/nonchimeras.qza"
     shell:
         "qiime vsearch uchime-denovo "
            "--i-table {input.table} "
