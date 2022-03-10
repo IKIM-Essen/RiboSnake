@@ -2,3 +2,20 @@
 # In case of sample based data, it should be complemented by a samples.tsv file that contains
 # one row per sample. It can be parsed easily via pandas.
 pepfile: config/pep/config.yaml
+
+# Paths to the directories holding the fastqs
+input: /local/work/16S/snakemake_qiime/incoming/
+data: /local/work/16S/snakemake_qiime/16S/data/
+# Path to the sheet holding metadata information
+metadata: /local/work/16S/snakemake_qiime/16S/config/pep/metadata.txt
+# Forward and reverse primers used for sequencing
+primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
+primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
+# Relative threshold for the abundance filtering
+relative-abundance-filter: 0.001
+# Minimum length of a sequence to be retained
+min-seq-length: 200
+# Minimum quality score for sequences to pass filter
+phred-score: 20
+# Maximum number of undetermined base calls ("N")
+max-ambiguity: 50
