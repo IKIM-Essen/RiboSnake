@@ -4,10 +4,14 @@
 pepfile: config/pep/config.yaml
 
 # Paths to the directories holding the fastqs
-input: /local/work/16S/snakemake_qiime/incoming/
-data: /local/work/16S/snakemake_qiime/16S/data/
+input: ../incoming/
+data: data/
 # Path to the sheet holding metadata information
-metadata: /local/work/16S/snakemake_qiime/16S/config/pep/metadata.txt
+metadata: config/pep/metadata.txt
+#
+database:
+  sequences: resources/silva-138-99-seqs.qza
+  taxonomy: resources/silva-138-99-tax.qza
 # Forward and reverse primers used for sequencing
 primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG

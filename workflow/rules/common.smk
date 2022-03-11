@@ -13,8 +13,6 @@ import zipfile
 def get_date():
     metadata = pd.read_csv(config["metadata"], header = 0, delimiter = ",")
     date = metadata["run_date"].iloc[1]
-    print(date)
-    #date = datetime.today().strftime('%Y-%m-%d')
     return date
 
 def get_samples():

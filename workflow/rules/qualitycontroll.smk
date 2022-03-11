@@ -1,6 +1,6 @@
 rule fastqc:
     input:
-        "/local/work/16S/snakemake_qiime/16S/data/{date}/{names}"
+        "data/{date}/{names}"
     output:
         html="results/{date}/out/fastqc/{names}.html",
         zip="results/{date}/out/fastqc/{names}_fastqc.zip",

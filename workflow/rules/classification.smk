@@ -31,8 +31,8 @@ rule de_novo_clustering:
 rule classification:
     input:
         query = "results/{date}/out/seq-cluster-filtered.qza",
-        reference_reads = "/local/work/16S/snakemake_qiime/16S/databases/silva-138-99-seqs.qza",
-        reference_taxonomy = "/local/work/16S/snakemake_qiime/16S/databases/silva-138-99-tax.qza"
+        reference_reads = config["database"]["sequences"],
+        reference_taxonomy = config["database"]["taxonomy"]
     output:
         "results/{date}/out/taxonomy.qza"
     params:
