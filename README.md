@@ -1,10 +1,9 @@
-# Snakemake workflow: 16S
+# 16S workflow using qiime2 and snakemake
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.10-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/16S.svg?branch=master)](https://travis-ci.org/snakemake-workflows/16S)
 
-This is the template for a new Snakemake workflow. Replace this text with a comprehensive description covering the purpose and domain.
-Insert your code into the respective folders, i.e. `scripts`, `rules`, and `envs`. Define the entry point of the workflow in the `Snakefile` and the main configuration in the `config.yaml` file.
+Qiime2 workflow for 16S analysis created with snakemake. 
 
 ## Authors
 
@@ -22,53 +21,46 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 ### Step 2: Configure workflow
 
-Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `samples.tsv` to specify your sample setup.
+Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `metadata.txt` to specify your sample setup.
 
 ### Step 3: Install Snakemake
 
-Install Snakemake using [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html):
+Install Snakemake and Qiime2 using [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) via the qiime_env.yaml file in workflow/envs:
 
-    conda create -c bioconda -c conda-forge -n snakemake snakemake
+    conda env create -n qiime2 -f qiime_env.yaml 
 
-For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
+For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
+or the [instructions in the qiime2 documentation](https://docs.qiime2.org/2022.2/install/native/).
 
 ### Step 4: Execute workflow
 
 Activate the conda environment:
 
-    conda activate snakemake
+    conda activate qiime2
+
+Fill up the `metadata.txt` with the information of your samples:
+
+    Please be careful to not include spaces between the commas. If there is a column, that you don't have any information about, please leave it empty and simply 
+    go on with the next column.
 
 Test your configuration by performing a dry-run via
 
     snakemake --use-conda -n
 
-Execute the workflow locally via
+Executing the workflow takes two steps:
+    
+    Data preparation: snakemake --cores $N data_prep
+    Workflow execution: snakemake --cores $N 
 
-    snakemake --use-conda --cores $N
-
-using `$N` cores or run it in a cluster environment via
-
-    snakemake --use-conda --cluster qsub --jobs 100
-
-or
-
-    snakemake --use-conda --drmaa --jobs 100
-
-If you not only want to fix the software stack but also the underlying OS, use
-
-    snakemake --use-conda --use-singularity
-
-in combination with any of the modes above.
-See the [Snakemake documentation](https://snakemake.readthedocs.io/en/stable/executable.html) for further details.
+using `$N` cores.
 
 ### Step 5: Investigate results
 
-After successful execution, you can create a self-contained interactive HTML report with all results via:
-
-    snakemake --report report.html
+After successful execution, the workflow provides you with a compressed folder, holding all interesting results ready to decompress or to download to your local machine.
+The compressed file 16S-report.tar.gz holds several qiime2-artifacts that can be inspected via qiime-view, as well as unpacked qiime-artifacts in the directory `unzipped`
+that can be directly opened. In the zipped folder report.zip is the snakemake html report holding graphics as well as the DAG of the executed jobs.
 
 This report can, e.g., be forwarded to your collaborators.
-An example (using some trivial test data) can be seen [here](https://cdn.rawgit.com/snakemake-workflows/rna-seq-kallisto-sleuth/master/.test/report.html).
 
 ### Step 6: Commit changes
 
