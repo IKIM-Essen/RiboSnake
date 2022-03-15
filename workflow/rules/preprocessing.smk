@@ -1,14 +1,15 @@
 rule read_samples:
     input:
-        get_data_dir()
+        tsv = "config/pep/sample.tsv",
+        info = "config/pep/sample_info.txt",
     output:
-        demux_paired = "results/{date}/out/demux-paired-end.qza"
-        #visual_paired = "results/date/visual/demux-seqs.qzv"
+        "results/{date}/out/demux-paired-end.qza"
+    params:
+        direc = get_data_dir()
     shell:
-        #"workflow/scripts/read.sh -m {input} -o {output}"
         "qiime tools import "
             "--type 'SampleData[PairedEndSequencesWithQuality]' "
-            "--input-path {input} "
+            "--input-path {params.direc} "
             "--input-format CasavaOneEightSingleLanePerSampleDirFmt "
             "--output-path {output}"
 
