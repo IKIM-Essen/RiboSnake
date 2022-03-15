@@ -1,11 +1,12 @@
 rule data_prep:
     input:
-        incoming = config["input"],
-        data = config["data"],
-        metadata = "/local/work/16S/snakemake_qiime/16S/config/pep/metadata.txt",
+        config["metadata"]
     output:
-        "config/pep/sample.tsv"
-    params:
-        date = get_date()
+        metadata = "config/pep/sample.tsv",
+        sample_info = "config/pep/sample_info.txt",
+    priority:
+        50
+    log:
+        "logs/data_prep.txt"
     script:
         "../scripts/create_sample_metadata.py"
