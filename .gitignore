@@ -1,6 +1,7 @@
 *
 !config
 !config/*
+!config/pep/*
 !.tests
 !.tests/**/*
 !resources
