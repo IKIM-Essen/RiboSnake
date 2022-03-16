@@ -5,6 +5,7 @@ from os import path, getcwd, listdir
 from os import mkdir
 from shutil import move, copy2
 from datetime import date, datetime
+
 # Creating a metadata sample-sheet, that holds additional information concerning the samples.
 # Metadata information is needed to be able to create plots and for metadata-specific analysis.
 
@@ -12,7 +13,7 @@ config = snakemake.config
 
 DATA_PATH = str(config["data"])
 IN_PATH = str(config["input"])
-#today = date.today().strftime("%Y-%m-%d")
+# today = date.today().strftime("%Y-%m-%d")
 incoming_files = []
 # Running through all files in the IN_PATH and checking them
 # Adding the files to a list, when they meet the requirements
@@ -26,7 +27,7 @@ for f in listdir(IN_PATH):
         incoming_files.append(f)
     else:
         print(f, "not used")
-metadata = pd.read_csv(str(snakemake.input), header = 0, delimiter = ",")
+metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
 date = metadata["run_date"].iloc[1]
 print(date)
 # Adding a direcory for the specific date as subdirectory to the DATA_PATH
@@ -50,7 +51,7 @@ for name in files:
     sample = name.split("_")[0]
     sample_list.append(sample)
 sample_list = list(set(sample_list))
-metadata = pd.read_csv(str(snakemake.input), header = 0, delimiter = ",")
+metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
 # Samples, that are not mentioned in the metadata.csv are excluded from the sample-metadata-sheet
 for name in sample_list:
     if name not in metadata["sample_name"]:
@@ -61,19 +62,19 @@ for name in sample_list:
 # Only columns holding information should be added to the sample-metadata-sheet
 nan_value = float("NaN")
 metadata.replace("", nan_value, inplace=True)
-metadata.dropna(how='any', axis=1, inplace=True)
-metadata.rename(columns = {"sample_name":"sample-ID"}, inplace = True)
-metadata.to_csv(snakemake.output.metadata, sep = '\t', index=False)
+metadata.dropna(how="any", axis=1, inplace=True)
+metadata.rename(columns={"sample_name": "sample-ID"}, inplace=True)
+metadata.to_csv(snakemake.output.metadata, sep="\t", index=False)
 
 # Creating a sample_info df, that holds paths to the fastq files and the date.
 # Common functions can read information from sample_info.txt instead from the data directories
 data = [metadata["sample-ID"], metadata["run_date"]]
 header = ["sample-ID", "run_date"]
-sample_info = pd.concat(data, axis = 1, keys = header)
+sample_info = pd.concat(data, axis=1, keys=header)
 sample_info["path1"] = ""
 sample_info["path2"] = ""
-sample_info.set_index("sample-ID", inplace = True)
-sample_info.drop(labels = ["categorical"], axis = 0, inplace = True) 
+sample_info.set_index("sample-ID", inplace=True)
+sample_info.drop(labels=["categorical"], axis=0, inplace=True)
 i = 0
 while i < len(sample_info.index):
     for file in files_to_copy:
@@ -85,4 +86,4 @@ while i < len(sample_info.index):
         else:
             continue
     i = i + 1
-sample_info.to_csv(snakemake.output.sample_info, sep = ",")
+sample_info.to_csv(snakemake.output.sample_info, sep=",")

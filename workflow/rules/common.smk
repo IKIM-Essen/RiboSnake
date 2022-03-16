@@ -11,18 +11,21 @@ import zipfile
 
 configfile: "config/config.yaml"
 
+
 def get_date():
-    metadata = pd.read_csv(config["metadata"], header = 0, delimiter = ",")
+    metadata = pd.read_csv(config["metadata"], header=0, delimiter=",")
     date = metadata["run_date"].iloc[1]
     return date
+
 
 def get_samples():
     incoming_files = get_filenames()
     names = []
     for file in incoming_files:
-        name  = file.split("_")[0]
+        name = file.split("_")[0]
         names.append(name)
     return names
+
 
 def get_filenames():
     # read files from sample_info
@@ -33,9 +36,10 @@ def get_filenames():
     incoming_files = []
     for file in allpaths:
         filename = file.split("/")[-1]
-        if ( ".fastq.gz" in file):
+        if ".fastq.gz" in file:
             incoming_files.append(filename)
     return incoming_files
+
 
 def get_data_dir():
     data = pd.read_csv("config/pep/sample_info.txt")
@@ -47,12 +51,13 @@ def get_data_dir():
     except IndexError:
         print("There is no data directory jet known to the workflow.")
 
+
 def get_file_dir(name):
-    dir = get_data_dir+name
+    dir = get_data_dir + name
     return dir
+
 
 def get_abundance(path):
     with open(path, "r") as f:
         abundance = f.read()
         return abundance
-

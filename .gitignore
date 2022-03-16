@@ -1,6 +1,8 @@
 *
 !config
 !config/*
+!tests
+!tests/data
 !resources
 !resources/*
 !workflow
