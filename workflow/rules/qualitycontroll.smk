@@ -11,7 +11,8 @@ rule fastqc:
 rule multiqc:
     input:
         expand(
-            "results/{{date}}/out/fastqc/{names}_fastqc.zip", names=get_filenames(),
+            "results/{{date}}/out/fastqc/{names}_fastqc.zip",
+            names=get_filenames(),
         ),
     output:
         "results/{date}/out/multiqc.html",

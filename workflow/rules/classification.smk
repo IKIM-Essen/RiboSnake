@@ -54,7 +54,7 @@ rule classification:
 
 rule phylogenetic_tree:
     input:
-        "results/{date}/out/seq-taxa-filtered.qza", #"results/{date}/out/seq-cluster-filtered.qza"
+        "results/{date}/out/seq-taxa-filtered.qza",  #"results/{date}/out/seq-cluster-filtered.qza"
     output:
         alignment="results/{date}/out/aligned-rep-seqs.qza",
         masked_alignment="results/{date}/out/masked-aligned-rep-seqs.qza",

@@ -43,7 +43,7 @@ rule chimera_taxonomy:
 
 rule taxa_barplot_chimera:
     input:
-        table="results/{date}/out/table-chimeras.qza", #"results/{date}/out/table-cluster-filtered.qza",
+        table="results/{date}/out/table-chimeras.qza",  #"results/{date}/out/table-cluster-filtered.qza",
         taxonomy="results/{date}/out/chimera_taxonomy.qza",
     output:
         "results/{date}/visual/taxa-bar-plots-chimeras.qzv",

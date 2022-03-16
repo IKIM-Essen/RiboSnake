@@ -47,8 +47,8 @@ rule chimera_filtering:
 
 rule filter_seq_length:
     input:
-        seq="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza", #results/{date}/out/seq-cluster.qza",
-        table="results/{date}/out/table-nonchimeric-wo-borderline.qza", #"results/{date}/out/table-cluster.qza"
+        seq="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",  #results/{date}/out/seq-cluster.qza",
+        table="results/{date}/out/table-nonchimeric-wo-borderline.qza",  #"results/{date}/out/table-cluster.qza"
     output:
         seq="results/{date}/out/seq-cluster-lengthfilter.qza",
         table="results/{date}/out/table-cluster-lengthfilter.qza",
@@ -79,12 +79,12 @@ rule abundance_frequency:
 
 rule filter_frequency:
     input:
-        table="results/{date}/out/table-cluster-lengthfilter.qza", #"results/{date}/out/table-cluster.qza", 
-        seqs="results/{date}/out/seq-cluster-lengthfilter.qza", #"results/{date}/out/seq-cluster.qza", 
+        table="results/{date}/out/table-cluster-lengthfilter.qza",  #"results/{date}/out/table-cluster.qza", 
+        seqs="results/{date}/out/seq-cluster-lengthfilter.qza",  #"results/{date}/out/seq-cluster.qza", 
         abundance="results/{date}/out/abundance.txt",
     output:
-        table="results/{date}/out/table-cluster-filtered.qza", # "results/{date}/out/table-cluster-freq.qza"
-        seqs="results/{date}/out/seq-cluster-filtered.qza", # "results/{date}/out/seq-cluster-freq.qza"
+        table="results/{date}/out/table-cluster-filtered.qza",  # "results/{date}/out/table-cluster-freq.qza"
+        seqs="results/{date}/out/seq-cluster-filtered.qza",  # "results/{date}/out/seq-cluster-freq.qza"
     shell:
         "value=$(<{input.abundance}) \n"
         "echo $value \n"

@@ -63,7 +63,7 @@ rule taxa_heatmap:
 
 rule taxa_barplot:
     input:
-        table="results/{date}/out/table-taxa-filtered.qza", #"results/{date}/out/table-cluster-filtered.qza",
+        table="results/{date}/out/table-taxa-filtered.qza",  #"results/{date}/out/table-cluster-filtered.qza",
         taxonomy="results/{date}/out/taxonomy.qza",
     output:
         "results/{date}/visual/taxa-bar-plots.qzv",
