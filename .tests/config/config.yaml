@@ -1,0 +1,25 @@
+# This file should contain everything to configure the workflow on a global scale.
+# In case of sample based data, it should be complemented by a samples.tsv file that contains
+# one row per sample. It can be parsed easily via pandas.
+pepfile: config/pep/config.yaml
+
+# Paths to the directories holding the fastqs
+input: ../incoming/
+data: data/
+# Path to the sheet holding metadata information
+metadata: config/pep/metadata.txt
+#
+database:
+  sequences: resources/silva-138-99-seqs.qza
+  taxonomy: resources/silva-138-99-tax.qza
+# Forward and reverse primers used for sequencing
+primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
+primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
+# Relative threshold for the abundance filtering
+relative-abundance-filter: 0.001
+# Minimum length of a sequence to be retained
+min-seq-length: 200
+# Minimum quality score for sequences to pass filter
+phred-score: 20
+# Maximum number of undetermined base calls ("N")
+max-ambiguity: 50

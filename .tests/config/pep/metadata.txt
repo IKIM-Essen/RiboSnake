@@ -1,0 +1,2 @@
+sample_name,subject,year,month,day,age,sex,medication,swab-site,run_date
+categorical,categorical,numeric,numeric,numeric,numeric,categorical,categorical,categorical,numeric
