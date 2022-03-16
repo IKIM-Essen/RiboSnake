@@ -6,6 +6,7 @@ from os import path, getcwd, listdir
 from os import mkdir
 from shutil import copy, copy2
 from datetime import date, datetime
+
 # Function to extract results from the qiime2 artifacts, already saved in a zip file
 
 """print("results/2022-02-24/visual/unzipped/")
@@ -45,4 +46,3 @@ while b < len(subdir):
         tsv = datadir + "metadata.tsv"
         shutil.copy(tsv, snakemake.output.taxonomy_tsv)
     b = b + 1
-

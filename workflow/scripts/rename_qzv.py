@@ -3,6 +3,7 @@ import gzip
 import shutil
 import os
 import zipfile
+
 # Renaming the qiime2 artifacts for viewing to zip files so the information can be accessed
 
 # Iterating over the input files and renaming them to zip
@@ -17,10 +18,10 @@ while i < len(snakemake.input):
 z = 0
 # opening the zip files and saving them to the output directory
 while z < len(zipped_files):
-    with zipfile.ZipFile(zipped_files[z],"r") as zip_ref:
+    with zipfile.ZipFile(zipped_files[z], "r") as zip_ref:
         name = zipped_files[z].split("/")[-1]
         new_dir = str(snakemake.output) + "/" + name
-        zip_ref.extractall(os.path.splitext(new_dir)[0]+"/")
+        zip_ref.extractall(os.path.splitext(new_dir)[0] + "/")
     z = z + 1
 directory = os.listdir(str(snakemake.output))
 # Iterating through the directory holding the unzipped files, moving the file content one folder up.

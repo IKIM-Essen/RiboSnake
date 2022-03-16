@@ -1,25 +1,26 @@
 rule biom_file:
     input:
-        table = "results/{date}/out/table-cluster-filtered.qza",
-        taxonomy = "results/{date}/out/taxonomy.qza"
+        table="results/{date}/out/table-cluster-filtered.qza",
+        taxonomy="results/{date}/out/taxonomy.qza",
     output:
-        table_binary = "results/{date}/out/table_binary.qza",
-        table_biom = directory("results/{date}/out/biom_table/"),
-        taxa_biom = directory("results/{date}/out/taxonomy_biom/"),
-        binary_biom = directory("results/{date}/out/binary_biom/")
+        table_binary="results/{date}/out/table_binary.qza",
+        table_biom=directory("results/{date}/out/biom_table/"),
+        taxa_biom=directory("results/{date}/out/taxonomy_biom/"),
+        binary_biom=directory("results/{date}/out/binary_biom/"),
     shell:
         "qiime tools export "
-            "--input-path {input.table} "
-            "--output-path {output.table_biom} \n"
+        "--input-path {input.table} "
+        "--output-path {output.table_biom} \n"
         "qiime tools export "
-            "--input-path {input.taxonomy} "
-            "--output-path {output.taxa_biom} \n"
+        "--input-path {input.taxonomy} "
+        "--output-path {output.taxa_biom} \n"
         "qiime feature-table presence-absence "
-            "--i-table {input.table} "
-            "--o-presence-absence-table {output.table_binary} \n"
+        "--i-table {input.table} "
+        "--o-presence-absence-table {output.table_binary} \n"
         "qiime tools export "
-            "--input-path {output.table_binary} "
-            "--output-path {output.binary_biom}"
+        "--input-path {output.table_binary} "
+        "--output-path {output.binary_biom}"
+
 
 rule unzip_reports:
     input:
@@ -30,28 +31,29 @@ rule unzip_reports:
         "results/{date}/visual/rooted-tree.qza",
         "results/{date}/visual/taxonomy.qzv",
     output:
-        directory("results/{date}/visual/unzipped")
+        directory("results/{date}/visual/unzipped"),
     script:
         "../scripts/rename_qzv.py"
 
+
 rule report_files:
     input:
-        "results/{date}/visual/unzipped/"
+        "results/{date}/visual/unzipped/",
     output:
-        beta_svg = report(
+        beta_svg=report(
             "results/{date}/visual/report/beta-rarefaction.svg",
-            category = "3. Rarefaction",
-            subcategory = "Beta rarefaction",
+            category="3. Rarefaction",
+            subcategory="Beta rarefaction",
         ),
-        heatmap = report(
+        heatmap=report(
             "results/{date}/visual/report/heatmap.svg",
-            category = "1. Heatmap",
-            subcategory = "Relative abunadnces",
+            category="1. Heatmap",
+            subcategory="Relative abunadnces",
         ),
-        taxonomy_tsv = report(
+        taxonomy_tsv=report(
             "results/{date}/visual/report/taxonomy.tsv",
-            category = "2. Taxonomy",
-            subcategory = "Taxonomy Table",
+            category="2. Taxonomy",
+            subcategory="Taxonomy Table",
         ),
     script:
         "../scripts/extract_reports.py"
@@ -63,9 +65,10 @@ rule snakemake_report:
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
     output:
-        "results/{date}/out/report.zip"
+        "results/{date}/out/report.zip",
     shell:
         "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css"
+
 
 rule zip_report:
     input:
@@ -90,13 +93,12 @@ rule zip_report:
         directory("results/{date}/visual/unzipped"),
         "results/{date}/out/report.zip",
         "results/{date}/visual/fastq_stats.qzv",
-        "results/{date}/visual/demux-joined-filter-stats.qzv"
+        "results/{date}/visual/demux-joined-filter-stats.qzv",
     output:
-        "results/{date}/16S-report.tar.gz" 
+        "results/{date}/16S-report.tar.gz",
     shell:
         """
-            mkdir results/{wildcards.date}/16S-report
-            cp -r {input} results/{wildcards.date}/16S-report/
-            tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
+        mkdir results/{wildcards.date}/16S-report
+        cp -r {input} results/{wildcards.date}/16S-report/
+        tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
         """
-
