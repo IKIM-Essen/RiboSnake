@@ -7,7 +7,7 @@ rule read_samples:
     params:
         direc=get_data_dir(),
     log:
-        "logs/preprocessing/read-samples.txt",
+        "logs/{date}/preprocessing/read-samples.txt",
     shell:
         "qiime tools import "
         "--type 'SampleData[PairedEndSequencesWithQuality]' "
