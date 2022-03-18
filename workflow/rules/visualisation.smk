@@ -50,7 +50,7 @@ rule taxa_heatmap:
     output:
         "results/{date}/visual/heatmap.qzv",
     params:
-        metadata=config["metadata-parameters"]["taxa-heatmap-column"],#"extract-group-no",#"swab-site", config["metadata-parameters"]["taxa-heatmap-column"]
+        metadata=config["metadata-parameters"]["taxa-heatmap-column"],  #"extract-group-no",#"swab-site", config["metadata-parameters"]["taxa-heatmap-column"]
         cluster="features",
     shell:
         "qiime feature-table heatmap "
@@ -121,7 +121,7 @@ rule beta:
     output:
         "results/{date}/visual/unweighted-unifrac-body-site-significance.qzv",
     params:
-        metadata=config["metadata-parameters"]["beta-metadata-column"]#"extract-group-no"#"swab-site", config["metadata-parameters"]["beta-metadata-column"]
+        metadata=config["metadata-parameters"]["beta-metadata-column"],  #"extract-group-no"#"swab-site", config["metadata-parameters"]["beta-metadata-column"]
     shell:
         "qiime diversity beta-group-significance "
         "--i-distance-matrix {input} "
@@ -164,12 +164,12 @@ rule rarefaction:
         alpha="results/{date}/visual/alpha-rarefaction.qzv",
         beta="results/{date}/visual/beta-rarefaction.qzv",
     params:
-        max_depth=config["metadata-parameters"]["rarefaction-max-depth"]
+        max_depth=config["metadata-parameters"]["rarefaction-max-depth"],
     shell:
         "qiime diversity alpha-rarefaction "
         "--i-table {input.table} "
         "--i-phylogeny {input.phylogeny} "
-        "--p-max-depth {params.max_depth} "     #400,500
+        "--p-max-depth {params.max_depth} "
         "--m-metadata-file config/pep/sample.tsv "
         "--o-visualization {output.alpha} \n"
         "qiime diversity beta-rarefaction "
@@ -180,6 +180,7 @@ rule rarefaction:
         "--m-metadata-file config/pep/sample.tsv "
         "--p-sampling-depth 100 "
         "--o-visualization {output.beta}"
+        #400,500
 
 
 rule gneiss:
@@ -189,7 +190,7 @@ rule gneiss:
         tree="results/{date}/out/hirarchy_gneiss.qza",
         heatmap_gneiss="results/{date}/visual/heatmap_gneiss.qzv",
     params:
-        metadata=config["metadata-parameters"]["gneiss-metadata-column"]
+        metadata=config["metadata-parameters"]["gneiss-metadata-column"],
     shell:
         "qiime gneiss correlation-clustering "
         "--i-table {input} "
@@ -199,9 +200,10 @@ rule gneiss:
         "--i-table {input} "
         "--i-tree {output.tree} "
         "--m-metadata-file config/pep/sample.tsv "
-        "--m-metadata-column {params.metadata} "       #subject
+        "--m-metadata-column {params.metadata} "
         "--p-color-map seismic "
         "--o-visualization {output.heatmap_gneiss}"
+        #subject
 
 
 rule rename_taxonomy:
