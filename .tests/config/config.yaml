@@ -8,7 +8,7 @@ input: ../incoming/
 data: data/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
-#
+# Paths to the databases used for classification and taxonomy
 database:
   sequences: resources/silva-138-99-seqs.qza
   taxonomy: resources/silva-138-99-tax.qza
@@ -23,3 +23,9 @@ min-seq-length: 200
 phred-score: 20
 # Maximum number of undetermined base calls ("N")
 max-ambiguity: 50
+# Parameters for plots
+metadata-parameters:
+  taxa-heatmap-column: extract-group-no #swab-site
+  beta-metadata-column: extract-group-no #swab-site
+  gneiss-metadata-column: site-name #subject
+  rarefaction-max-depth: 400 #500
