@@ -36,7 +36,7 @@ rule visualise_fastq:
     log:
         "logs/{date}/visualisation/visualise-fastq.log",
     conda:
-        "envs/qiime-vsearch.yaml"
+        "../envs/qiime-vsearch.yaml"
     shell:
         "qiime vsearch fastq-stats "
         "--i-sequences {input} "
