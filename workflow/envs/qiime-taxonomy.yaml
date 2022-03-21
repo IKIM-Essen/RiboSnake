@@ -1,0 +1,10 @@
+channels:
+  - qiime2/label/r2021.11
+  - bioconda
+  - conda-forge
+dependencies:
+  - qiime2=2021.11.0
+  - q2templates=2021.11.0
+  - q2cli=2021.11.0
+  - q2-taxa=2021.11.0
+  - pandas=1.2.5

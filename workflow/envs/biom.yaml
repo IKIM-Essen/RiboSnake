@@ -1,0 +1,4 @@
+channels:
+  - bioconda
+dependencies:
+  - biom-format=2.1.10

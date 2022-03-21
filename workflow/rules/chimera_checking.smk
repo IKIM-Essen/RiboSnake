@@ -6,6 +6,10 @@ rule chimera_only:
     output:
         table="results/{date}/out/table-chimeras.qza",
         seqs="results/{date}/out/rep-seqs-chimeras.qza",
+    log:
+        "logs/{date}/chimera-checking/chimera-only.log"
+    conda:
+        "../envs/qiime-chimerafilter.yaml"
     shell:
         "qiime feature-table filter-features "
         "--i-table {input.table} "
@@ -28,6 +32,10 @@ rule chimera_taxonomy:
         "results/{date}/out/chimera_taxonomy.qza",
     params:
         perc_identity=0.97,
+    log:
+        "logs/{date}/chimera-checking/chimera-taxonomy.log"
+    conda:
+        "../envs/qiime-classifiers.yaml"
     shell:
         "qiime feature-classifier classify-consensus-vsearch "
         "--i-query {input.query} "
@@ -47,6 +55,10 @@ rule taxa_barplot_chimera:
         taxonomy="results/{date}/out/chimera_taxonomy.qza",
     output:
         "results/{date}/visual/taxa-bar-plots-chimeras.qzv",
+    log:
+        "logs/{date}/chimera-checking/taxa-barplot-chimera.log"
+    conda:
+        "../envs/qiime-taxonomy.yaml"
     shell:
         "qiime taxa barplot "
         "--i-table {input.table} "

@@ -4,6 +4,10 @@ rule dereplication:
     output:
         table="results/{date}/out/derepl-table.qza",
         seqs="results/{date}/out/derepl-seq.qza",
+    log:
+        "logs/{date}/classification/dereplication.log"
+    conda:
+        "../envs/qiime-vsearch.yaml"
     shell:
         "qiime vsearch dereplicate-sequences "
         "--i-sequences {input} "
@@ -20,6 +24,10 @@ rule de_novo_clustering:
         seqs="results/{date}/out/seq-cluster.qza",
     params:
         perc_identity=0.99,
+    log:
+        "logs/{date}/classification/de-novo-clustering.log"
+    conda:
+        "../envs/qiime-vsearch.yaml"
     shell:
         "qiime vsearch cluster-features-de-novo "
         "--i-table {input.table} "
@@ -39,6 +47,10 @@ rule classification:
         "results/{date}/out/taxonomy.qza",
     params:
         perc_identity=0.97,
+    log:
+        "logs/{date}/classification/classification.log"
+    conda:
+        "../envs/qiime-classifier.yaml"
     shell:
         "qiime feature-classifier classify-consensus-vsearch "
         "--i-query {input.query} "
@@ -60,6 +72,10 @@ rule phylogenetic_tree:
         masked_alignment="results/{date}/out/masked-aligned-rep-seqs.qza",
         tree="results/{date}/visual/unrooted-tree.qza",
         rooted_tree="results/{date}/visual/rooted-tree.qza",
+    log:
+        "logs/{date}/classification/phylogenetic-tree.log"
+    conda:
+        "../envs/qiime-phylogeny.yaml"
     shell:
         "qiime phylogeny align-to-tree-mafft-fasttree "
         "--i-sequences {input} "
@@ -78,6 +94,10 @@ rule core_metrics:
         "results/{date}/core-metrics-results",
     params:
         depth=100,
+    log:
+        "logs/{date}/classification/core_metrics.log"
+    conda:
+        "../envs/qiime-diversity.yaml"
     shell:
         "qiime diversity core-metrics-phylogenetic "
         "--i-phylogeny {input.phylogeny} "

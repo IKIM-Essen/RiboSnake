@@ -7,7 +7,9 @@ rule read_samples:
     params:
         direc=get_data_dir(),
     log:
-        "logs/{date}/preprocessing/read-samples.txt",
+        "logs/{date}/preprocessing/read-samples.log",
+    conda:
+        "../envs/qiime-import.yaml"
     shell:
         "qiime tools import "
         "--type 'SampleData[PairedEndSequencesWithQuality]' "
@@ -25,6 +27,10 @@ rule trim_paired:
         primer1=config["primer1"],
         primer2=config["primer2"],
         min_length=6,
+    log:
+        "logs/{date}/preprocessing/trim-paired.log",
+    conda:
+        "../envs/qiime-cutadapt.yaml"
     shell:
         "qiime cutadapt trim-paired "
         "--i-demultiplexed-sequences {input} "
@@ -41,6 +47,10 @@ rule join_ends:
         "results/{date}/out/joined-seqs.qza",
     params:
         minlen=30,
+    log:
+        "logs/{date}/preprocessing/join-ends.log",
+    conda:
+        "../envs/qiime-vsearch.yaml"
     shell:
         "qiime vsearch join-pairs "
         "--i-demultiplexed-seqs {input} "

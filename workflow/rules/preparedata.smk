@@ -6,6 +6,8 @@ rule data_prep:
         sample_info="config/pep/sample_info.txt",
     priority: 50
     log:
-        "logs/data_prep.txt",
+        "logs/data_prep.log",
+    conda:
+        "../envs/python.yaml"
     script:
         "../scripts/create_sample_metadata.py"
