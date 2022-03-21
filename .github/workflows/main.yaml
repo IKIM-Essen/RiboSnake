@@ -51,9 +51,7 @@ jobs:
       - Linting
       - Formatting
     steps:
-    - uses: actions/checkout@v1
-    - name: Checkout submodules
-      uses: textbook/git-checkout-submodule-action@2.0.0
+    - uses: actions/checkout@v2
     - name: Download test dataset
       run: |
         mkdir -p .tests/data/2022-03-17
