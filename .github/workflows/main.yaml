@@ -54,11 +54,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Download test dataset
       run: |
-        wget \ 
-          https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza > \
+        wget https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza > \
           .tests/resources/silva-138-99-seqs.qza
-        wget \ 
-          https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza > \
+        wget https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza > \
           .tests/resources/silva-138-99-tax.qza
         mkdir -p .tests/data/2022-03-17
         curl -sL \
