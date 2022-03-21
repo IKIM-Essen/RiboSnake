@@ -5,7 +5,7 @@ rule dereplication:
         table="results/{date}/out/derepl-table.qza",
         seqs="results/{date}/out/derepl-seq.qza",
     log:
-        "logs/{date}/classification/dereplication.log"
+        "logs/{date}/classification/dereplication.log",
     conda:
         "../envs/qiime-vsearch.yaml"
     shell:
@@ -25,7 +25,7 @@ rule de_novo_clustering:
     params:
         perc_identity=0.99,
     log:
-        "logs/{date}/classification/de-novo-clustering.log"
+        "logs/{date}/classification/de-novo-clustering.log",
     conda:
         "../envs/qiime-vsearch.yaml"
     shell:
@@ -48,7 +48,7 @@ rule classification:
     params:
         perc_identity=0.97,
     log:
-        "logs/{date}/classification/classification.log"
+        "logs/{date}/classification/classification.log",
     conda:
         "../envs/qiime-classifier.yaml"
     shell:
@@ -73,7 +73,7 @@ rule phylogenetic_tree:
         tree="results/{date}/visual/unrooted-tree.qza",
         rooted_tree="results/{date}/visual/rooted-tree.qza",
     log:
-        "logs/{date}/classification/phylogenetic-tree.log"
+        "logs/{date}/classification/phylogenetic-tree.log",
     conda:
         "../envs/qiime-phylogeny.yaml"
     shell:
@@ -95,7 +95,7 @@ rule core_metrics:
     params:
         depth=100,
     log:
-        "logs/{date}/classification/core_metrics.log"
+        "logs/{date}/classification/core_metrics.log",
     conda:
         "../envs/qiime-diversity.yaml"
     shell:

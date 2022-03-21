@@ -7,7 +7,7 @@ rule chimera_only:
         table="results/{date}/out/table-chimeras.qza",
         seqs="results/{date}/out/rep-seqs-chimeras.qza",
     log:
-        "logs/{date}/chimera-checking/chimera-only.log"
+        "logs/{date}/chimera-checking/chimera-only.log",
     conda:
         "../envs/qiime-chimerafilter.yaml"
     shell:
@@ -33,7 +33,7 @@ rule chimera_taxonomy:
     params:
         perc_identity=0.97,
     log:
-        "logs/{date}/chimera-checking/chimera-taxonomy.log"
+        "logs/{date}/chimera-checking/chimera-taxonomy.log",
     conda:
         "../envs/qiime-classifiers.yaml"
     shell:
@@ -56,7 +56,7 @@ rule taxa_barplot_chimera:
     output:
         "results/{date}/visual/taxa-bar-plots-chimeras.qzv",
     log:
-        "logs/{date}/chimera-checking/taxa-barplot-chimera.log"
+        "logs/{date}/chimera-checking/taxa-barplot-chimera.log",
     conda:
         "../envs/qiime-taxonomy.yaml"
     shell:

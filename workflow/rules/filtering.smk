@@ -10,7 +10,7 @@ rule fastq_score:
         min_length_frac=0.75,
         max_ambig=config["max-ambiguity"],
     log:
-        "logs/{date}/filtering/fastq-score.log"
+        "logs/{date}/filtering/fastq-score.log",
     conda:
         "../envs/qiime-qualityfilter.yaml"
     shell:
@@ -32,7 +32,7 @@ rule chimera_filtering:
         table="results/{date}/out/table-nonchimeric-wo-borderline.qza",
         seqs="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",
     log:
-        "logs/{date}/filtering/chimera-filtering.log"
+        "logs/{date}/filtering/chimera-filtering.log",
     conda:
         "../envs/qiime-chimerafilter.yaml"
     shell:
@@ -63,7 +63,7 @@ rule filter_seq_length:
     params:
         min_length=config["min-seq-length"],
     log:
-        "logs/{date}/filtering/filter-seq-length.log"
+        "logs/{date}/filtering/filter-seq-length.log",
     conda:
         "../envs/qiime-chimerafilter.yaml"
     shell:
@@ -86,7 +86,7 @@ rule abundance_frequency:
     params:
         relative_abundance=config["relative-abundance-filter"],
     log:
-        "logs/{date}/filtering/abundance-frequency.log"
+        "logs/{date}/filtering/abundance-frequency.log",
     conda:
         "../envs/abundancefiltering.yaml"
     script:
@@ -102,7 +102,7 @@ rule filter_frequency:
         table="results/{date}/out/table-cluster-filtered.qza",  # "results/{date}/out/table-cluster-freq.qza"
         seqs="results/{date}/out/seq-cluster-filtered.qza",  # "results/{date}/out/seq-cluster-freq.qza"
     log:
-        "logs/{date}/filtering/filter-frequency.log"
+        "logs/{date}/filtering/filter-frequency.log",
     conda:
         "../envs/qiime-chimerafilter.yaml"
     shell:
@@ -149,7 +149,7 @@ rule taxa_collapse:
     output:
         "results/{date}/out/taxa_collapsed.qza",
     log:
-        "logs/{date}/filtering/taxa-collapse.log"
+        "logs/{date}/filtering/taxa-collapse.log",
     conda:
         "../envs/qiime-taxonomy.yaml"
     shell:
@@ -169,7 +169,7 @@ rule filter_taxonomy:
         table="results/{date}/out/table-taxa-filtered.qza",
         seq="results/{date}/out/seq-taxa-filtered.qza",
     log:
-        "logs/{date}/filtering/filter-taxonomy.log"
+        "logs/{date}/filtering/filter-taxonomy.log",
     conda:
         "../envs/qiime-taxonomy.yaml"
     shell:

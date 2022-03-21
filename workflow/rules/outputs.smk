@@ -8,7 +8,7 @@ rule biom_file:
         taxa_biom=directory("results/{date}/out/taxonomy_biom/"),
         binary_biom=directory("results/{date}/out/binary_biom/"),
     log:
-        "logs/{date}/outputs/biom-file.log"
+        "logs/{date}/outputs/biom-file.log",
     conda:
         "../envs/qiime-export.yaml"
     shell:
@@ -37,7 +37,7 @@ rule unzip_reports:
     output:
         directory("results/{date}/visual/unzipped"),
     log:
-        "logs/{date}/outputs/unzip-reports.log"
+        "logs/{date}/outputs/unzip-reports.log",
     conda:
         "../envs/python.yaml"
     script:
@@ -64,7 +64,7 @@ rule report_files:
             subcategory="Taxonomy Table",
         ),
     log:
-        "logs/{date}/outputs/report-files.log"
+        "logs/{date}/outputs/report-files.log",
     conda:
         "../envs/python.yaml"
     script:
@@ -79,7 +79,7 @@ rule snakemake_report:
     output:
         "results/{date}/out/report.zip",
     log:
-        "logs/{date}/outputs/snakemake-report.log"
+        "logs/{date}/outputs/snakemake-report.log",
     conda:
         "../envs/snakemake.yaml"
     shell:
@@ -113,7 +113,7 @@ rule zip_report:
     output:
         "results/{date}/16S-report.tar.gz",
     log:
-        "logs/{date}/outputs/zip-report.log"
+        "logs/{date}/outputs/zip-report.log",
     conda:
         "../envs/snakemake.yaml"
     shell:

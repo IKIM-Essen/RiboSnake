@@ -4,7 +4,7 @@ rule visualise_samples:
     output:
         "results/{date}/visual/paired-seqs.qzv",
     log:
-        "logs/{date}/visualisation/visualise-samples.log"
+        "logs/{date}/visualisation/visualise-samples.log",
     conda:
         "../envs/qiime-metadata-visual.yaml"
     shell:
@@ -19,7 +19,7 @@ rule visualise_table:
     output:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
     log:
-        "logs/{date}/visualisation/visualise-table.log"
+        "logs/{date}/visualisation/visualise-table.log",
     conda:
         "../envs/qiime-metadata-visual.yaml"
     shell:
@@ -34,7 +34,7 @@ rule visualise_fastq:
     output:
         "results/{date}/visual/fastq_stats.qzv",
     log:
-        "logs/{date}/visualisation/visualise-fastq.log"
+        "logs/{date}/visualisation/visualise-fastq.log",
     conda:
         "envs/qiime-vsearch.yaml"
     shell:
@@ -49,7 +49,7 @@ rule demux_stats:
     output:
         "results/{date}/visual/demux-joined-filter-stats.qzv",
     log:
-        "logs/{date}/visualisation/demux-stats.log"
+        "logs/{date}/visualisation/demux-stats.log",
     conda:
         "../envs/qiime-metadata-visual.yaml"
     shell:
@@ -67,7 +67,7 @@ rule taxa_heatmap:
         metadata=config["metadata-parameters"]["taxa-heatmap-column"],  #"extract-group-no",#"swab-site", config["metadata-parameters"]["taxa-heatmap-column"]
         cluster="features",
     log:
-        "logs/{date}/visualisation/taxa-heatmap.log"
+        "logs/{date}/visualisation/taxa-heatmap.log",
     conda:
         "../envs/qiime-taxonomy.yaml"
     shell:
@@ -86,7 +86,7 @@ rule taxa_barplot:
     output:
         "results/{date}/visual/taxa-bar-plots.qzv",
     log:
-        "logs/{date}/visualisation/taxa-barplot.log"
+        "logs/{date}/visualisation/taxa-barplot.log",
     conda:
         "../envs/qiime-taxonomy.yaml"
     shell:
@@ -103,7 +103,7 @@ rule tabulate_taxa:
     output:
         "results/{date}/visual/taxonomy.qzv",
     log:
-        "logs/{date}/visualisation/tabulate-taxa.log"
+        "logs/{date}/visualisation/tabulate-taxa.log",
     conda:
         "../envs/qiime-metadata-visual.yaml"
     shell:
@@ -118,7 +118,7 @@ rule newick_tree:
     output:
         "results/{date}/visual",
     log:
-        "logs/{date}/visualisation/newick-tree.log"
+        "logs/{date}/visualisation/newick-tree.log",
     conda:
         "../envs/qiime-qiime-exports.yaml"
     shell:
@@ -135,7 +135,7 @@ rule alpha:
         faith="results/{date}/visual/faith-pd-group-significance.qzv",
         evenness="results/{date}/visual/evenness-group-significance.qzv",
     log:
-        "logs/{date}/visualisation/alpha-rarefaction.log"
+        "logs/{date}/visualisation/alpha-rarefaction.log",
     conda:
         "../envs/qiime-diversity.yaml"
     shell:
@@ -157,7 +157,7 @@ rule beta:
     params:
         metadata=config["metadata-parameters"]["beta-metadata-column"],  #"extract-group-no"#"swab-site", config["metadata-parameters"]["beta-metadata-column"]
     log:
-        "logs/{date}/visualisation/beta-rarefaction.log"
+        "logs/{date}/visualisation/beta-rarefaction.log",
     conda:
         "../envs/qiime-diversity.yaml"
     shell:
@@ -181,7 +181,7 @@ rule emperor:
             "results/{date}/visual/bray-curtis-emperor-days-since-experiment-start.qzv"
         ),
     log:
-        "logs/{date}/visualisation/emperor.log"
+        "logs/{date}/visualisation/emperor.log",
     conda:
         "../envs/qiime-plots.yaml"
     shell:
@@ -208,7 +208,7 @@ rule rarefaction:
     params:
         max_depth=config["metadata-parameters"]["rarefaction-max-depth"],
     log:
-        "logs/{date}/visualisation/rarefaction.log"
+        "logs/{date}/visualisation/rarefaction.log",
     conda:
         "../envs/qiime-diversity.yaml"
     shell:
@@ -238,7 +238,7 @@ rule gneiss:
     params:
         metadata=config["metadata-parameters"]["gneiss-metadata-column"],
     log:
-        "logs/{date}/visualisation/gneiss.log"
+        "logs/{date}/visualisation/gneiss.log",
     conda:
         "../envs/qiime-plots.yaml"
     shell:
@@ -262,7 +262,7 @@ rule rename_taxonomy:
     output:
         "results/{date}/out/taxonomy_biom.tsv",
     log:
-        "logs/{date}/visualisation/rename-taxonomy.log"
+        "logs/{date}/visualisation/rename-taxonomy.log",
     conda:
         "../envs/qiime-taxonomy.yaml"
     script:
@@ -277,7 +277,7 @@ rule add_biom_files:
         biom="results/{date}/out/table.w-taxa.biom",
         txt="results/{date}/out/table.from_biom_w_taxonomy.txt",
     log:
-        "logs/{date}/visualisation/add-biom-files.log"
+        "logs/{date}/visualisation/add-biom-files.log",
     conda:
         "../envs/biom.yaml"
     shell:
@@ -298,7 +298,7 @@ rule binary_heatmap:
             subcategory="Presence/absence heatmap",
         ),
     log:
-        "logs/{date}/visualisation/binary-heatmap.log"
+        "logs/{date}/visualisation/binary-heatmap.log",
     conda:
         "../envs/binary-heatmap.yaml"
     script:
