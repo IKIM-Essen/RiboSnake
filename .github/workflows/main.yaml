@@ -66,6 +66,7 @@ jobs:
         rm blank*
         rm PAP*
         cd ../../
+        cd config
         ls
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
