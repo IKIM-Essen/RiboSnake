@@ -65,19 +65,17 @@ jobs:
         rm -r casava-18-paired-end-demultiplexed/
         rm blank*
         rm PAP*
-        cd ../../
-        cd config
-        ls
+
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
-        directory: .test
+        directory: .tests
         snakefile: workflow/Snakefile
         args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs"
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
       with:
-        directory: .test
+        directory: .tests
         snakefile: workflow/Snakefile
         args: "--report report.zip"
