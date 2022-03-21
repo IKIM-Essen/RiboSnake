@@ -54,6 +54,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: Download test dataset
       run: |
+        curl -L \ 
+          https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza > \
+          .tests/resources/silva-138-99-seqs.qza
+        curl -L \ 
+          https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza > \
+          .tests/resources/silva-138-99-tax.qza
         mkdir -p .tests/data/2022-03-17
         curl -sL \
           https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip > \
@@ -65,6 +71,7 @@ jobs:
         rm -r casava-18-paired-end-demultiplexed/
         rm blank*
         rm PAP*
+        
 
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
