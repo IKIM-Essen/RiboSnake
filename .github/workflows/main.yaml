@@ -65,6 +65,7 @@ jobs:
         rm -r casava-18-paired-end-demultiplexed/
         rm blank*
         rm PAP*
+        ls
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
