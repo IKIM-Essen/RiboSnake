@@ -62,8 +62,10 @@ def get_abundance(path):
         abundance = f.read()
         return abundance
 
+
 def get_for_testing():
     return bool(config["testing"])
+
 
 def get_if_testing(string):
     return string if get_for_testing() else ""
