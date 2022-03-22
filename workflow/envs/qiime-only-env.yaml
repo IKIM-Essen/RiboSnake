@@ -23,7 +23,7 @@ dependencies:
   - bioconductor-biocgenerics=0.40.0
   - bioconductor-biocparallel=1.28.0
   - bioconductor-biostrings=2.62.0
-  - bioconductor-dada2=1.22.0
+  - bioconductor-dada2=1.18.0
   - bioconductor-delayedarray=0.20.0
   - bioconductor-genomeinfodb=1.30.0
   - bioconductor-genomeinfodbdata=1.2.7
@@ -106,7 +106,7 @@ dependencies:
   - gxx_linux-64=9.4.0
   - h5py=3.6.0
   - harfbuzz=3.4.0
-  - hdf5=1.12.1
+  - hdf5=1.10.6
   - hdmedians=0.14.2
   - hmmer=3.1b2
   - htslib=1.14
@@ -416,7 +416,7 @@ dependencies:
   - tzlocal=2.1
   - umap-learn=0.5.2
   - unicodedata2=14.0.0
-  - unifrac=0.20.3
+  - unifrac=0.20.2
   - urllib3=1.26.8
   - vsearch=2.7.0
   - wcwidth=0.2.5
