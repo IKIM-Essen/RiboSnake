@@ -109,7 +109,7 @@ rule zip_report:
         "results/{date}/visual/unzipped",
         "results/{date}/out/report.zip",
         "results/{date}/visual/fastq_stats.qzv",
-        "results/{date}/visual/demux-joined-filter-stats.qzv",
+        #"results/{date}/visual/demux-joined-filter-stats.qzv",
     output:
         "results/{date}/16S-report.tar.gz",
     log:

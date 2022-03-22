@@ -8,4 +8,5 @@ dependencies:
   - q2cli=2021.11.0
   - q2-metadata=2021.11.0
   - q2-demux=2021.11.0
-  - q2-feature-table=2021.11.0=py38_0
+  - q2-feature-table=2021.11.0
+  - q2-types=2021.11.0

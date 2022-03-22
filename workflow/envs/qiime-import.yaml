@@ -6,4 +6,5 @@ dependencies:
   - qiime2=2021.11.0
   - q2templates=2021.11.0
   - q2cli=2021.11.0
+  - q2-types=2021.11.0
   
