@@ -3,6 +3,8 @@
 # one row per sample. It can be parsed easily via pandas.
 pepfile: config/pep/config.yaml
 
+# If testing set true
+testing: True
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/

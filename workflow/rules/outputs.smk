@@ -78,12 +78,15 @@ rule snakemake_report:
         "results/{date}/visual/report/heatmap.svg",
     output:
         "results/{date}/out/report.zip",
+    params:
+        for_testing=get_if_testing("--snakefile ../workflow/Snakefile"),
     log:
         "logs/{date}/outputs/snakemake-report.log",
     conda:
         "../envs/snakemake.yaml"
     shell:
-        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css"
+        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css {input}"
+        "--report {output} {params.for_testing}"
 
 
 rule zip_report:
