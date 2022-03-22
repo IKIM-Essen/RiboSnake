@@ -9,7 +9,7 @@ rule chimera_only:
     log:
         "logs/{date}/chimera-checking/chimera-only.log",
     conda:
-        "../envs/qiime-chimerafilter.yaml"
+        "../envs/qiime-only-env.yaml"#"../envs/qiime-chimerafilter.yaml"
     shell:
         "qiime feature-table filter-features "
         "--i-table {input.table} "
@@ -35,7 +35,7 @@ rule chimera_taxonomy:
     log:
         "logs/{date}/chimera-checking/chimera-taxonomy.log",
     conda:
-        "../envs/qiime-classifiers.yaml"
+        "../envs/qiime-only-env.yaml"#"../envs/qiime-classifiers.yaml"
     shell:
         "qiime feature-classifier classify-consensus-vsearch "
         "--i-query {input.query} "
@@ -58,7 +58,7 @@ rule taxa_barplot_chimera:
     log:
         "logs/{date}/chimera-checking/taxa-barplot-chimera.log",
     conda:
-        "../envs/qiime-taxonomy.yaml"
+        "../envs/qiime-only-env.yaml"#"../envs/qiime-taxonomy.yaml"
     shell:
         "qiime taxa barplot "
         "--i-table {input.table} "
