@@ -7,7 +7,7 @@ rule dereplication:
     log:
         "logs/{date}/classification/dereplication.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-vsearch.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-vsearch.yaml"
     shell:
         "qiime vsearch dereplicate-sequences "
         "--i-sequences {input} "
@@ -27,7 +27,7 @@ rule de_novo_clustering:
     log:
         "logs/{date}/classification/de-novo-clustering.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-vsearch.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-vsearch.yaml"
     shell:
         "qiime vsearch cluster-features-de-novo "
         "--i-table {input.table} "
@@ -50,7 +50,7 @@ rule classification:
     log:
         "logs/{date}/classification/classification.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-classifier.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-classifier.yaml"
     shell:
         "qiime feature-classifier classify-consensus-vsearch "
         "--i-query {input.query} "
@@ -75,7 +75,7 @@ rule phylogenetic_tree:
     log:
         "logs/{date}/classification/phylogenetic-tree.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-phylogeny.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-phylogeny.yaml"
     shell:
         "qiime phylogeny align-to-tree-mafft-fasttree "
         "--i-sequences {input} "
@@ -97,7 +97,7 @@ rule core_metrics:
     log:
         "logs/{date}/classification/core_metrics.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-diversity.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-diversity.yaml"
     shell:
         "qiime diversity core-metrics-phylogenetic "
         "--i-phylogeny {input.phylogeny} "

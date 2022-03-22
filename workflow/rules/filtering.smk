@@ -12,7 +12,7 @@ rule fastq_score:
     log:
         "logs/{date}/filtering/fastq-score.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-qualityfilter.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-qualityfilter.yaml"
     shell:
         "qiime quality-filter q-score "
         "--i-demux {input} "
@@ -34,7 +34,7 @@ rule chimera_filtering:
     log:
         "logs/{date}/filtering/chimera-filtering.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-chimerafilter.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-chimerafilter.yaml"
     shell:
         "qiime vsearch uchime-denovo "
         "--i-table {input.table} "
@@ -65,7 +65,7 @@ rule filter_seq_length:
     log:
         "logs/{date}/filtering/filter-seq-length.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-chimerafilter.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-chimerafilter.yaml"
     shell:
         "qiime feature-table filter-seqs "
         "--i-data {input.seq} "
@@ -104,7 +104,7 @@ rule filter_frequency:
     log:
         "logs/{date}/filtering/filter-frequency.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-chimerafilter.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-chimerafilter.yaml"
     shell:
         "value=$(<{input.abundance}) \n"
         "echo $value \n"
@@ -151,7 +151,7 @@ rule taxa_collapse:
     log:
         "logs/{date}/filtering/taxa-collapse.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-taxonomy.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-taxonomy.yaml"
     shell:
         "qiime taxa collapse "
         "--i-table {input.table} "
@@ -171,7 +171,7 @@ rule filter_taxonomy:
     log:
         "logs/{date}/filtering/filter-taxonomy.log",
     conda:
-        "../envs/qiime-only-env.yaml"#"../envs/qiime-taxonomy.yaml"
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-taxonomy.yaml"
     shell:
         "qiime taxa filter-table "
         "--i-table {input.table} "
