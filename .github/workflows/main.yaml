@@ -63,8 +63,8 @@ jobs:
         ls
         curl -sL \
           https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip > \
-          .tests/data/2022-03-17/casava-18-paired-end-demultiplexed.zip
-        cd .tests/data/2022-03-17
+          data/2022-03-17/casava-18-paired-end-demultiplexed.zip
+        cd data/2022-03-17
         unzip -q casava-18-paired-end-demultiplexed.zip
         rm casava-18-paired-end-demultiplexed.zip
         mv casava-18-paired-end-demultiplexed/* .
@@ -72,7 +72,6 @@ jobs:
         rm blank*
         rm PAP*
         
-
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
