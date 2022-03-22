@@ -86,7 +86,7 @@ rule snakemake_report:
         "../envs/snakemake.yaml"
     shell:
         "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css {input}"
-        "--report {output} {params.for_testing}"
+        " --report {output} {params.for_testing}"
 
 
 rule zip_report:
