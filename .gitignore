@@ -1,8 +1,9 @@
 *
 !config
 !config/*
-!tests
-!tests/data
+!config/pep/*
+!.tests
+!.tests/**/*
 !resources
 !resources/*
 !workflow
@@ -10,7 +11,6 @@
 .gitignore
 !.gitattributes
 !.editorconfig
-!.test
 !LICENSE
 !README.md
 !.gitignore

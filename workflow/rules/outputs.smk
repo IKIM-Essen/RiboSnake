@@ -7,6 +7,10 @@ rule biom_file:
         table_biom=directory("results/{date}/out/biom_table/"),
         taxa_biom=directory("results/{date}/out/taxonomy_biom/"),
         binary_biom=directory("results/{date}/out/binary_biom/"),
+    log:
+        "logs/{date}/outputs/biom-file.log",
+    conda:
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-export.yaml"
     shell:
         "qiime tools export "
         "--input-path {input.table} "
@@ -32,6 +36,10 @@ rule unzip_reports:
         "results/{date}/visual/taxonomy.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
+    log:
+        "logs/{date}/outputs/unzip-reports.log",
+    conda:
+        "../envs/python.yaml"
     script:
         "../scripts/rename_qzv.py"
 
@@ -55,6 +63,10 @@ rule report_files:
             category="2. Taxonomy",
             subcategory="Taxonomy Table",
         ),
+    log:
+        "logs/{date}/outputs/report-files.log",
+    conda:
+        "../envs/python.yaml"
     script:
         "../scripts/extract_reports.py"
 
@@ -66,8 +78,15 @@ rule snakemake_report:
         "results/{date}/visual/report/heatmap.svg",
     output:
         "results/{date}/out/report.zip",
+    params:
+        for_testing=get_if_testing("--snakefile ../workflow/Snakefile"),
+    log:
+        "logs/{date}/outputs/snakemake-report.log",
+    conda:
+        "../envs/snakemake.yaml"
     shell:
-        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css"
+        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css {input}"
+        " --report {output} {params.for_testing}"
 
 
 rule zip_report:
@@ -90,12 +109,16 @@ rule zip_report:
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
-        directory("results/{date}/visual/unzipped"),
+        "results/{date}/visual/unzipped",
         "results/{date}/out/report.zip",
         "results/{date}/visual/fastq_stats.qzv",
-        "results/{date}/visual/demux-joined-filter-stats.qzv",
+        #"results/{date}/visual/demux-joined-filter-stats.qzv",
     output:
         "results/{date}/16S-report.tar.gz",
+    log:
+        "logs/{date}/outputs/zip-report.log",
+    conda:
+        "../envs/snakemake.yaml"
     shell:
         """
         mkdir results/{wildcards.date}/16S-report

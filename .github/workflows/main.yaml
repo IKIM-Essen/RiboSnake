@@ -5,16 +5,19 @@ on:
     branches:
       - main
   pull_request:
-    branches_ignore: []
+    branches:
+      - "*"
 
 jobs:
-Cancel-previous-jobs:
+  Cancel-previous-jobs:
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/master'
+    if: github.ref != 'refs/heads/main'
     steps:
       - uses: khan/pull-request-workflow-cancel@1.0.0
         with:
           workflows: "main.yml"
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
 
   Formatting:
     runs-on: ubuntu-latest
@@ -24,7 +27,7 @@ Cancel-previous-jobs:
         uses: github/super-linter@v4.8.7
         env:
           VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: master
+          DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           FILTER_REGEX_EXCLUDE: CHANGELOG.md
           VALIDATE_SNAKEMAKE_SNAKEFMT: true
@@ -36,7 +39,7 @@ Cancel-previous-jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Lint workflow
-      uses: snakemake/snakemake-github-action@v1.5.3
+      uses: snakemake/snakemake-github-action@v1
       with:
         directory: .
         snakefile: workflow/Snakefile
@@ -48,19 +51,37 @@ Cancel-previous-jobs:
       - Linting
       - Formatting
     steps:
-    - uses: actions/checkout@v1
-    - name: Checkout submodules
-      uses: textbook/git-checkout-submodule-action@2.0.0
+    - uses: actions/checkout@v2
+    - name: Download test dataset
+      run: |
+        cd .tests/resources
+        wget https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
+        wget https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza 
+        cd ..
+        ls
+        mkdir -p data/2022-03-17
+        ls
+        curl -sL \
+          https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip > \
+          data/2022-03-17/casava-18-paired-end-demultiplexed.zip
+        cd data/2022-03-17
+        unzip -q casava-18-paired-end-demultiplexed.zip
+        rm casava-18-paired-end-demultiplexed.zip
+        mv casava-18-paired-end-demultiplexed/* .
+        rm -r casava-18-paired-end-demultiplexed/
+        rm blank*
+        rm PAP*
+        
     - name: Test workflow (local test data)
-      uses: snakemake/snakemake-github-action@v1.5.3
+      uses: snakemake/snakemake-github-action@v1
       with:
-        directory: .test
+        directory: .tests
         snakefile: workflow/Snakefile
-        args: "--use-conda --show-failed-logs -j 10 --conda-cleanup-pkgs"
+        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs"
 
     - name: Test report
-      uses: snakemake/snakemake-github-action@v1.5.3
+      uses: snakemake/snakemake-github-action@v1
       with:
-        directory: .test
+        directory: .tests
         snakefile: workflow/Snakefile
         args: "--report report.zip"

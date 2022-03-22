@@ -4,7 +4,7 @@
 pepfile: config/pep/config.yaml
 
 # If testing set true
-testing: False
+testing: True
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/

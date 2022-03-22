@@ -17,36 +17,26 @@ report: "report/workflow.rst"
 
 
 include: "rules/common.smk"
-
-
 include: "rules/preprocessing.smk"
-
-
 include: "rules/filtering.smk"
-
-
 include: "rules/qualitycontroll.smk"
-
-
 include: "rules/visualisation.smk"
-
-
 include: "rules/classification.smk"
-
-
 include: "rules/outputs.smk"
-
-
 include: "rules/preparedata.smk"
-
-
 include: "rules/chimera_checking.smk"
 
 
 rule all:
     input:
         expand(
-            "results/{date}/16S-report.tar.gz", date=get_date(),
+            "results/{date}/16S-report.tar.gz",
+            date=get_date(),
         ),
     output:
-        touch(expand("results/archive-indicator/{date}.archived", date=get_date(),),),
+        touch(
+            expand(
+                "results/archive-indicator/{date}.archived",
+                date=get_date(),
+            ),
+        ),

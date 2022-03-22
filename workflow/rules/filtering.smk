@@ -9,6 +9,10 @@ rule fastq_score:
         min_quality=config["phred-score"],
         min_length_frac=0.75,
         max_ambig=config["max-ambiguity"],
+    log:
+        "logs/{date}/filtering/fastq-score.log",
+    conda:
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-qualityfilter.yaml"
     shell:
         "qiime quality-filter q-score "
         "--i-demux {input} "
@@ -27,6 +31,10 @@ rule chimera_filtering:
         direc=directory("results/{date}/out/uchime-dn-out"),
         table="results/{date}/out/table-nonchimeric-wo-borderline.qza",
         seqs="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",
+    log:
+        "logs/{date}/filtering/chimera-filtering.log",
+    conda:
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-chimerafilter.yaml"
     shell:
         "qiime vsearch uchime-denovo "
         "--i-table {input.table} "
@@ -47,13 +55,17 @@ rule chimera_filtering:
 
 rule filter_seq_length:
     input:
-        seq="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza", #results/{date}/out/seq-cluster.qza",
-        table="results/{date}/out/table-nonchimeric-wo-borderline.qza", #"results/{date}/out/table-cluster.qza"
+        seq="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",  #results/{date}/out/seq-cluster.qza",
+        table="results/{date}/out/table-nonchimeric-wo-borderline.qza",  #"results/{date}/out/table-cluster.qza"
     output:
         seq="results/{date}/out/seq-cluster-lengthfilter.qza",
         table="results/{date}/out/table-cluster-lengthfilter.qza",
     params:
         min_length=config["min-seq-length"],
+    log:
+        "logs/{date}/filtering/filter-seq-length.log",
+    conda:
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-chimerafilter.yaml"
     shell:
         "qiime feature-table filter-seqs "
         "--i-data {input.seq} "
@@ -73,18 +85,26 @@ rule abundance_frequency:
         "results/{date}/out/abundance.txt",
     params:
         relative_abundance=config["relative-abundance-filter"],
+    log:
+        "logs/{date}/filtering/abundance-frequency.log",
+    conda:
+        "../envs/abundancefiltering.yaml"
     script:
         "../scripts/relative_abundance.py"
 
 
 rule filter_frequency:
     input:
-        table="results/{date}/out/table-cluster-lengthfilter.qza", #"results/{date}/out/table-cluster.qza", 
-        seqs="results/{date}/out/seq-cluster-lengthfilter.qza", #"results/{date}/out/seq-cluster.qza", 
+        table="results/{date}/out/table-cluster-lengthfilter.qza",  #"results/{date}/out/table-cluster.qza", 
+        seqs="results/{date}/out/seq-cluster-lengthfilter.qza",  #"results/{date}/out/seq-cluster.qza", 
         abundance="results/{date}/out/abundance.txt",
     output:
-        table="results/{date}/out/table-cluster-filtered.qza", # "results/{date}/out/table-cluster-freq.qza"
-        seqs="results/{date}/out/seq-cluster-filtered.qza", # "results/{date}/out/seq-cluster-freq.qza"
+        table="results/{date}/out/table-cluster-filtered.qza",  # "results/{date}/out/table-cluster-freq.qza"
+        seqs="results/{date}/out/seq-cluster-filtered.qza",  # "results/{date}/out/seq-cluster-freq.qza"
+    log:
+        "logs/{date}/filtering/filter-frequency.log",
+    conda:
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-chimerafilter.yaml"
     shell:
         "value=$(<{input.abundance}) \n"
         "echo $value \n"
@@ -128,6 +148,10 @@ rule taxa_collapse:
         taxonomy="results/{date}/out/taxonomy.qza",
     output:
         "results/{date}/out/taxa_collapsed.qza",
+    log:
+        "logs/{date}/filtering/taxa-collapse.log",
+    conda:
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-taxonomy.yaml"
     shell:
         "qiime taxa collapse "
         "--i-table {input.table} "
@@ -144,6 +168,10 @@ rule filter_taxonomy:
     output:
         table="results/{date}/out/table-taxa-filtered.qza",
         seq="results/{date}/out/seq-taxa-filtered.qza",
+    log:
+        "logs/{date}/filtering/filter-taxonomy.log",
+    conda:
+        "../envs/qiime-only-env.yaml"  #"../envs/qiime-taxonomy.yaml"
     shell:
         "qiime taxa filter-table "
         "--i-table {input.table} "
