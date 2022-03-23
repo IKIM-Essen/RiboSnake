@@ -12,8 +12,8 @@ data: data/
 metadata: config/pep/metadata.txt
 # Paths to the databases used for classification and taxonomy
 database:
-  sequences: resources/silva-138-99-seqs.qza
-  taxonomy: resources/silva-138-99-tax.qza
+  download-path-seq: https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
+  download-path-tax: https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza
 # Forward and reverse primers used for sequencing
 primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
@@ -27,7 +27,7 @@ phred-score: 20
 max-ambiguity: 50
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: extract-group-no #swab-site
-  beta-metadata-column: extract-group-no #swab-site
-  gneiss-metadata-column: site-name #subject
-  rarefaction-max-depth: 400 #500
+  taxa-heatmap-column: swab-site #extract-group-no
+  beta-metadata-column: swab-site #extract-group-no
+  gneiss-metadata-column: subject #site-name
+  rarefaction-max-depth: 500 #400

@@ -12,8 +12,8 @@ data: data/
 metadata: config/pep/metadata.txt
 # Paths to the databases used for classification and taxonomy
 database:
-  sequences: resources/silva-138-99-seqs.qza
-  taxonomy: resources/silva-138-99-tax.qza
+  download-path-seq: resources/silva-138-99-seqs.qza
+  download-path-tax: resources/silva-138-99-tax.qza
 # Forward and reverse primers used for sequencing
 primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
