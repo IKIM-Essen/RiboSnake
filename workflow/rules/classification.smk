@@ -41,8 +41,8 @@ rule de_novo_clustering:
 rule classification:
     input:
         query="results/{date}/out/seq-cluster-filtered.qza",
-        reference_reads=config["database"]["sequences"],
-        reference_taxonomy=config["database"]["taxonomy"],
+        reference_reads="resources/silva-138-99-seqs.qza",
+        reference_taxonomy="resources/silva-138-99-tax.qza",
     output:
         "results/{date}/out/taxonomy.qza",
     params:

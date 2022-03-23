@@ -11,3 +11,15 @@ rule data_prep:
         "../envs/python.yaml"
     script:
         "../scripts/create_sample_metadata.py"
+
+rule get_database:
+    output:
+        seq = "resources/silva-138-99-seqs.qza",
+        tax = "resources/silva-138-99-tax.qza"
+    params:
+        seq = str(config["database"]["download-path-seq"]),
+        tax = str(config["database"]["download-path-tax"])
+    shell: 
+        "cd resources; "
+        "wget {params.seq}; "
+        "wget {params.tax}; "

@@ -7,8 +7,6 @@ rule fastqc:
     log:
         "logs/{date}/fastqc/{names}.log",
     threads: 8
-    conda:
-        "../envs/qc.yaml"
     wrapper:
         "v1.3.1/bio/fastqc"
 
@@ -23,7 +21,5 @@ rule multiqc:
         "results/{date}/out/multiqc.html",
     log:
         "logs/{date}/multiqc.log",
-    conda:
-        "../envs/qc.yaml"
     wrapper:
         "v1.3.1/bio/multiqc"
