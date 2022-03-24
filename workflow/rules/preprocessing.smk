@@ -9,7 +9,7 @@ rule read_samples:
     log:
         "logs/{date}/preprocessing/read-samples.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-import.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime tools import "
         "--type 'SampleData[PairedEndSequencesWithQuality]' "
@@ -30,7 +30,7 @@ rule trim_paired:
     log:
         "logs/{date}/preprocessing/trim-paired.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-cutadapt.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime cutadapt trim-paired "
         "--i-demultiplexed-sequences {input} "
@@ -50,7 +50,7 @@ rule join_ends:
     log:
         "logs/{date}/preprocessing/join-ends.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-vsearch.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime vsearch join-pairs "
         "--i-demultiplexed-seqs {input} "

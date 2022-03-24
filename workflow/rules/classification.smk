@@ -7,7 +7,7 @@ rule dereplication:
     log:
         "logs/{date}/classification/dereplication.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-vsearch.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime vsearch dereplicate-sequences "
         "--i-sequences {input} "
@@ -23,11 +23,11 @@ rule de_novo_clustering:
         table="results/{date}/out/table-cluster.qza",
         seqs="results/{date}/out/seq-cluster.qza",
     params:
-        perc_identity=0.99,
+        perc_identity=config["clustering"],["perc-identity"]
     log:
         "logs/{date}/classification/de-novo-clustering.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-vsearch.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime vsearch cluster-features-de-novo "
         "--i-table {input.table} "
@@ -46,18 +46,20 @@ rule classification:
     output:
         "results/{date}/out/taxonomy.qza",
     params:
-        perc_identity=0.97,
+        perc_identity=config["classification"]["perc-identity"],
+        maxaccepts=config["classification"]["maxaccepts"],
+        maxrejects=config["classification"]["maxrejects"],
     log:
         "logs/{date}/classification/classification.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-classifier.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime feature-classifier classify-consensus-vsearch "
         "--i-query {input.query} "
         "--i-reference-reads {input.reference_reads} "
         "--i-reference-taxonomy {input.reference_taxonomy} "
-        "--p-maxaccepts 1 "
-        "--p-maxrejects 1 "
+        "--p-maxaccepts {params.maxaccepts} "
+        "--p-maxrejects {params.maxrejects} "
         "--p-perc-identity {params.perc_identity} "
         "--p-threads 10 "
         "--o-classification {output} "
@@ -75,7 +77,7 @@ rule phylogenetic_tree:
     log:
         "logs/{date}/classification/phylogenetic-tree.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-phylogeny.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime phylogeny align-to-tree-mafft-fasttree "
         "--i-sequences {input} "
@@ -97,7 +99,7 @@ rule core_metrics:
     log:
         "logs/{date}/classification/core_metrics.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-diversity.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime diversity core-metrics-phylogenetic "
         "--i-phylogeny {input.phylogeny} "

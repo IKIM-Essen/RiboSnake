@@ -6,13 +6,13 @@ rule fastq_score:
         stats="results/{date}/out/demux-joined-filter-stats.qza",
     params:
         date=get_date(),
-        min_quality=config["phred-score"],
-        min_length_frac=0.75,
-        max_ambig=config["max-ambiguity"],
+        min_quality=config["filtering"]["phred-score"],
+        min_length_frac=config["filtering"]["min-length-frac"],
+        max_ambig=config["filtering"]["max-ambiguity"],
     log:
         "logs/{date}/filtering/fastq-score.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-qualityfilter.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime quality-filter q-score "
         "--i-demux {input} "
@@ -31,15 +31,17 @@ rule chimera_filtering:
         direc=directory("results/{date}/out/uchime-dn-out"),
         table="results/{date}/out/table-nonchimeric-wo-borderline.qza",
         seqs="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",
+    params:
+        minh=config["filtering"]["chimera-minh"],
     log:
         "logs/{date}/filtering/chimera-filtering.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-chimerafilter.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime vsearch uchime-denovo "
         "--i-table {input.table} "
         "--i-sequences {input.seqs} "
-        "--p-minh 0.35 "
+        "--p-minh {params.minh} "
         "--output-dir {output.direc} \n"
         "qiime feature-table filter-features "
         "--i-table {input.table} "
@@ -61,11 +63,11 @@ rule filter_seq_length:
         seq="results/{date}/out/seq-cluster-lengthfilter.qza",
         table="results/{date}/out/table-cluster-lengthfilter.qza",
     params:
-        min_length=config["min-seq-length"],
+        min_length=config["filtering"]["min-seq-length"],
     log:
         "logs/{date}/filtering/filter-seq-length.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-chimerafilter.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime feature-table filter-seqs "
         "--i-data {input.seq} "
@@ -84,7 +86,7 @@ rule abundance_frequency:
     output:
         "results/{date}/out/abundance.txt",
     params:
-        relative_abundance=config["relative-abundance-filter"],
+        relative_abundance=config["filtering"]["relative-abundance-filter"],
     log:
         "logs/{date}/filtering/abundance-frequency.log",
     conda:
@@ -104,7 +106,7 @@ rule filter_frequency:
     log:
         "logs/{date}/filtering/filter-frequency.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-chimerafilter.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "value=$(<{input.abundance}) \n"
         "echo $value \n"
@@ -151,7 +153,7 @@ rule taxa_collapse:
     log:
         "logs/{date}/filtering/taxa-collapse.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-taxonomy.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime taxa collapse "
         "--i-table {input.table} "
@@ -171,7 +173,7 @@ rule filter_taxonomy:
     log:
         "logs/{date}/filtering/filter-taxonomy.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-taxonomy.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime taxa filter-table "
         "--i-table {input.table} "

@@ -10,7 +10,7 @@ rule biom_file:
     log:
         "logs/{date}/outputs/biom-file.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-export.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime tools export "
         "--input-path {input.table} "
