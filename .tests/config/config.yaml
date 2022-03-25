@@ -33,9 +33,9 @@ filtering:
   chimera-minh: 0.35
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: swab-site #extract-group-no
-  beta-metadata-column: swab-site #extract-group-no
-  gneiss-metadata-column: subject #site-name
+  taxa-heatmap-column: extract-group-no
+  beta-metadata-column: extract-group-no
+  gneiss-metadata-column: site-name
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification
@@ -53,7 +53,7 @@ clustering:
 # Parameters set for alpha- and beta-rarefaction
 rarefaction:
   # The maximum rarefaction depth. Must be greater than min-depth
-  max-depth: 500 #400
+  max-depth: 400
   # The total frequency that each sample should be rarefied to prior to computing the diversity metric
   sampling_depth: 100
   # The beta diversity metric to be computed
