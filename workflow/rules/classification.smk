@@ -23,7 +23,7 @@ rule de_novo_clustering:
         table="results/{date}/out/table-cluster.qza",
         seqs="results/{date}/out/seq-cluster.qza",
     params:
-        perc_identity=config["clustering"],["perc-identity"]
+        perc_identity=config["clustering"]["perc-identity"],
     log:
         "logs/{date}/classification/de-novo-clustering.log",
     conda:
@@ -95,7 +95,7 @@ rule core_metrics:
     output:
         "results/{date}/core-metrics-results",
     params:
-        depth=100,
+        depth=config["rarefaction"]["sampling_depth"],
     log:
         "logs/{date}/classification/core_metrics.log",
     conda:
