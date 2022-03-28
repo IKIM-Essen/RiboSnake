@@ -24,6 +24,7 @@ rule de_novo_clustering:
         seqs="results/{date}/out/seq-cluster.qza",
     params:
         perc_identity=config["clustering"]["perc-identity"],
+        threads=config["threads"],
     log:
         "logs/{date}/classification/de-novo-clustering.log",
     conda:
@@ -33,7 +34,7 @@ rule de_novo_clustering:
         "--i-table {input.table} "
         "--i-sequences {input.seqs} "
         "--p-perc-identity {params.perc_identity} "
-        "--p-threads 10 "
+        "--p-threads {params.threads} "
         "--o-clustered-table {output.table} "
         "--o-clustered-sequences {output.seqs}"
 
@@ -49,6 +50,9 @@ rule classification:
         perc_identity=config["classification"]["perc-identity"],
         maxaccepts=config["classification"]["maxaccepts"],
         maxrejects=config["classification"]["maxrejects"],
+        threads=config["threads"],
+        query_cov=config["classification"]["query-cov"],
+        min_consensus=config["classification"]["min-consensus"],
     log:
         "logs/{date}/classification/classification.log",
     conda:
@@ -61,7 +65,9 @@ rule classification:
         "--p-maxaccepts {params.maxaccepts} "
         "--p-maxrejects {params.maxrejects} "
         "--p-perc-identity {params.perc_identity} "
-        "--p-threads 10 "
+        "--p-query-cov {params.query_cov} "
+        "--p-min-consensus {params.min_consensus} "
+        "--p-threads {params.threads} "
         "--o-classification {output} "
         "--verbose"
 

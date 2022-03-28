@@ -17,6 +17,35 @@ database:
 # Forward and reverse primers used for sequencing
 primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
+#Primertrimming parameters
+primertrimming:
+    # Maximum allowed error rate
+    error_rate: 0.1
+    # Remove multiple occurrences of an adapter if it is repeated, up to `times` times
+    rep_times: 1
+    # Require at least `overlap` bases of overlap between read and adapter for an adapter to be found
+    overlap: 3
+    # Discard reads shorter than specified value
+    min_length: 6
+sequence_joining:
+  # Minimum overlap length of forward and reverse reads for joining.
+  seq_join_length: 30
+  # Sequences shorter than minlen after truncation are discarded. 
+  minlen: 1
+  # Maximum number of mismatches in the forward/reverse read overlap for joining. 
+  maxdiffs: 10
+  # The minimum allowed quality score in the input.
+  qmin: 0
+  # The minimum allowed quality score to use in output.
+  qminout: 0
+  # The maximum allowed quality score in the input.
+  qmax: 41
+  # The maximum allowed quality score to use in output.
+  qmaxout: 41
+  # Number of threads to use
+  threads: 4
+# Threads to be used by the different methods
+threads: 10
 # Parameters necessary for filtering
 filtering:
   # Relative threshold for the abundance filtering
@@ -33,7 +62,7 @@ filtering:
   chimera-minh: 0.35
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: swab-site #extract-group-no
+  taxa-heatmap-column: subject #extract-group-no
   beta-metadata-column: swab-site #extract-group-no
   gneiss-metadata-column: subject #site-name
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
@@ -46,6 +75,10 @@ classification:
   maxaccepts: 1
   # Range(1,None), String("all"), Maximum number of non-matching target sequences to consider before stopping the search
   maxrejects: 1
+  # Reject match if query alignment coverage per high-scoring pair is lower. 
+  query-cov: 0.8
+  # Minimum fraction of assignments must match top hit to be accepted as consensus assignment.
+  min-consensus: 0.51
 # Parameters for de-novo clustering with vsearch
 clustering:
   #The percent identity at which clustering should be performed
