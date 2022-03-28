@@ -6,7 +6,7 @@ rule visualise_samples:
     log:
         "logs/{date}/visualisation/visualise-samples.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-metadata-visual.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime demux summarize "
         "--i-data {input} "
@@ -21,7 +21,7 @@ rule visualise_table:
     log:
         "logs/{date}/visualisation/visualise-table.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-metadata-visual.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime feature-table summarize "
         "--i-table {input} "
@@ -36,7 +36,7 @@ rule visualise_fastq:
     log:
         "logs/{date}/visualisation/visualise-fastq.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-vsearch.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime vsearch fastq-stats "
         "--i-sequences {input} "
@@ -51,7 +51,7 @@ rule demux_stats:
     log:
         "logs/{date}/visualisation/demux-stats.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-metadata-visual.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime metadata tabulate "
         "--m-input-file {input} "
@@ -65,11 +65,11 @@ rule taxa_heatmap:
         "results/{date}/visual/heatmap.qzv",
     params:
         metadata=config["metadata-parameters"]["taxa-heatmap-column"],  #"extract-group-no",#"swab-site", config["metadata-parameters"]["taxa-heatmap-column"]
-        cluster="features",
+        cluster=config["metadata-parameters"]["cluster"],
     log:
         "logs/{date}/visualisation/taxa-heatmap.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-taxonomy.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime feature-table heatmap "
         "--i-table {input} "
@@ -88,7 +88,7 @@ rule taxa_barplot:
     log:
         "logs/{date}/visualisation/taxa-barplot.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-taxonomy.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime taxa barplot "
         "--i-table {input.table} "
@@ -105,7 +105,7 @@ rule tabulate_taxa:
     log:
         "logs/{date}/visualisation/tabulate-taxa.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-metadata-visual.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime metadata tabulate "
         "--m-input-file {input} "
@@ -120,7 +120,7 @@ rule newick_tree:
     log:
         "logs/{date}/visualisation/newick-tree.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-qiime-exports.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime tools export "
         "--input-path {input} "
@@ -137,7 +137,7 @@ rule alpha:
     log:
         "logs/{date}/visualisation/alpha-rarefaction.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-diversity.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime diversity alpha-group-significance "
         "--i-alpha-diversity {input.faith} "
@@ -159,7 +159,7 @@ rule beta:
     log:
         "logs/{date}/visualisation/beta-rarefaction.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-diversity.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime diversity beta-group-significance "
         "--i-distance-matrix {input} "
@@ -183,7 +183,7 @@ rule emperor:
     log:
         "logs/{date}/visualisation/emperor.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-plots.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime emperor plot "
         "--i-pcoa {input.unifrac_pcoa} "
@@ -206,11 +206,14 @@ rule rarefaction:
         alpha="results/{date}/visual/alpha-rarefaction.qzv",
         beta="results/{date}/visual/beta-rarefaction.qzv",
     params:
-        max_depth=config["metadata-parameters"]["rarefaction-max-depth"],
+        max_depth=config["rarefaction"]["max-depth"],
+        sampling_depth=config["rarefaction"]["sampling_depth"],
+        metric=config["rarefaction"]["metric"],
+        clustering_method=config["rarefaction"]["clustering_method"],
     log:
         "logs/{date}/visualisation/rarefaction.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-diversity.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime diversity alpha-rarefaction "
         "--i-table {input.table} "
@@ -221,12 +224,11 @@ rule rarefaction:
         "qiime diversity beta-rarefaction "
         "--i-table {input.table} "
         "--i-phylogeny {input.phylogeny} "
-        "--p-metric euclidean "
-        "--p-clustering-method nj "
+        "--p-metric {params.metric} "
+        "--p-clustering-method {params.clustering_method} "
         "--m-metadata-file config/pep/sample.tsv "
-        "--p-sampling-depth 100 "
+        "--p-sampling-depth {params.sampling_depth} "
         "--o-visualization {output.beta}"
-        #400,500
 
 
 rule gneiss:

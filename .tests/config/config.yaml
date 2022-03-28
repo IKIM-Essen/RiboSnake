@@ -17,17 +17,79 @@ database:
 # Forward and reverse primers used for sequencing
 primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
-# Relative threshold for the abundance filtering
-relative-abundance-filter: 0.001
-# Minimum length of a sequence to be retained
-min-seq-length: 200
-# Minimum quality score for sequences to pass filter
-phred-score: 20
-# Maximum number of undetermined base calls ("N")
-max-ambiguity: 50
+#Primertrimming parameters
+primertrimming:
+    # Maximum allowed error rate
+    error_rate: 0.1
+    # Remove multiple occurrences of an adapter if it is repeated, up to `times` times
+    rep_times: 1
+    # Require at least `overlap` bases of overlap between read and adapter for an adapter to be found
+    overlap: 3
+    # Discard reads shorter than specified value
+    min_length: 6
+sequence_joining:
+  # Minimum overlap length of forward and reverse reads for joining.
+  seq_join_length: 30
+  # Sequences shorter than minlen after truncation are discarded. 
+  minlen: 1
+  # Maximum number of mismatches in the forward/reverse read overlap for joining. 
+  maxdiffs: 10
+  # The minimum allowed quality score in the input.
+  qmin: 0
+  # The minimum allowed quality score to use in output.
+  qminout: 0
+  # The maximum allowed quality score in the input.
+  qmax: 41
+  # The maximum allowed quality score to use in output.
+  qmaxout: 41
+  # Number of threads to use
+  threads: 4
+# Threads to be used by the different methods
+threads: 10
+# Parameters necessary for filtering
+filtering:
+  # Relative threshold for the abundance filtering
+  relative-abundance-filter: 0.001
+  # Minimum length of a sequence to be retained
+  min-seq-length: 200
+  # Minimum quality score for sequences to pass filter
+  phred-score: 20
+  # Maximum number of undetermined base calls ("N")
+  max-ambiguity: 50
+  # The minimum length that a sequence read can be following truncation and still be retained
+  min-length-frac: 0.75
+  # Increasing this value tends to reduce the number of false positives and to decrease sensitivity.
+  chimera-minh: 0.35
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: extract-group-no #swab-site
-  beta-metadata-column: extract-group-no #swab-site
-  gneiss-metadata-column: site-name #subject
-  rarefaction-max-depth: 400 #500
+  taxa-heatmap-column: extract-group-no
+  beta-metadata-column: extract-group-no
+  gneiss-metadata-column: site-name
+  # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
+  cluster: features
+# Parameters for classification
+classification:
+  # Reject match if percent identity to query is lower
+  perc-identity: 0.97
+  # Range (1,None), String("all"), Maximum number of hits to keep for each query
+  maxaccepts: 1
+  # Range(1,None), String("all"), Maximum number of non-matching target sequences to consider before stopping the search
+  maxrejects: 1
+  # Reject match if query alignment coverage per high-scoring pair is lower. 
+  query-cov: 0.8
+  # Minimum fraction of assignments must match top hit to be accepted as consensus assignment.
+  min-consensus: 0.51
+# Parameters for de-novo clustering with vsearch
+clustering:
+  #The percent identity at which clustering should be performed
+  perc-identity: 0.99
+# Parameters set for alpha- and beta-rarefaction
+rarefaction:
+  # The maximum rarefaction depth. Must be greater than min-depth
+  max-depth: 400
+  # The total frequency that each sample should be rarefied to prior to computing the diversity metric
+  sampling_depth: 100
+  # The beta diversity metric to be computed
+  metric: euclidean
+  # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
+  clustering_method: nj

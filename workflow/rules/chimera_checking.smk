@@ -31,7 +31,9 @@ rule chimera_taxonomy:
     output:
         "results/{date}/out/chimera_taxonomy.qza",
     params:
-        perc_identity=0.97,
+        perc_identity=config["classification"]["perc-identity"],
+        maxaccepts=config["classification"]["maxaccepts"],
+        maxrejects=config["classification"]["maxrejects"],
     log:
         "logs/{date}/chimera-checking/chimera-taxonomy.log",
     conda:
@@ -41,8 +43,8 @@ rule chimera_taxonomy:
         "--i-query {input.query} "
         "--i-reference-reads {input.reference_reads} "
         "--i-reference-taxonomy {input.reference_taxonomy} "
-        "--p-maxaccepts 1 "
-        "--p-maxrejects 1 "
+        "--p-maxaccepts {params.maxaccepts} "
+        "--p-maxrejects {params.maxrejects} "
         "--p-perc-identity {params.perc_identity} "
         "--p-threads 4 "
         "--o-classification {output} "
