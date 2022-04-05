@@ -39,10 +39,18 @@ while b < len(subdir):
     if "beta-rarefaction" in subdir[b]:
         svg = datadir + "heatmap.svg"
         shutil.copy(svg, snakemake.output.beta_svg)
+        html = datadir
+        shutil.copytree(html, snakemake.output.beta_html)
     elif "heatmap" in subdir[b]:
         svg = datadir + "feature-table-heatmap.svg"
         shutil.copy(svg, snakemake.output.heatmap)
     elif "taxonomy" in subdir[b]:
         tsv = datadir + "metadata.tsv"
         shutil.copy(tsv, snakemake.output.taxonomy_tsv)
+    elif "taxa-bar-plots" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.taxa_barplot)
+    if "alpha-rarefaction" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.alpha_html)
     b = b + 1
