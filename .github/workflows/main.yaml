@@ -58,9 +58,7 @@ jobs:
         wget https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
         wget https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza 
         cd ..
-        ls
         mkdir -p data/2022-03-17
-        ls
         curl -sL \
           https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip > \
           data/2022-03-17/casava-18-paired-end-demultiplexed.zip
@@ -71,6 +69,7 @@ jobs:
         rm -r casava-18-paired-end-demultiplexed/
         rm blank*
         rm PAP*
+        ls
         
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
