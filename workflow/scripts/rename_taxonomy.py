@@ -5,6 +5,7 @@ import os
 # When the headers are equal, the files can be merged into one file.
 
 taxonomy_file = str(snakemake.input) + "/" + os.listdir(str(snakemake.input))[0]
+print(os.listdir(str(snakemake.input))[0])
 taxonomy_df = pd.read_csv(taxonomy_file, delimiter="\t", header=0)
 taxonomy_df.rename(
     columns={"Feature ID": "#OTU ID", "Taxon": "taxonomy", "Consensus": "confidence"},
