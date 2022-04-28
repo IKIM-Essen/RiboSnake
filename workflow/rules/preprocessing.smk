@@ -63,7 +63,9 @@ rule trim_paired:
         fi
         """
 
+
 if config["datatype"] == "'SampleData[PairedEndSequencesWithQuality]'":
+
     rule join_ends:
         input:
             "results/{date}/out/trimmed-seqs.qza",

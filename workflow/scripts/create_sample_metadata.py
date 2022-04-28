@@ -82,14 +82,22 @@ i = 0
 while i < len(sample_info.index):
     for file in files_to_copy:
         if sample_info.index[i] in file:
-            if "SampleData[PairedEndSequencesWithQuality]" in str(snakemake.params.datatype):
+            if "SampleData[PairedEndSequencesWithQuality]" in str(
+                snakemake.params.datatype
+            ):
                 if "R1" in file:
-                    sample_info.loc[sample_info.index[i], "path1"] = DATA_PATH + "/" + file
+                    sample_info.loc[sample_info.index[i], "path1"] = (
+                        DATA_PATH + "/" + file
+                    )
                 elif "R2" in file:
-                    sample_info.loc[sample_info.index[i], "path2"] = DATA_PATH + "/" + file
+                    sample_info.loc[sample_info.index[i], "path2"] = (
+                        DATA_PATH + "/" + file
+                    )
             elif "SampleData[SequencesWithQuality]" in str(snakemake.params.datatype):
                 if "R1" in file:
-                    sample_info.loc[sample_info.index[i], "path1"] = DATA_PATH + "/" + file
+                    sample_info.loc[sample_info.index[i], "path1"] = (
+                        DATA_PATH + "/" + file
+                    )
         else:
             continue
     i = i + 1

@@ -1,4 +1,5 @@
 if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+
     rule fastq_score:
         input:
             "results/{date}/out/joined-seqs.qza",
@@ -25,6 +26,7 @@ if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
 
 if config["datatype"] == "SampleData[SequencesWithQuality]":
+
     rule fastq_score:
         input:
             "results/{date}/out/trimmed-seqs.qza",
@@ -146,9 +148,9 @@ rule filter_frequency:
         "--i-table {output.table} "
         "--p-no-exclude-ids "
         "--o-filtered-data {output.seqs}"
-
-
 # rule filter_abundance:
+
+
 #    input:
 #        table = "results/{date}/out/table-cluster-freq.qza",
 #        seqs = "results/{date}/out/seq-cluster-freq.qza"
