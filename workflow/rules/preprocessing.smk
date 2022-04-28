@@ -6,13 +6,14 @@ rule read_samples:
         "results/{date}/out/demux-paired-end.qza",
     params:
         direc=get_data_dir(),
+        datatype=config["datatype"],
     log:
         "logs/{date}/preprocessing/read-samples.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
         "qiime tools import "
-        "--type 'SampleData[PairedEndSequencesWithQuality]' "
+        "--type {params.datatype} "
         "--input-path {params.direc} "
         "--input-format CasavaOneEightSingleLanePerSampleDirFmt "
         "--output-path {output}"
@@ -24,6 +25,7 @@ rule trim_paired:
     output:
         "results/{date}/out/trimmed-seqs.qza",
     params:
+        datatype=config["datatype"],
         primer1=config["primer1"],
         primer2=config["primer2"],
         error_rate=config["primertrimming"]["error_rate"],
@@ -35,44 +37,60 @@ rule trim_paired:
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
-        "qiime cutadapt trim-paired "
-        "--i-demultiplexed-sequences {input} "
-        "--p-adapter-f {params.primer1} "
-        "--p-front-f {params.primer2} "
-        "--p-error-rate {params.error_rate} "
-        "--p-times {params.rep_times} "
-        "--p-overlap {params.overlap} "
-        "--p-minimum-length {params.min_length} "
-        "--o-trimmed-sequences {output}"
+        """
+        if [[ '${params.datatype}' == '$SampleData[PairedEndSequencesWithQuality]' ]] 
+        then 
+            qiime cutadapt trim-paired \
+            --i-demultiplexed-sequences {input} \
+            --p-adapter-f {params.primer1} \
+            --p-front-f {params.primer2} \
+            --p-error-rate {params.error_rate} \
+            --p-times {params.rep_times} \
+            --p-overlap {params.overlap} \
+            --p-minimum-length {params.min_length} \
+            --o-trimmed-sequences {output} 
+        else 
+            qiime cutadapt trim-single \
+            --i-demultiplexed-sequences {input} \
+            --p-cores 10 \
+            --p-adapter {params.primer1} \
+            --p-front {params.primer2} \
+            --p-error-rate {params.error_rate} \
+            --p-times {params.rep_times} \
+            --p-overlap {params.overlap} \
+            --p-minimum-length {params.min_length} \
+            --o-trimmed-sequences {output}
+        fi
+        """
 
-
-rule join_ends:
-    input:
-        "results/{date}/out/trimmed-seqs.qza",
-    output:
-        "results/{date}/out/joined-seqs.qza",
-    params:
-        minovlen=config["sequence_joining"]["seq_join_length"],
-        minlen=config["sequence_joining"]["minlen"],
-        maxdiffs=config["sequence_joining"]["maxdiffs"],
-        qmin=config["sequence_joining"]["qmin"],
-        qminout=config["sequence_joining"]["qminout"],
-        qmax=config["sequence_joining"]["qmax"],
-        qmaxout=config["sequence_joining"]["qmaxout"],
-        threads=config["sequence_joining"]["threads"],
-    log:
-        "logs/{date}/preprocessing/join-ends.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime vsearch join-pairs "
-        "--i-demultiplexed-seqs {input} "
-        "--p-minovlen {params.minovlen} "
-        "--p-minlen {params.minlen} "
-        "--p-maxdiffs {params.maxdiffs} "
-        "--p-qmin {params.qmin} "
-        "--p-qminout {params.qminout} "
-        "--p-qmax {params.qmax} "
-        "--p-qmaxout {params.qmaxout} "
-        "--p-threads {params.threads} "
-        "--o-joined-sequences {output}"
+if config["datatype"] == "'SampleData[PairedEndSequencesWithQuality]'":
+    rule join_ends:
+        input:
+            "results/{date}/out/trimmed-seqs.qza",
+        output:
+            "results/{date}/out/joined-seqs.qza",
+        params:
+            minovlen=config["sequence_joining"]["seq_join_length"],
+            minlen=config["sequence_joining"]["minlen"],
+            maxdiffs=config["sequence_joining"]["maxdiffs"],
+            qmin=config["sequence_joining"]["qmin"],
+            qminout=config["sequence_joining"]["qminout"],
+            qmax=config["sequence_joining"]["qmax"],
+            qmaxout=config["sequence_joining"]["qmaxout"],
+            threads=config["sequence_joining"]["threads"],
+        log:
+            "logs/{date}/preprocessing/join-ends.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime vsearch join-pairs "
+            "--i-demultiplexed-seqs {input} "
+            "--p-minovlen {params.minovlen} "
+            "--p-minlen {params.minlen} "
+            "--p-maxdiffs {params.maxdiffs} "
+            "--p-qmin {params.qmin} "
+            "--p-qminout {params.qminout} "
+            "--p-qmax {params.qmax} "
+            "--p-qmaxout {params.qmaxout} "
+            "--p-threads {params.threads} "
+            "--o-joined-sequences {output}"

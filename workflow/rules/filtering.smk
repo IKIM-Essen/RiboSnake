@@ -1,26 +1,53 @@
-rule fastq_score:
-    input:
-        "results/{date}/out/joined-seqs.qza",
-    output:
-        filtering="results/{date}/out/demux-joined-filtered.qza",
-        stats="results/{date}/out/demux-joined-filter-stats.qza",
-    params:
-        date=get_date(),
-        min_quality=config["filtering"]["phred-score"],
-        min_length_frac=config["filtering"]["min-length-frac"],
-        max_ambig=config["filtering"]["max-ambiguity"],
-    log:
-        "logs/{date}/filtering/fastq-score.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime quality-filter q-score "
-        "--i-demux {input} "
-        "--p-min-quality {params.min_quality} "
-        "--p-min-length-fraction {params.min_length_frac} "
-        "--p-max-ambiguous {params.max_ambig} "
-        "--o-filtered-sequences {output.filtering} "
-        "--o-filter-stats {output.stats}"
+if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+    rule fastq_score:
+        input:
+            "results/{date}/out/joined-seqs.qza",
+        output:
+            filtering="results/{date}/out/demux-joined-filtered.qza",
+            stats="results/{date}/out/demux-joined-filter-stats.qza",
+        params:
+            date=get_date(),
+            min_quality=config["filtering"]["phred-score"],
+            min_length_frac=config["filtering"]["min-length-frac"],
+            max_ambig=config["filtering"]["max-ambiguity"],
+        log:
+            "logs/{date}/filtering/fastq-score.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime quality-filter q-score "
+            "--i-demux {input} "
+            "--p-min-quality {params.min_quality} "
+            "--p-min-length-fraction {params.min_length_frac} "
+            "--p-max-ambiguous {params.max_ambig} "
+            "--o-filtered-sequences {output.filtering} "
+            "--o-filter-stats {output.stats}"
+
+
+if config["datatype"] == "SampleData[SequencesWithQuality]":
+    rule fastq_score:
+        input:
+            "results/{date}/out/trimmed-seqs.qza",
+        output:
+            filtering="results/{date}/out/demux-joined-filtered.qza",
+            stats="results/{date}/out/demux-joined-filter-stats.qza",
+        params:
+            date=get_date(),
+            min_quality=config["filtering"]["phred-score"],
+            min_length_frac=config["filtering"]["min-length-frac"],
+            max_ambig=config["filtering"]["max-ambiguity"],
+        log:
+            "logs/{date}/filtering/fastq-score.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime quality-filter q-score "
+            "--i-demux {input} "
+            "--p-min-quality {params.min_quality} "
+            "--p-min-length-fraction {params.min_length_frac} "
+            "--p-max-ambiguous {params.max_ambig} "
+            "--o-filtered-sequences {output.filtering} "
+            "--o-filter-stats {output.stats}"
 
 
 rule chimera_filtering:
