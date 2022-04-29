@@ -148,8 +148,9 @@ rule filter_frequency:
         "--i-table {output.table} "
         "--p-no-exclude-ids "
         "--o-filtered-data {output.seqs}"
-# rule filter_abundance:
 
+
+# rule filter_abundance:
 
 
 #    input:
