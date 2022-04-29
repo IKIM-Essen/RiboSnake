@@ -64,7 +64,7 @@ rule trim_paired:
         """
 
 
-if config["datatype"] == "'SampleData[PairedEndSequencesWithQuality]'":
+if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
     rule join_ends:
         input:
