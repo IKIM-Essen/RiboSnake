@@ -17,9 +17,11 @@ rule get_database:
     output:
         seq="resources/silva-138-99-seqs.qza",
         tax="resources/silva-138-99-tax.qza",
+        ref_gen_packed="resources/GRCh38_latest_rna.fna.gz",
     params:
         seq=str(config["database"]["download-path-seq"]),
         tax=str(config["database"]["download-path-tax"]),
+        ref_seq=str(config["database"]["ref-genome"])
     log:
         "logs/prep_database.log",
     conda:
@@ -28,3 +30,33 @@ rule get_database:
         "cd resources; "
         "wget {params.seq}; "
         "wget {params.tax}; "
+        "wget {params.ref_seq}; "
+
+
+rule unzip_ref_gen:
+    input:
+        "resources/GRCh38_latest_rna.fna.gz"
+    output:
+        "resources/GRCh38_latest_rna.fna"
+    log:
+        "logs/unzip_ref_gen.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "gzip -d {input}"
+
+
+rule import_ref_genome:
+    input:
+        "resources/GRCh38_latest_genomic_upper.fna"
+    output:
+        "resources/GRCh38_latest_genomic_upper.qza"
+    log:
+        "logs/import_ref_gen.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime tools import "
+        "--input-path {input} "
+        "--output-path {output} "
+        "--type 'FeatureData[Sequence]' "

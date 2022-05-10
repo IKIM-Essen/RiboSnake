@@ -14,6 +14,7 @@ metadata: config/pep/metadata.txt
 database:
   download-path-seq: https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
   download-path-tax: https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza
+  ref-genome: https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_rna.fna.gz
 # Forward and reverse primers used for sequencing
 primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
@@ -49,7 +50,7 @@ threads: 10
 # Parameters necessary for filtering
 filtering:
   # Relative threshold for the abundance filtering
-  relative-abundance-filter: 0.001
+  relative-abundance-filter: 0.0025
   # Minimum length of a sequence to be retained
   min-seq-length: 200
   # Minimum quality score for sequences to pass filter
@@ -62,9 +63,9 @@ filtering:
   chimera-minh: 0.35
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: subject #extract-group-no
-  beta-metadata-column: swab-site #extract-group-no
-  gneiss-metadata-column: subject #site-name
+  taxa-heatmap-column: sampling_site #extract-group-no
+  beta-metadata-column: sampling_site #extract-group-no
+  gneiss-metadata-column: days_on_ecmo #site-name
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification
@@ -90,6 +91,6 @@ rarefaction:
   # The total frequency that each sample should be rarefied to prior to computing the diversity metric
   sampling_depth: 100
   # The beta diversity metric to be computed
-  metric: euclidean
+  metric: jaccard
   # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
   clustering_method: nj
