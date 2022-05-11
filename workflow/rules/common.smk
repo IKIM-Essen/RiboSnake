@@ -30,9 +30,13 @@ def get_samples():
 def get_filenames():
     # read files from sample_info
     data = pd.read_csv("config/pep/sample_info.txt")
-    path_list1 = data["path1"].tolist()
-    path_list2 = data["path2"].tolist()
-    allpaths = path_list1 + path_list2
+    if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+        path_list1 = data["path1"].tolist()
+        path_list2 = data["path2"].tolist()
+        allpaths = path_list1 + path_list2
+    elif config["datatype"] == "SampleData[SequencesWithQuality]":
+        path_list1 = data["path1"].tolist()
+        allpaths = path_list1
     incoming_files = []
     for file in allpaths:
         filename = file.split("/")[-1]
