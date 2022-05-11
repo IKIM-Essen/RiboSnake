@@ -34,6 +34,7 @@ rule multiqc_report:
     output:
         report(
             "results/{date}/visual/report/multiqc.html",
+            caption="../report/multiqc.rst",
             htmlindex="multiqc.htm",
             category="4. Qualitycontrol",
         ),
