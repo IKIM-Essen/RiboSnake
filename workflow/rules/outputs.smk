@@ -131,6 +131,7 @@ rule zip_report:
         "results/{date}/visual/report/taxonomy.tsv",
         "results/{date}/out/report.zip",
         "results/{date}/visual/fastq_stats.qzv",
+        "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         #"results/{date}/visual/demux-joined-filter-stats.qzv",
     output:
         "results/{date}/16S-report.tar.gz",
