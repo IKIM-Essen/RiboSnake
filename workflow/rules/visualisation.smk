@@ -290,6 +290,25 @@ rule add_biom_files:
         """
 
 
+rule add_biom_files_featcount:
+    input:
+        biom="results/{date}/out/biom_table/",
+        taxonomy="results/{date}/out/taxonomy_biom.tsv",
+    output:
+        biom="results/{date}/out/table.w-taxa-featcount.biom",
+        txt="results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+    log:
+        "logs/{date}/visualisation/add-biom-files.log",
+    conda:
+        "../envs/biom.yaml"
+    shell:
+        """
+        biom add-metadata -i {input.biom}/feature-table.biom -o {output.biom} --observation-metadata-fp {input.taxonomy}
+
+        biom convert -i {output.biom} -o {output.txt} --to-tsv --header-key taxonomy
+        """
+
+
 rule binary_heatmap:
     input:
         "results/{date}/out/table.from_biom_w_taxonomy.txt",
