@@ -296,6 +296,7 @@ rule binary_heatmap:
     output:
         report(
             "results/{date}/visual/heatmap_binary.png",
+            caption="../report/binary-heatmap.rst",
             category="1. Heatmap",
             subcategory="Presence/absence heatmap",
         ),

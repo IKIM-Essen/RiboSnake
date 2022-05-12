@@ -1,0 +1,1 @@
+MultiQC report showing general statistics and summarizes the fastQC reports.

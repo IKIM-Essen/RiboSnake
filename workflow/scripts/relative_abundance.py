@@ -32,7 +32,7 @@ while b < len(subdir):
         shutil.move(path, new_dir)
     b = b + 1
 # Read the specific csv holding the information, creating a dataframe, adding up all feature frequencies
-datadir = directory + "/" + "data/"
+datadir = str(snakemake.output.feature_table) + "/"
 csv = datadir + "sample-frequency-detail.csv"
 frequency = pd.read_csv(csv, header=0, delimiter=",")
 number = frequency["0"].sum()
@@ -40,5 +40,5 @@ number = frequency["0"].sum()
 abundance = float(str(snakemake.params))
 endnumber = number * abundance
 endnumber = int(endnumber)
-with open(str(snakemake.output), "w") as f:
+with open(str(snakemake.output.abundance), "w") as f:
     f.write(str(endnumber))

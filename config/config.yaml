@@ -18,6 +18,8 @@ database:
 # Forward and reverse primers used for sequencing
 primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
+# Type of data, single-end: 'SampleData[SequencesWithQuality]' or paired-end: 'SampleData[PairedEndSequencesWithQuality]'
+datatype: 'SampleData[PairedEndSequencesWithQuality]'
 #Primertrimming parameters
 primertrimming:
     # Maximum allowed error rate

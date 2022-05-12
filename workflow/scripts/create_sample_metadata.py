@@ -71,18 +71,33 @@ metadata.to_csv(snakemake.output.metadata, sep="\t", index=False)
 data = [metadata["sample-ID"], metadata["run_date"]]
 header = ["sample-ID", "run_date"]
 sample_info = pd.concat(data, axis=1, keys=header)
-sample_info["path1"] = ""
-sample_info["path2"] = ""
+if "SampleData[PairedEndSequencesWithQuality]" in str(snakemake.params.datatype):
+    sample_info["path1"] = ""
+    sample_info["path2"] = ""
+elif "SampleData[SequencesWithQuality]" in str(snakemake.params.datatype):
+    sample_info["path1"] = ""
 sample_info.set_index("sample-ID", inplace=True)
 sample_info.drop(labels=["categorical"], axis=0, inplace=True)
 i = 0
 while i < len(sample_info.index):
     for file in files_to_copy:
         if sample_info.index[i] in file:
-            if "R1" in file:
-                sample_info.loc[sample_info.index[i], "path1"] = DATA_PATH + "/" + file
-            elif "R2" in file:
-                sample_info.loc[sample_info.index[i], "path2"] = DATA_PATH + "/" + file
+            if "SampleData[PairedEndSequencesWithQuality]" in str(
+                snakemake.params.datatype
+            ):
+                if "R1" in file:
+                    sample_info.loc[sample_info.index[i], "path1"] = (
+                        DATA_PATH + "/" + file
+                    )
+                elif "R2" in file:
+                    sample_info.loc[sample_info.index[i], "path2"] = (
+                        DATA_PATH + "/" + file
+                    )
+            elif "SampleData[SequencesWithQuality]" in str(snakemake.params.datatype):
+                if "R1" in file:
+                    sample_info.loc[sample_info.index[i], "path1"] = (
+                        DATA_PATH + "/" + file
+                    )
         else:
             continue
     i = i + 1

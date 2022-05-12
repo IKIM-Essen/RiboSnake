@@ -1,0 +1,1 @@
+A bar plot showing for every sample, which bacterial taxa could be found and how large their percentage is of all the bacteria found in this sample.

@@ -1,0 +1,2 @@
+The alpha-rarefaction features two plots. the first one allows a closer look on the observed features, shannon or faith pd depending on the sequencing depth. The metadata column 
+observed can be changed depending on interest. The second plot shows the number of samples as a function of the sequencing depth.
