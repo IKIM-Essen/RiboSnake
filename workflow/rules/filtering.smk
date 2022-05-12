@@ -191,6 +191,7 @@ rule filter_human:
         table = "results/{date}/out/derep-table-nonhum.qza",
         human_hit = "results/{date}/out/human.qza",
     log:
+        "logs/{date}/filtering/filter-human.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:

@@ -19,11 +19,11 @@ rule get_database:
     output:
         seq="resources/silva-138-99-seqs.qza",
         tax="resources/silva-138-99-tax.qza",
-        ref_gen_packed="resources/GRCh38_latest_rna.fna.gz",
+        ref_gen_packed="resources/GRCh38_latest_genomic.fna.gz",
     params:
         seq=str(config["database"]["download-path-seq"]),
         tax=str(config["database"]["download-path-tax"]),
-        ref_seq=str(config["database"]["ref-genome"])
+        ref_seq=str(config["database"]["ref-genome"]),
     log:
         "logs/prep_database.log",
     conda:
@@ -37,22 +37,24 @@ rule get_database:
 
 rule unzip_ref_gen:
     input:
-        "resources/GRCh38_latest_rna.fna.gz"
+        "resources/GRCh38_latest_genomic.fna.gz",
     output:
-        "resources/GRCh38_latest_rna.fna"
+        fasta="resources/GRCh38_latest_genomic.fna",
+        fasta_uppercase="resources/GRCh38_latest_genomic_upper.fna",
     log:
         "logs/unzip_ref_gen.log",
     conda:
         "../envs/python.yaml"
     shell:
-        "gzip -d {input}"
+        "gzip -dc {input} > {output.fasta}; "
+        "awk '/^>/ {{print($0)}}; /^[^>]/ {{print(toupper($0))}}' {output.fasta} > {output.fasta_uppercase};"
 
 
 rule import_ref_genome:
     input:
-        "resources/GRCh38_latest_genomic_upper.fna"
+        "resources/GRCh38_latest_genomic_upper.fna",
     output:
-        "resources/GRCh38_latest_genomic_upper.qza"
+        "resources/GRCh38_latest_genomic_upper.qza",
     log:
         "logs/import_ref_gen.log",
     conda:

@@ -242,7 +242,7 @@ rule gneiss:
     log:
         "logs/{date}/visualisation/gneiss.log",
     conda:
-        "../envs/qiime-only-env.yaml"  #"../envs/qiime-plots.yaml"
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime gneiss correlation-clustering "
         "--i-table {input} "
@@ -255,7 +255,6 @@ rule gneiss:
         "--m-metadata-column {params.metadata} "
         "--p-color-map seismic "
         "--o-visualization {output.heatmap_gneiss}"
-        #subject
 
 
 rule rename_taxonomy:
