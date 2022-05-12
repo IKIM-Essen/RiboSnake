@@ -57,6 +57,8 @@ jobs:
         cd .tests/resources
         wget https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
         wget https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza 
+        wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
+        gzip -d GRCh38_latest_genomic.fna.gz
         cd ..
         mkdir -p data/2022-03-17
         curl -sL \

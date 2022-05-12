@@ -14,6 +14,7 @@ metadata: config/pep/metadata.txt
 database:
   download-path-seq: resources/silva-138-99-seqs.qza
   download-path-tax: resources/silva-138-99-tax.qza
+  ref-genome: https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
 # Forward and reverse primers used for sequencing
 primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
