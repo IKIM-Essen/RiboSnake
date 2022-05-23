@@ -255,7 +255,6 @@ rule gneiss:
         "--m-metadata-column {params.metadata} "
         "--p-color-map seismic "
         "--o-visualization {output.heatmap_gneiss}"
-        #subject
 
 
 rule rename_taxonomy:
@@ -322,6 +321,24 @@ rule binary_heatmap:
     log:
         "logs/{date}/visualisation/binary-heatmap.log",
     conda:
-        "../envs/binary-heatmap.yaml"
+        "../envs/plot.yaml"
     script:
         "../scripts/binaryheatmap.py"
+
+
+rule absolute_taxa:
+    input:
+        "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+    output:
+        report(
+            "results/{date}/visual/absolute-taxabar-plot.png",
+            caption="../report/absolute-taxabar-plot.rst",
+            category="2. Taxonomy",
+            subcategory="Taxa Barplot",
+        ),
+    log:
+        "logs/{date}/visualisation/absolute_taxabarplot.log",
+    conda:
+        "../envs/plot.yaml"
+    script:
+        "../scripts/absolute_taxabarplot.py"
