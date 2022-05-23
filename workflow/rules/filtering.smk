@@ -190,6 +190,10 @@ rule filter_human:
         seq="results/{date}/out/derep-seq-nonhum.qza",
         table="results/{date}/out/derep-table-nonhum.qza",
         human_hit="results/{date}/out/human.qza",
+    params:
+        threads=config["threads"],
+        perc-identity=config["filtering"]["perc-identity"],
+        perc-query-aligned=config["filtering"]["perc-query-aligned"],
     log:
         "logs/{date}/filtering/filter-human.log",
     conda:
@@ -198,6 +202,9 @@ rule filter_human:
         "qiime quality-control exclude-seqs "
         "--i-query-sequences {input.seq} "
         "--i-reference-sequences {input.ref_seq} "
+        "--p-threads {params.threads} "
+        "--p-perc-identity {params.perc-identity} "
+        "--p-perc-query-aligned {params.perc-query-aligned} "
         "--o-sequence-hits {output.human_hit} "
         "--o-sequence-misses {output.seq} \n"
         "qiime feature-table filter-features "

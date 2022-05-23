@@ -63,11 +63,15 @@ filtering:
   min-length-frac: 0.75
   # Increasing this value tends to reduce the number of false positives and to decrease sensitivity.
   chimera-minh: 0.35
+  # Percentual identity between query sequence and reference human genome
+  perc-identity: 0.93
+  # Percent of query sequence that must align to reference in order to be accepted as a hit
+  perc-query-aligned: 0.93
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: extract-group-no
-  beta-metadata-column: extract-group-no
-  gneiss-metadata-column: site-name
+  taxa-heatmap-column: subject
+  beta-metadata-column: swab-site
+  gneiss-metadata-column: subject
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification

@@ -48,7 +48,7 @@ sequence_joining:
   # Number of threads to use
   threads: 4
 # Threads to be used by the different methods
-threads: 10
+threads: 15
 # Parameters necessary for filtering
 filtering:
   # Relative threshold for the abundance filtering
@@ -63,6 +63,10 @@ filtering:
   min-length-frac: 0.75
   # Increasing this value tends to reduce the number of false positives and to decrease sensitivity.
   chimera-minh: 0.35
+  # Percentual identity between query sequence and reference human genome
+  perc-identity: 0.93
+  # Percent of query sequence that must align to reference in order to be accepted as a hit
+  perc-query-aligned: 0.93
 # Parameters for plots
 metadata-parameters:
   taxa-heatmap-column: sampling_site #extract-group-no
@@ -93,6 +97,6 @@ rarefaction:
   # The total frequency that each sample should be rarefied to prior to computing the diversity metric
   sampling_depth: 100
   # The beta diversity metric to be computed
-  metric: jaccard
+  metric: euclidean
   # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
   clustering_method: nj
