@@ -289,6 +289,25 @@ rule add_biom_files:
         """
 
 
+rule add_biom_files_featcount:
+    input:
+        biom="results/{date}/out/biom_table/",
+        taxonomy="results/{date}/out/taxonomy_biom.tsv",
+    output:
+        biom="results/{date}/out/table.w-taxa-featcount.biom",
+        txt="results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+    log:
+        "logs/{date}/visualisation/add-biom-files.log",
+    conda:
+        "../envs/biom.yaml"
+    shell:
+        """
+        biom add-metadata -i {input.biom}/feature-table.biom -o {output.biom} --observation-metadata-fp {input.taxonomy}
+
+        biom convert -i {output.biom} -o {output.txt} --to-tsv --header-key taxonomy
+        """
+
+
 rule binary_heatmap:
     input:
         "results/{date}/out/table.from_biom_w_taxonomy.txt",
@@ -302,6 +321,24 @@ rule binary_heatmap:
     log:
         "logs/{date}/visualisation/binary-heatmap.log",
     conda:
-        "../envs/binary-heatmap.yaml"
+        "../envs/plot.yaml"
     script:
         "../scripts/binaryheatmap.py"
+
+
+rule absolute_taxa:
+    input:
+        "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+    output:
+        report(
+            "results/{date}/visual/absolute-taxabar-plot.png",
+            caption="../report/absolute-taxabar-plot.rst",
+            category="2. Taxonomy",
+            subcategory="Taxa Barplot",
+        ),
+    log:
+        "logs/{date}/visualisation/absolute_taxabarplot.log",
+    conda:
+        "../envs/plot.yaml"
+    script:
+        "../scripts/absolute_taxabarplot.py"
