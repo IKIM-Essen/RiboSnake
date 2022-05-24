@@ -102,6 +102,7 @@ rule snakemake_report:
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/unzipped",
         "results/{date}/visual/report/multiqc.html",
+        "results/{date}/visual/absolute-taxabar-plot.png",
     output:
         "results/{date}/out/report.zip",
     params:
@@ -132,6 +133,7 @@ rule zip_report:
         "results/{date}/out/report.zip",
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+        "results/{date}/visual/absolute-taxabar-plot.png",
         #"results/{date}/visual/demux-joined-filter-stats.qzv",
     output:
         "results/{date}/16S-report.tar.gz",
