@@ -40,14 +40,25 @@ rule unzip_ref_gen:
         "resources/GRCh38_latest_genomic.fna.gz",
     output:
         fasta="resources/GRCh38_latest_genomic.fna",
-        fasta_uppercase="resources/GRCh38_latest_genomic_upper.fna",
     log:
         "logs/unzip_ref_gen.log",
     conda:
         "../envs/python.yaml"
     shell:
         "gzip -dc {input} > {output.fasta}; "
-        "awk '/^>/ {{print($0)}}; /^[^>]/ {{print(toupper($0))}}' {output.fasta} > {output.fasta_uppercase};"
+
+
+rule lower_to_upper:
+    input:
+        "resources/GRCh38_latest_genomic.fna",
+    output:
+        "resources/GRCh38_latest_genomic_upper.fna",
+    log:
+        "logs/lower_to_upper_fasta.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/lower_to_upper_fasta.py"
 
 
 rule import_ref_genome:
