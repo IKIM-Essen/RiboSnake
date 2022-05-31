@@ -1,6 +1,6 @@
-import pandas as pd 
+import pandas as pd
 
-fasta = open(str(snakemake.input),"r")
+fasta = open(str(snakemake.input), "r")
 fasta_upper_file = open(str(snakemake.output), "w")
 print("read!")
 for x in fasta.read():
