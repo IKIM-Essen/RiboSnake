@@ -69,9 +69,9 @@ filtering:
   perc-query-aligned: 0.93
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: subject
-  beta-metadata-column: swab-site
-  gneiss-metadata-column: subject
+  taxa-heatmap-column: extract-group-no
+  beta-metadata-column: extract-group-no
+  gneiss-metadata-column: site-name
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification
