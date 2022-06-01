@@ -56,7 +56,8 @@ using `$N` cores.
 ### Step 5: Investigate results
 
 After successful execution, the workflow provides you with a compressed folder, holding all interesting results ready to decompress or to download to your local machine.
-The compressed file 16S-report.tar.gz holds several qiime2-artifacts that can be inspected via qiime-view. In the zipped folder report.zip is the snakemake html report holding graphics as well as the DAG of the executed jobs and html files leading you directly to the qiime2-results.
+The compressed file 16S-report.tar.gz holds several qiime2-artifacts that can be inspected via qiime-view. In the zipped folder report.zip is the snakemake html
+report holding graphics as well as the DAG of the executed jobs and html files leading you directly to the qiime2-results.
 
 This report can, e.g., be forwarded to your collaborators.
 
