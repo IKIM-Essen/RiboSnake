@@ -3,7 +3,7 @@
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.10-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/16S.svg?branch=master)](https://travis-ci.org/snakemake-workflows/16S)
 
-Qiime2 workflow for 16S analysis created with snakemake. 
+Qiime2 workflow for 16S analysis created with snakemake.
 
 ## Authors
 
@@ -47,7 +47,7 @@ Test your configuration by performing a dry-run via
     snakemake --use-conda -n
 
 Executing the workflow takes two steps:
-    
+  
     Data preparation: snakemake --cores $N --use-conda data_prep
     Workflow execution: snakemake --cores $N --use-conda
 
