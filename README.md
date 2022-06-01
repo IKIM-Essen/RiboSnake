@@ -25,18 +25,17 @@ Configure the workflow according to your needs via editing the files in the `con
 
 ### Step 3: Install Snakemake
 
-Install Snakemake and Qiime2 using [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) via the qiime_env.yaml file in workflow/envs:
+Create a snakemake environment using [mamba](https://mamba.readthedocs.io/en/latest/) via:
 
-    conda env create -n qiime2 -f qiime_env.yaml 
+    mamba create -c conda-forge -c bioconda -n snakemake snakemake
 
-For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
-or the [instructions in the qiime2 documentation](https://docs.qiime2.org/2022.2/install/native/).
+For installation details, see the [instructions in the Snakemake documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html).
 
 ### Step 4: Execute workflow
 
 Activate the conda environment:
 
-    conda activate qiime2
+    conda activate snakemake
 
 Fill up the `metadata.txt` with the information of your samples:
 
@@ -49,16 +48,15 @@ Test your configuration by performing a dry-run via
 
 Executing the workflow takes two steps:
     
-    Data preparation: snakemake --cores $N data_prep
-    Workflow execution: snakemake --cores $N 
+    Data preparation: snakemake --cores $N --use-conda data_prep
+    Workflow execution: snakemake --cores $N --use-conda
 
 using `$N` cores.
 
 ### Step 5: Investigate results
 
 After successful execution, the workflow provides you with a compressed folder, holding all interesting results ready to decompress or to download to your local machine.
-The compressed file 16S-report.tar.gz holds several qiime2-artifacts that can be inspected via qiime-view, as well as unpacked qiime-artifacts in the directory `unzipped`
-that can be directly opened. In the zipped folder report.zip is the snakemake html report holding graphics as well as the DAG of the executed jobs.
+The compressed file 16S-report.tar.gz holds several qiime2-artifacts that can be inspected via qiime-view. In the zipped folder report.zip is the snakemake html report holding graphics as well as the DAG of the executed jobs and html files leading you directly to the qiime2-results.
 
 This report can, e.g., be forwarded to your collaborators.
 
