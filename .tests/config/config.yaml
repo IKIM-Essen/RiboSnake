@@ -5,6 +5,8 @@ pepfile: config/pep/config.yaml
 
 # If testing set true
 testing: True
+# If data-preparation should be enabled
+include-data-prep: False
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/
