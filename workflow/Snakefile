@@ -23,8 +23,12 @@ include: "rules/qualitycontroll.smk"
 include: "rules/visualisation.smk"
 include: "rules/classification.smk"
 include: "rules/outputs.smk"
-include: "rules/preparedata.smk"
 include: "rules/chimera_checking.smk"
+
+
+if config["include-data-prep"]:
+
+    include: "rules/preparedata.smk"
 
 
 rule all:
