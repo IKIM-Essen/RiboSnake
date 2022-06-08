@@ -181,6 +181,38 @@ rule filter_frequency:
 #            "--o-filtered-data {output.seqs}"
 
 
+rule filter_human:
+    input:
+        seq="results/{date}/out/derepl-seq.qza",
+        table="results/{date}/out/derepl-table.qza",
+        ref_seq="resources/GRCh38_latest_genomic_upper.qza",
+    output:
+        seq="results/{date}/out/derep-seq-nonhum.qza",
+        table="results/{date}/out/derep-table-nonhum.qza",
+        human_hit="results/{date}/out/human.qza",
+    params:
+        threads=config["threads"],
+        #perc-identity=config["filtering"]["perc-identity"],
+        #perc-query-aligned=config["filtering"]["perc-query-aligned"],
+    log:
+        "logs/{date}/filtering/filter-human.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime quality-control exclude-seqs "
+        "--i-query-sequences {input.seq} "
+        "--i-reference-sequences {input.ref_seq} "
+        "--p-threads {params.threads} "
+        "--p-perc-identity 0.93 "
+        "--p-perc-query-aligned 0.93 "
+        "--o-sequence-hits {output.human_hit} "
+        "--o-sequence-misses {output.seq} \n"
+        "qiime feature-table filter-features "
+        "--i-table {input.table} "
+        "--m-metadata-file {output.seq} "
+        "--o-filtered-table {output.table} "
+
+
 rule taxa_collapse:
     input:
         table="results/{date}/out/table-cluster-filtered.qza",

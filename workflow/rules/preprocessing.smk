@@ -15,6 +15,48 @@ rule get_database:
         "wget {params.tax}; "
 
 
+rule unzip_ref_gen:
+    input:
+        "resources/GRCh38_latest_genomic.fna.gz",
+    output:
+        fasta="resources/GRCh38_latest_genomic.fna",
+    log:
+        "logs/unzip_ref_gen.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "gzip -dc {input} > {output.fasta}; "
+
+
+rule lower_to_upper:
+    input:
+        "resources/GRCh38_latest_genomic.fna",
+    output:
+        "resources/GRCh38_latest_genomic_upper.fna",
+    log:
+        "logs/lower_to_upper_fasta.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/lower_to_upper_fasta.py"
+
+
+rule import_ref_genome:
+    input:
+        "resources/GRCh38_latest_genomic_upper.fna",
+    output:
+        "resources/GRCh38_latest_genomic_upper.qza",
+    log:
+        "logs/import_ref_gen.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime tools import "
+        "--input-path {input} "
+        "--output-path {output} "
+        "--type 'FeatureData[Sequence]' "
+
+
 rule read_samples:
     input:
         tsv="config/pep/sample.tsv",

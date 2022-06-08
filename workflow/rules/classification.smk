@@ -17,8 +17,8 @@ rule dereplication:
 
 rule de_novo_clustering:
     input:
-        table="results/{date}/out/derepl-table.qza",
-        seqs="results/{date}/out/derepl-seq.qza",
+        table="results/{date}/out/derep-table-nonhum.qza",
+        seqs="results/{date}/out/derep-seq-nonhum.qza",
     output:
         table="results/{date}/out/table-cluster.qza",
         seqs="results/{date}/out/seq-cluster.qza",

@@ -16,6 +16,7 @@ metadata: config/pep/metadata.txt
 database:
   download-path-seq: resources/silva-138-99-seqs.qza
   download-path-tax: resources/silva-138-99-tax.qza
+  ref-genome: https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
 # Forward and reverse primers used for sequencing
 primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
@@ -64,6 +65,10 @@ filtering:
   min-length-frac: 0.75
   # Increasing this value tends to reduce the number of false positives and to decrease sensitivity.
   chimera-minh: 0.35
+  # Percentual identity between query sequence and reference human genome
+  perc-identity: 0.93
+  # Percent of query sequence that must align to reference in order to be accepted as a hit
+  perc-query-aligned: 0.93
 # Parameters for plots
 metadata-parameters:
   taxa-heatmap-column: extract-group-no
