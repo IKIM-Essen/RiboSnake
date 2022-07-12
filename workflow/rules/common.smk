@@ -81,7 +81,7 @@ def get_reads_for_kraken():
     for file in incoming_files:
         name = file.split("_")[0]
         number = file.split("_")[1]
-        kraken_name = name + "_" + number
+        kraken_name = "{name} _ {number}".format(name=name, number=number)
         names.append(kraken_name)
         names = list(dict.fromkeys(names))
     return names
