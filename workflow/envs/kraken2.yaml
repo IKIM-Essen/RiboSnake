@@ -1,0 +1,6 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - pandas=1.2.5
+  - kraken2=2.1.2
