@@ -57,7 +57,6 @@ jobs:
         cd .tests/resources
         wget https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
         wget https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza 
-        wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
         wget ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/old/minikraken2_v2_8GB_201904.tgz
         cd ..
         mkdir -p data/2022-03-17
