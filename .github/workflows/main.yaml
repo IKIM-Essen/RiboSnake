@@ -63,6 +63,7 @@ jobs:
         mkdir minikraken2_v2_8GB_201904_UPDATE
         tar -xf 16S_Silva138_20200326.tgz -C minikraken2_v2_8GB_201904_UPDATE/
         cd minikraken2_v2_8GB_201904_UPDATE
+        ls -l
         mv mini16S_SILVA138_k2db/* .
         rm -r mini16S_SILVA138_k2db/
         cd ..
