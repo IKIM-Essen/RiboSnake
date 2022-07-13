@@ -134,7 +134,10 @@ rule zip_report:
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.png",
-        #"results/{date}/visual/demux-joined-filter-stats.qzv",
+        expand(
+            "results/{{date}}/out/kraken/{sample}.kreport2",
+            sample=get_reads_for_kraken(),
+        ),
     output:
         "results/{date}/16S-report.tar.gz",
     log:

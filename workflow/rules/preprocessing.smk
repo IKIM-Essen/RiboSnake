@@ -2,11 +2,13 @@ rule get_database:
     output:
         seq="resources/silva-138-99-seqs.qza",
         tax="resources/silva-138-99-tax.qza",
-        genomic="resources/GRCh38_latest_genomic.fna.gz",
+        genomic=temp("resources/GRCh38_latest_genomic.fna.gz"),
+        kraken=temp("resources/minikraken2_v2_8GB_201904.tgz"),
     params:
         seq=str(config["database"]["download-path-seq"]),
         tax=str(config["database"]["download-path-tax"]),
         genomic=str(config["database"]["ref-genome"]),
+        kraken=str(config["database"]["kraken-db"]),
     log:
         "logs/prep_database.log",
     conda:
@@ -15,27 +17,28 @@ rule get_database:
         "cd resources; "
         "wget {params.seq}; "
         "wget {params.tax}; "
-        "wget {params.genomic};"
+        "wget {params.genomic}; "
+        "wget {params.kraken}; "
 
 
 rule unzip_ref_gen:
     input:
         "resources/GRCh38_latest_genomic.fna.gz",
     output:
-        fasta="resources/GRCh38_latest_genomic.fna",
+        temp("resources/GRCh38_latest_genomic.fna"),
     log:
         "logs/unzip_ref_gen.log",
     conda:
         "../envs/python.yaml"
     shell:
-        "gzip -dc {input} > {output.fasta}; "
+        "gzip -dc {input} > {output}; "
 
 
 rule lower_to_upper:
     input:
         "resources/GRCh38_latest_genomic.fna",
     output:
-        "resources/GRCh38_latest_genomic_upper.fna",
+        temp("resources/GRCh38_latest_genomic_upper.fna"),
     log:
         "logs/lower_to_upper_fasta.log",
     conda:
@@ -58,6 +61,19 @@ rule import_ref_genome:
         "--input-path {input} "
         "--output-path {output} "
         "--type 'FeatureData[Sequence]' "
+
+
+rule unzip_kraken:
+    input:
+        "resources/minikraken2_v2_8GB_201904.tgz",
+    output:
+        directory("resources/minikraken2_v2_8GB_201904_UPDATE"),
+    log:
+        "logs/unzip_kraken_db.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "tar -zxvf {input} -C resources;"
 
 
 rule read_samples:
