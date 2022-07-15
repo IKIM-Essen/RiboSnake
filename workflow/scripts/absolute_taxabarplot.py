@@ -32,7 +32,7 @@ lgd = fig.legend(
     loc="center left",
     bbox_to_anchor=(1, 0.5),
     borderaxespad=0.0,
-    fontsize=8
+    fontsize=8,
 )
 if len(df) < 40:
     plt.xticks(fontsize=7, rotation=45)
