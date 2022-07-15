@@ -27,7 +27,12 @@ mycolors = np.random.choice(
 fig = df_trans.plot(kind="bar", stacked=True, color=mycolors, figsize=(16, 8))
 handles, labels = fig.get_legend_handles_labels()
 lgd = fig.legend(
-    handles, labels, loc="center left", bbox_to_anchor=(1, 0.5), borderaxespad=0.0, fontsize=8
+    handles,
+    labels,
+    loc="center left",
+    bbox_to_anchor=(1, 0.5),
+    borderaxespad=0.0,
+    fontsize=8
 )
 if len(df) < 40:
     plt.xticks(fontsize=7, rotation=45)
