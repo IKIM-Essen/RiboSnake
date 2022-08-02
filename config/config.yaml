@@ -7,6 +7,8 @@ pepfile: config/pep/config.yaml
 testing: False
 # If data-preparation should be enabled
 include-data-prep: True
+# Modus: If true, analysis will be done with DADA2 instead of vsearch
+jan-mode: False
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/
@@ -103,3 +105,30 @@ rarefaction:
   metric: euclidean
   # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
   clustering_method: nj
+# If jan-mode is set to true, these parameters are used for denoising and clustering with DADA2
+dada2:
+  # Position at which forward reads should be truncated at the 3' end due to low quality
+  trunc-len-f: 240
+  # Position at which reverse reads should be truncated at the 3' end due to low quality
+  trunc-len-r: 240
+  # Position at which forward reads should be truncated at the 5' end due to low quality
+  trim-left-f: 0
+  # Position at which reverse reads should be truncated at the 5' end due to low quality
+  trim-left-r: 0
+  # Forward reads with number of expected errors higher than this value will be discarded
+  max-ee-f: 2.0
+  # Reverse reads with number of expected errors higher than this value will be discarded.
+  max-ee-r: 2.0
+  # Reads are truncated at the first instance of a quality score less than or equal to this value
+  trunc-q: 5
+  # The minimum length of the overlap required for merging the forward and reverse reads
+  min-overlap: 12
+  # The method used to pool samples for denoising ('independent', 'pseudo')
+  pooling-method: 'independent'
+  # The method used to remove chimeras ('none', 'consensus', 'pooled')
+  chimera-method: 'consensus'
+  # The minimum abundance of potential parents of a sequence being tested as chimeric, expressed as a 
+  # fold-change versus the abundance of the sequence being tested
+  min-fold-parent-over-abundance: 1.0
+  # The number of reads to use when training the errormodel
+  n-reads-learn: 1000000

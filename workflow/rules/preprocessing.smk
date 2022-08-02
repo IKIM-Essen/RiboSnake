@@ -142,7 +142,10 @@ rule trim_paired:
         """
 
 
-if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+if (
+    config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
+    and config["jan-mode"] == False
+):
 
     rule join_ends:
         input:
