@@ -34,6 +34,9 @@ rule unzip_reports:
         "results/{date}/visual/taxa-bar-plots.qzv",
         "results/{date}/visual/rooted-tree.qza",
         "results/{date}/visual/taxonomy.qzv",
+        "results/{date}/visual/faith-pd-group-significance.qzv",
+        "results/{date}/visual/evenness-group-significance.qzv",
+        #"results/{date}/visual/unweighted-unifrac-body-site-significance.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:

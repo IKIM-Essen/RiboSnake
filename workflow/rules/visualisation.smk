@@ -129,40 +129,45 @@ rule newick_tree:
 
 rule alpha:
     input:
-        faith="results/{date}/out/core-metrics-results/faith_pd_vector.qza",
-        evenness="results/{date}/out/core-metrics-results/evenness_vector.qza",
+        direc="results/{date}/core-metrics-results",
     output:
         faith="results/{date}/visual/faith-pd-group-significance.qzv",
         evenness="results/{date}/visual/evenness-group-significance.qzv",
+    params:
+        faith="results/{date}/core-metrics-results/faith_pd_vector.qza",
+        evenness="results/{date}/core-metrics-results/evenness_vector.qza",
     log:
         "logs/{date}/visualisation/alpha-rarefaction.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
         "qiime diversity alpha-group-significance "
-        "--i-alpha-diversity {input.faith} "
+        "--i-alpha-diversity {params.faith} "
         "--m-metadata-file config/pep/sample.tsv "
         "--o-visualization {output.faith} \n"
         "qiime diversity alpha-group-significance "
-        "--i-alpha-diversity {input.evenness} "
+        "--i-alpha-diversity {params.evenness} "
         "--m-metadata-file config/pep/sample.tsv "
         "--o-visualization {output.evenness}"
 
 
 rule beta:
     input:
-        "results/{date}/out/core-metrics-results/unweighted_unifrac_distance_matrix.qza",
+        direc="results/{date}/core-metrics-results",
     output:
         "results/{date}/visual/unweighted-unifrac-body-site-significance.qzv",
     params:
         metadata=config["metadata-parameters"]["beta-metadata-column"],  #"extract-group-no"#"swab-site", config["metadata-parameters"]["beta-metadata-column"]
+        unifrac=(
+            "results/{date}/core-metrics-results/unweighted_unifrac_distance_matrix.qza"
+        ),
     log:
         "logs/{date}/visualisation/beta-rarefaction.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
         "qiime diversity beta-group-significance "
-        "--i-distance-matrix {input} "
+        "--i-distance-matrix {params.unifrac} "
         "--m-metadata-file config/pep/sample.tsv "
         "--m-metadata-column {params.metadata} "
         "--o-visualization {output} "
@@ -171,14 +176,18 @@ rule beta:
 
 rule emperor:
     input:
-        unifrac_pcoa="results/{date}/out/core-metrics-results/unweighted_unifrac_pcoa_results.qza",
-        bray_curtis_pcoa=(
-            "results/{date}/out/core-metrics-results/bray_curtis_pcoa_results.qza"
-        ),
+        direc="results/{date}/core-metrics-results",
     output:
         unifrac="results/{date}/visual/unweighted-unifrac-emperor-days-since-experiment-start.qzv",
         bray_curtis=(
             "results/{date}/visual/bray-curtis-emperor-days-since-experiment-start.qzv"
+        ),
+    params:
+        unifrac_pcoa=(
+            "results/{date}/core-metrics-results/unweighted_unifrac_pcoa_results.qza"
+        ),
+        bray_curtis_pcoa=(
+            "results/{date}/core-metrics-results/bray_curtis_pcoa_results.qza"
         ),
     log:
         "logs/{date}/visualisation/emperor.log",
@@ -186,13 +195,13 @@ rule emperor:
         "../envs/qiime-only-env.yaml"
     shell:
         "qiime emperor plot "
-        "--i-pcoa {input.unifrac_pcoa} "
+        "--i-pcoa {params.unifrac_pcoa} "
         "--m-metadata-file config/pep/sample.tsv "
         "--p-custom-axes year "
         "--o-visualization {output.unifrac} \n"
 
         "qiime emperor plot "
-        "--i-pcoa {input.bray_curtis_pcoa} "
+        "--i-pcoa {params.bray_curtis_pcoa} "
         "--m-metadata-file config/pep/sample.tsv "
         "--p-custom-axes year "
         "--o-visualization {output.bray_curtis}"
