@@ -1,4 +1,7 @@
-if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+if (
+    config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
+    and config["jan-mode"] == False
+):
 
     rule fastq_score:
         input:
@@ -25,7 +28,10 @@ if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
             "--o-filter-stats {output.stats}"
 
 
-if config["datatype"] == "SampleData[SequencesWithQuality]":
+if (
+    config["datatype"] == "SampleData[SequencesWithQuality]"
+    and config["jan-mode"] == False
+):
 
     rule fastq_score:
         input:
@@ -52,61 +58,112 @@ if config["datatype"] == "SampleData[SequencesWithQuality]":
             "--o-filter-stats {output.stats}"
 
 
-rule chimera_filtering:
-    input:
-        table="results/{date}/out/table-cluster.qza",
-        seqs="results/{date}/out/seq-cluster.qza",
-    output:
-        direc=directory("results/{date}/out/uchime-dn-out"),
-        table="results/{date}/out/table-nonchimeric-wo-borderline.qza",
-        seqs="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",
-    params:
-        minh=config["filtering"]["chimera-minh"],
-    log:
-        "logs/{date}/filtering/chimera-filtering.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime vsearch uchime-denovo "
-        "--i-table {input.table} "
-        "--i-sequences {input.seqs} "
-        "--p-minh {params.minh} "
-        "--output-dir {output.direc} \n"
-        "qiime feature-table filter-features "
-        "--i-table {input.table} "
-        "--m-metadata-file {output.direc}/chimeras.qza "
-        "--p-exclude-ids "
-        "--o-filtered-table {output.table} \n"
-        "qiime feature-table filter-seqs "
-        "--i-data {input.seqs} "
-        "--m-metadata-file {output.direc}/chimeras.qza "
-        "--p-exclude-ids "
-        "--o-filtered-data {output.seqs}"
+if config["jan-mode"] == False:
+
+    rule chimera_filtering:
+        input:
+            table="results/{date}/out/table-cluster.qza",
+            seqs="results/{date}/out/seq-cluster.qza",
+        output:
+            direc=directory("results/{date}/out/uchime-dn-out"),
+            table="results/{date}/out/table-nonchimeric-wo-borderline.qza",
+            seqs="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",
+        params:
+            minh=config["filtering"]["chimera-minh"],
+        log:
+            "logs/{date}/filtering/chimera-filtering.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime vsearch uchime-denovo "
+            "--i-table {input.table} "
+            "--i-sequences {input.seqs} "
+            "--p-minh {params.minh} "
+            "--output-dir {output.direc} \n"
+            "qiime feature-table filter-features "
+            "--i-table {input.table} "
+            "--m-metadata-file {output.direc}/chimeras.qza "
+            "--p-exclude-ids "
+            "--o-filtered-table {output.table} \n"
+            "qiime feature-table filter-seqs "
+            "--i-data {input.seqs} "
+            "--m-metadata-file {output.direc}/chimeras.qza "
+            "--p-exclude-ids "
+            "--o-filtered-data {output.seqs}"
+
+    rule filter_seq_length:
+        input:
+            seq="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",  #results/{date}/out/seq-cluster.qza",
+            table="results/{date}/out/table-nonchimeric-wo-borderline.qza",  #"results/{date}/out/table-cluster.qza"
+        output:
+            seq="results/{date}/out/seq-cluster-lengthfilter.qza",
+            table="results/{date}/out/table-cluster-lengthfilter.qza",
+        params:
+            min_length=config["filtering"]["min-seq-length"],
+        log:
+            "logs/{date}/filtering/filter-seq-length.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table filter-seqs "
+            "--i-data {input.seq} "
+            "--m-metadata-file {input.seq} "
+            "--p-where 'length(sequence) > {params.min_length}' "
+            "--o-filtered-data {output.seq} \n"
+            "qiime feature-table filter-features "
+            "--i-table {input.table} "
+            "--m-metadata-file {output.seq} "
+            "--o-filtered-table {output.table} "
 
 
-rule filter_seq_length:
-    input:
-        seq="results/{date}/out/rep-seqs-nonchimeric-wo-borderline.qza",  #results/{date}/out/seq-cluster.qza",
-        table="results/{date}/out/table-nonchimeric-wo-borderline.qza",  #"results/{date}/out/table-cluster.qza"
-    output:
-        seq="results/{date}/out/seq-cluster-lengthfilter.qza",
-        table="results/{date}/out/table-cluster-lengthfilter.qza",
-    params:
-        min_length=config["filtering"]["min-seq-length"],
-    log:
-        "logs/{date}/filtering/filter-seq-length.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime feature-table filter-seqs "
-        "--i-data {input.seq} "
-        "--m-metadata-file {input.seq} "
-        "--p-where 'length(sequence) > {params.min_length}' "
-        "--o-filtered-data {output.seq} \n"
-        "qiime feature-table filter-features "
-        "--i-table {input.table} "
-        "--m-metadata-file {output.seq} "
-        "--o-filtered-table {output.table} "
+if config["jan-mode"] == True:
+
+    rule dada2:
+        input:
+            "results/{date}/out/trimmed-seqs.qza",
+        output:
+            table="results/{date}/out/table-cluster-lengthfilter.qza",
+            seq="results/{date}/out/seq-cluster-lengthfilter.qza",
+            stats="results/{date}/out/dada2-stats.qza",
+        params:
+            trunc_len_f=config["dada2"]["trunc-len-f"],
+            trunc_len_r=config["dada2"]["trunc-len-r"],
+            trim_left_f=config["dada2"]["trim-left-f"],
+            trim_left_r=config["dada2"]["trim-left-r"],
+            max_ee_f=config["dada2"]["max-ee-f"],
+            max_ee_r=config["dada2"]["max-ee-r"],
+            trunc_q=config["dada2"]["trunc-q"],
+            min_overlap=config["dada2"]["min-overlap"],
+            pooling_method=config["dada2"]["pooling-method"],
+            chimera_method=config["dada2"]["chimera-method"],
+            min_fold_parent_over_abundance=config["dada2"][
+                "min-fold-parent-over-abundance"
+            ],
+            n_reads_learn=config["dada2"]["n-reads-learn"],
+            threads=config["threads"],
+        log:
+            "logs/{date}/clustering/dada2.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime dada2 denoise-paired "
+            "--i-demultiplexed-seqs {input} "
+            "--p-trunc-len-f {params.trunc_len_f} "
+            "--p-trunc-len-r {params.trunc_len_r} "
+            "--p-trim-left-f {params.trim_left_f} "
+            "--p-trim-left-r  {params.trim_left_r} "
+            "--p-max-ee-f {params.max_ee_f} "
+            "--p-max-ee-r {params.max_ee_r} "
+            "--p-trunc-q {params.trunc_q} "
+            "--p-min-overlap {params.min_overlap} "
+            "--p-pooling-method {params.pooling_method} "
+            "--p-chimera-method {params.chimera_method} "
+            "--p-min-fold-parent-over-abundance {params.min_fold_parent_over_abundance} "
+            "--p-n-threads {params.threads} "
+            "--p-n-reads-learn {params.n_reads_learn} "
+            "--o-table {output.table} "
+            "--o-representative-sequences {output.seq} "
+            "--o-denoising-stats {output.stats} "
 
 
 rule abundance_frequency:
@@ -154,31 +211,6 @@ rule filter_frequency:
         "--i-table {output.table} "
         "--p-no-exclude-ids "
         "--o-filtered-data {output.seqs}"
-
-
-# rule filter_abundance:
-
-
-#    input:
-#        table = "results/{date}/out/table-cluster-freq.qza",
-#        seqs = "results/{date}/out/seq-cluster-freq.qza"
-#    output:
-#        table = "results/{date}/out/table-cluster-filtered.qza",
-#        seqs = "results/{date}/out/seq-cluster-filtered.qza"
-#    params:
-#        abundance = float(0.015),
-#        prevalence = float(0.001)
-#    shell:
-#        "qiime feature-table filter-features-conditionally "
-#            "--i-table {input.table} "
-#            "--p-abundance {params.abundance} "
-#            "--p-prevalence {params.prevalence} "
-#            "--o-filtered-table {output.table} \n"
-#        "qiime feature-table filter-seqs "
-#            "--i-data {input.seqs} "
-#            "--i-table {output.table} "
-#            "--p-no-exclude-ids "
-#            "--o-filtered-data {output.seqs}"
 
 
 rule filter_human:
