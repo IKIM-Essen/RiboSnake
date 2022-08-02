@@ -61,7 +61,7 @@ rule import_ref_genome:
         "--input-path {input} "
         "--output-path {output} "
         "--type 'FeatureData[Sequence]' "
-        "--verbose 2> {log} "
+        "2> {log} "
 
 
 rule unzip_kraken:
@@ -96,7 +96,7 @@ rule read_samples:
         "--input-path {params.direc} "
         "--input-format CasavaOneEightSingleLanePerSampleDirFmt "
         "--output-path {output} "
-        "--verbose 2> {log} "
+        "2> {log} "
 
 
 rule trim_paired:
@@ -128,7 +128,8 @@ rule trim_paired:
             --p-times {params.rep_times} \
             --p-overlap {params.overlap} \
             --p-minimum-length {params.min_length} \
-            --o-trimmed-sequences {output} 
+            --o-trimmed-sequences {output} \
+            --verbose 2> {log}
         else 
             qiime cutadapt trim-single \
             --i-demultiplexed-sequences {input} \
@@ -139,7 +140,8 @@ rule trim_paired:
             --p-times {params.rep_times} \
             --p-overlap {params.overlap} \
             --p-minimum-length {params.min_length} \
-            --o-trimmed-sequences {output}
+            --o-trimmed-sequences {output} \
+            --verbose 2> {log}
         fi
         """
 

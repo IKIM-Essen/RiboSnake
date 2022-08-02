@@ -1,21 +1,3 @@
-rule dereplication:
-    input:
-        "results/{date}/out/demux-joined-filtered.qza",
-    output:
-        table="results/{date}/out/derepl-table.qza",
-        seqs="results/{date}/out/derepl-seq.qza",
-    log:
-        "logs/{date}/classification/dereplication.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime vsearch dereplicate-sequences "
-        "--i-sequences {input} "
-        "--o-dereplicated-table {output.table} "
-        "--o-dereplicated-sequences {output.seqs} "
-        "--verbose 2> {log}"
-
-        
 if config["jan-mode"] == False:
 
     rule dereplication:
@@ -32,7 +14,9 @@ if config["jan-mode"] == False:
             "qiime vsearch dereplicate-sequences "
             "--i-sequences {input} "
             "--o-dereplicated-table {output.table} "
-            "--o-dereplicated-sequences {output.seqs}"
+            "--o-dereplicated-sequences {output.seqs} "
+            "--verbose 2> {log}"
+
 
     rule de_novo_clustering:
         input:
@@ -110,7 +94,8 @@ rule phylogenetic_tree:
         "--o-alignment {output.alignment} "
         "--o-masked-alignment {output.masked_alignment} "
         "--o-tree {output.tree} "
-        "--o-rooted-tree {output.rooted_tree}"
+        "--o-rooted-tree {output.rooted_tree} "
+        "--verbose 2> {log}"
 
 
 rule core_metrics:
