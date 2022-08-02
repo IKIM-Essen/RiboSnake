@@ -31,7 +31,7 @@ rule unzip_ref_gen:
     conda:
         "../envs/python.yaml"
     shell:
-        "gzip -dc {input} > {output}; "
+        "gzip -dc {input} > {output} 2> {log}; "
 
 
 rule lower_to_upper:
@@ -61,6 +61,7 @@ rule import_ref_genome:
         "--input-path {input} "
         "--output-path {output} "
         "--type 'FeatureData[Sequence]' "
+        "--verbose 2> {log} "
 
 
 rule unzip_kraken:
@@ -94,7 +95,8 @@ rule read_samples:
         "--type {params.datatype} "
         "--input-path {params.direc} "
         "--input-format CasavaOneEightSingleLanePerSampleDirFmt "
-        "--output-path {output}"
+        "--output-path {output} "
+        "--verbose 2> {log} "
 
 
 rule trim_paired:
@@ -173,4 +175,5 @@ if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
             "--p-qmax {params.qmax} "
             "--p-qmaxout {params.qmaxout} "
             "--p-threads {params.threads} "
-            "--o-joined-sequences {output}"
+            "--o-joined-sequences {output} "
+            "--verbose 2> {log}"

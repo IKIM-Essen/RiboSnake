@@ -12,7 +12,8 @@ rule dereplication:
         "qiime vsearch dereplicate-sequences "
         "--i-sequences {input} "
         "--o-dereplicated-table {output.table} "
-        "--o-dereplicated-sequences {output.seqs}"
+        "--o-dereplicated-sequences {output.seqs} "
+        "--verbose 2> {log}"
 
 
 rule de_novo_clustering:
@@ -36,7 +37,8 @@ rule de_novo_clustering:
         "--p-perc-identity {params.perc_identity} "
         "--p-threads {params.threads} "
         "--o-clustered-table {output.table} "
-        "--o-clustered-sequences {output.seqs}"
+        "--o-clustered-sequences {output.seqs} "
+        "--verbose 2> {log}"
 
 
 rule classification:
@@ -69,7 +71,7 @@ rule classification:
         "--p-min-consensus {params.min_consensus} "
         "--p-threads {params.threads} "
         "--o-classification {output} "
-        "--verbose"
+        "--verbose 2> {log} "
 
 
 rule phylogenetic_tree:
@@ -96,10 +98,10 @@ rule phylogenetic_tree:
 rule core_metrics:
     input:
         phylogeny="results/{date}/visual/rooted-tree.qza",
-        table="results/{date}/table-cluster-filtered.qza",
+        table="results/{date}/out/table-taxa-filtered.qza",
         metadata="config/pep/sample.tsv",
     output:
-        "results/{date}/core-metrics-results",
+        directory("results/{date}/core-metrics-results"),
     params:
         depth=config["rarefaction"]["sampling_depth"],
     log:
@@ -112,4 +114,5 @@ rule core_metrics:
         "--i-table {input.table} "
         "--p-sampling-depth {params.depth} "
         "--m-metadata-file {input.metadata} "
-        "--output-dir {output}"
+        "--output-dir {output} "
+        "--verbose 2> {log}"
