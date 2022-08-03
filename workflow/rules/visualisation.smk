@@ -127,7 +127,7 @@ rule newick_tree:
         "--output-path {output}"
 
 
-rule alpha:
+rule alpha_significance:
     input:
         direc="results/{date}/core-metrics-results",
     output:
@@ -137,7 +137,7 @@ rule alpha:
         faith="results/{date}/core-metrics-results/faith_pd_vector.qza",
         evenness="results/{date}/core-metrics-results/evenness_vector.qza",
     log:
-        "logs/{date}/visualisation/alpha-rarefaction.log",
+        "logs/{date}/visualisation/alpha-significance.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
@@ -151,7 +151,7 @@ rule alpha:
         "--o-visualization {output.evenness}"
 
 
-rule beta:
+rule beta_significance:
     input:
         direc="results/{date}/core-metrics-results",
     output:
@@ -162,7 +162,7 @@ rule beta:
             "results/{date}/core-metrics-results/unweighted_unifrac_distance_matrix.qza"
         ),
     log:
-        "logs/{date}/visualisation/beta-rarefaction.log",
+        "logs/{date}/visualisation/beta-significance.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
@@ -351,3 +351,117 @@ rule absolute_taxa:
         "../envs/plot.yaml"
     script:
         "../scripts/absolute_taxabarplot.py"
+
+"""
+rule alpha:
+    input: 
+        "results/{date}/out/table-taxa-filtered.qza",
+    output:
+        "results/{date}/out/alpha-diversity.qza",
+    params:
+        metric=config["diversity"]["alpha"]["diversity-metric"],
+    log:
+        "logs/{date}/visualisation/alpha-diversity.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    script:
+        "qiime diversity alpha "
+        "--i-table {input}"
+        "--p-metric {params.metric} "
+        "--o-alpha-diversity {output} "
+        "--verbose 2> {log} "
+
+
+rule beta:
+    input: "results/{date}/out/table-taxa-filtered.qza",
+    output:
+        "results/{date}/out/beta-diversity-distance.qza",
+    params:
+        metric=config["diversity"]["beta"]["diversity-metric"],
+        pseudocount=config["diversity"]["beta"]["diversity-pseudocount"],
+        n_jobs=config["diversity"]["beta"]["diversity-n-jobs"],
+    log:
+        "logs/{date}/visualisation/beta-diversity.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    script:
+        "qiime diversity beta "
+        "--i-table {input} "
+        "--p-metric {params.metric} "
+        "--p-pseudocount {params.pseudocount} "
+        "--p-n-jobs {params.n_jobs} "
+        "--o-distance-matrix {ouput} "
+        "--verbose 2> {log}"
+
+
+rule beta_correlation:
+    input:
+         "results/{date}/out/beta-diversity-distance.qza",
+    output:
+        distance_matrix="results/{date}/out/beta-correlation.qza",
+        mantel_scatter_vis="results/{date}/out/beta-correlation-scatter.qzv"
+    params:
+        metadata_file="config/pep/sample.tsv",
+        metadata_column=config["diversity"]["beta"]["correlation-column"],
+        method=config["diversity"]["beta"]["correlation-method"],
+        permutations=config["diversity"]["beta"]["correlation-permutations"],
+    log:
+        "logs/{date}/visualisation/beta-correlation.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    script:
+        "qiime diversity beta-correlation "
+        "--i-distance-matrix {input} "
+        "--m-metadata-file {params.metadata_file} "
+        "--m-metadata-column {params.metadata_column} "
+        "--p-method {params.method} "
+        "--p-permutations {params.permutations} "
+        "--o-metadata-distance-matrix {output.distance_matrix} "
+        "--o-mantel-scatter-visualization {output.mantel_scatter_vis} "
+        "--verbose 2> {log}"
+
+
+rule beta_phylogeny:
+    input:
+        table="results/{date}/out/table-taxa-filtered.qza",
+        phylogeny="results/{date}/visual/rooted-tree.qza",
+    output:
+        "results/{date}/out/beta-phylogeny.qza",
+    params:
+        metrics=config["diversity"]["beta"]["phylogeny-metric"],
+        threads=config["threads"],
+        variance_adjusted=config["diversity"]["beta"]["phylogeny-variance-adjusted"],
+    log:
+        "logs/{date}/visualisation/beta-phylogeny.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    script:
+        "qiime diversity beta-phylogenetic "
+        "--i-table {input.table} "
+        "--i-phylogeny {input.phylogeny} "
+        "--p-metric {params.metrics} "
+        "--p-threads {params.threads} "
+        "--p-variance-adjusted {params.variance_adjusted} "
+        "--o-distance-matrix {output}"
+
+
+rule alpha_phylogeny:
+    input:
+        table="results/{date}/out/table-taxa-filtered.qza",
+        phylogeny="results/{date}/visual/rooted-tree.qza",
+    output:
+        "results/{date}/out/alpha-phylogeny.qza",
+    params:
+        metric=config["diversity"]["alpha"]["phylogeny-metric"],
+    log:
+        "logs/{date}/visualisation/alpha-phylogeny.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    script:
+        "qiime diversity alpha.phylogenetic "
+        "--i-tabel {input.table} "
+        "--i-phylogeny {input.phylogeny} "
+        "--p-metric {params.metric} "
+        "--o-alpha-diversity {ouput} "
+        "--verbose 2> {log}"
+"""

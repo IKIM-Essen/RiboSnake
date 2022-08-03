@@ -53,4 +53,7 @@ while b < len(subdir):
     if "alpha-rarefaction" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.alpha_html)
+    if "evenness-group-significance" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.alpha_significance)
     b = b + 1

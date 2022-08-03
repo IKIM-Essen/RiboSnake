@@ -54,8 +54,8 @@ rule report_files:
         beta_svg=report(
             "results/{date}/visual/report/beta-rarefaction.svg",
             caption="../report/beta-heatmap.rst",
-            category="3. Rarefaction",
-            subcategory="Beta rarefaction",
+            category="3. Analysis",
+            subcategory="Beta",
         ),
         heatmap=report(
             "results/{date}/visual/report/heatmap.svg",
@@ -79,14 +79,21 @@ rule report_files:
         beta_html=report(
             directory("results/{date}/visual/report/beta_rarefaction"),
             caption="../report/beta-rarefaction.rst",
-            category="3. Rarefaction",
+            category="3. Analysis",
             subcategory="Beta",
             htmlindex="index.html",
         ),
         alpha_html=report(
             directory("results/{date}/visual/report/alpha_rarefaction"),
             caption="../report/alpha-rarefaction.rst",
-            category="3. Rarefaction",
+            category="3. Analysis",
+            subcategory="Alpha",
+            htmlindex="index.html",
+        ),
+        alpha_significance=report(
+            directory("results/{date}/visual/report/evenness-group-significance"),
+            caption="../report/alpha-significance.rst",
+            category="3. Analysis",
             subcategory="Alpha",
             htmlindex="index.html",
         ),
@@ -141,6 +148,11 @@ rule zip_report:
             "results/{{date}}/out/kraken/{sample}.kreport2",
             sample=get_reads_for_kraken(),
         ),
+        #"results/{date}/out/alpha-diversity.qza",
+        #"results/{date}/out/beta-diversity-distance.qza",
+        #"results/{date}/out/beta-correlation.qza",
+        #"results/{date}/out/beta-phylogeny.qza",
+        #"results/{date}/out/alpha-phylogeny.qza",
     output:
         "results/{date}/16S-report.tar.gz",
     log:
