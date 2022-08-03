@@ -10,7 +10,8 @@ rule visualise_samples:
     shell:
         "qiime demux summarize "
         "--i-data {input} "
-        "--o-visualization {output}"
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
 
 
 rule visualise_table:
@@ -25,7 +26,8 @@ rule visualise_table:
     shell:
         "qiime feature-table summarize "
         "--i-table {input} "
-        "--o-visualization {output}"
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
 
 
 rule visualise_fastq:
@@ -40,7 +42,8 @@ rule visualise_fastq:
     shell:
         "qiime vsearch fastq-stats "
         "--i-sequences {input} "
-        "--o-visualization {output}"
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
 
 
 rule demux_stats:
@@ -56,6 +59,7 @@ rule demux_stats:
         "qiime metadata tabulate "
         "--m-input-file {input} "
         "--o-visualization {output} "
+        "--verbose 2> {log}"
 
 
 rule taxa_heatmap:
@@ -76,7 +80,8 @@ rule taxa_heatmap:
         "--m-sample-metadata-file config/pep/sample.tsv "
         "--m-sample-metadata-column {params.metadata} "
         "--p-cluster {params.cluster} "
-        "--o-visualization {output}"
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
 
 
 rule taxa_barplot:
@@ -94,7 +99,8 @@ rule taxa_barplot:
         "--i-table {input.table} "
         "--i-taxonomy {input.taxonomy} "
         "--m-metadata-file config/pep/sample.tsv "
-        "--o-visualization {output}"
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
 
 
 rule tabulate_taxa:
@@ -109,7 +115,8 @@ rule tabulate_taxa:
     shell:
         "qiime metadata tabulate "
         "--m-input-file {input} "
-        "--o-visualization {output}"
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
 
 
 rule newick_tree:
@@ -124,7 +131,8 @@ rule newick_tree:
     shell:
         "qiime tools export "
         "--input-path {input} "
-        "--output-path {output}"
+        "--output-path {output} "
+        "--verbose 2> {log}"
 
 
 rule alpha:
@@ -171,7 +179,8 @@ rule beta:
         "--m-metadata-file config/pep/sample.tsv "
         "--m-metadata-column {params.metadata} "
         "--o-visualization {output} "
-        "--p-pairwise"
+        "--p-pairwise "
+        "--verbose 2> {log}"
 
 
 rule emperor:
@@ -229,7 +238,8 @@ rule rarefaction:
         "--i-phylogeny {input.phylogeny} "
         "--p-max-depth {params.max_depth} "
         "--m-metadata-file config/pep/sample.tsv "
-        "--o-visualization {output.alpha} \n"
+        "--o-visualization {output.alpha} "
+        "--verbose 2> {log} \n"
         "qiime diversity beta-rarefaction "
         "--i-table {input.table} "
         "--i-phylogeny {input.phylogeny} "
@@ -237,7 +247,8 @@ rule rarefaction:
         "--p-clustering-method {params.clustering_method} "
         "--m-metadata-file config/pep/sample.tsv "
         "--p-sampling-depth {params.sampling_depth} "
-        "--o-visualization {output.beta}"
+        "--o-visualization {output.beta} "
+        "--verbose 2> {log}"
 
 
 rule gneiss:
@@ -263,7 +274,8 @@ rule gneiss:
         "--m-metadata-file config/pep/sample.tsv "
         "--m-metadata-column {params.metadata} "
         "--p-color-map seismic "
-        "--o-visualization {output.heatmap_gneiss}"
+        "--o-visualization {output.heatmap_gneiss} "
+        "--verbose 2> {log}"
 
 
 rule rename_taxonomy:

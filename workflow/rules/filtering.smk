@@ -25,7 +25,8 @@ if (
             "--p-min-length-fraction {params.min_length_frac} "
             "--p-max-ambiguous {params.max_ambig} "
             "--o-filtered-sequences {output.filtering} "
-            "--o-filter-stats {output.stats}"
+            "--o-filter-stats {output.stats} "
+            "--verbose 2> {log}"
 
 
 if (
@@ -55,7 +56,8 @@ if (
             "--p-min-length-fraction {params.min_length_frac} "
             "--p-max-ambiguous {params.max_ambig} "
             "--o-filtered-sequences {output.filtering} "
-            "--o-filter-stats {output.stats}"
+            "--o-filter-stats {output.stats} "
+            "--verbose 2> {log}"
 
 
 if config["jan-mode"] == False:
@@ -89,7 +91,8 @@ if config["jan-mode"] == False:
             "--i-data {input.seqs} "
             "--m-metadata-file {output.direc}/chimeras.qza "
             "--p-exclude-ids "
-            "--o-filtered-data {output.seqs}"
+            "--o-filtered-data {output.seqs} "
+            "--verbose 2> {log}"
 
     rule filter_seq_length:
         input:
@@ -114,6 +117,7 @@ if config["jan-mode"] == False:
             "--i-table {input.table} "
             "--m-metadata-file {output.seq} "
             "--o-filtered-table {output.table} "
+            "--verbose 2> {log}"
 
 
 if config["jan-mode"] == True:
@@ -164,6 +168,7 @@ if config["jan-mode"] == True:
             "--o-table {output.table} "
             "--o-representative-sequences {output.seq} "
             "--o-denoising-stats {output.stats} "
+            "--verbose 2> {log}"
 
 
 rule abundance_frequency:
@@ -238,7 +243,8 @@ rule filter_human:
         "--p-perc-identity 0.93 "
         "--p-perc-query-aligned 0.93 "
         "--o-sequence-hits {output.human_hit} "
-        "--o-sequence-misses {output.seq} \n"
+        "--o-sequence-misses {output.seq} "
+        "--verbose 2> {log} \n"
         "qiime feature-table filter-features "
         "--i-table {input.table} "
         "--m-metadata-file {output.seq} "
