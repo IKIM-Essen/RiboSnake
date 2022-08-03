@@ -17,7 +17,6 @@ if config["jan-mode"] == False:
             "--o-dereplicated-sequences {output.seqs} "
             "--verbose 2> {log}"
 
-
     rule de_novo_clustering:
         input:
             table="results/{date}/out/derep-table-nonhum.qza",
