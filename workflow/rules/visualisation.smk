@@ -196,12 +196,16 @@ rule copy_emperor:
     params:
         bray="results/{date}/core-metrics-results/bray_curtis_emperor.qzv",
         jaccard="results/{date}/core-metrics-results/jaccard_emperor.qzv",
-        unweighted_unifrac="results/{date}/core-metrics-results/unweighted_unifrac_emperor.qzv",
-        weighted_unifrac="results/{date}/core-metrics-results/weighted_unifrac_emperor.qzv",
+        unweighted_unifrac=(
+            "results/{date}/core-metrics-results/unweighted_unifrac_emperor.qzv"
+        ),
+        weighted_unifrac=(
+            "results/{date}/core-metrics-results/weighted_unifrac_emperor.qzv"
+        ),
     log:
         "logs/{date}/visualisation/copy-emperor.log",
     conda:
-        "../envs/python.yaml",
+        "../envs/python.yaml"
     shell:
         "cp {params.bray} {output.bray};"
         "cp {params.jaccard} {output.jaccard};"
@@ -409,7 +413,7 @@ rule alpha:
         "--p-metric {params.metric} "
         "--o-alpha-diversity {output} "
         "--verbose 2> {log}"
-    
+
 
 rule beta:
     input:
