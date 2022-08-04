@@ -56,4 +56,24 @@ while b < len(subdir):
     if "evenness-group-significance" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.alpha_significance)
+    if "faith-pd-group-significance" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.faith_pd)
+    if "bray-curtis-emperor" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.bray_curtis_emperor)
+    if "jaccard-emperor" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.jaccard_emperor)
+    if "unweighted-unifrac-emperor" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.unweighted_unifrac_emperor)
+    if "weighted-unifrac-emperor" in subdir[b]:
+        html = datadir
+        if os.path.exists(snakemake.output.weighted_unifrac_emperor):
+            shutil.rmtree(snakemake.output.weighted_unifrac_emperor)
+        shutil.copytree(html, snakemake.output.weighted_unifrac_emperor)
+    if "beta-correlation-scatter" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.beta_correaltion_scatter)
     b = b + 1

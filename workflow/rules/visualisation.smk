@@ -174,6 +174,33 @@ rule beta_significance:
         "--p-pairwise"
 
 
+rule copy_emperor:
+    input:
+        direc="results/{date}/core-metrics-results",
+        scatter="results/{date}/out/beta-correlation-scatter.qzv",
+    output:
+        bray="results/{date}/visual/bray-curtis-emperor.qzv",
+        jaccard="results/{date}/visual/jaccard-emperor.qzv",
+        unweighted_unifrac="results/{date}/visual/unweighted-unifrac-emperor.qzv",
+        weighted_unifrac="results/{date}/visual/weighted-unifrac-emperor.qzv",
+        scatter="results/{date}/visual/beta-correlation-scatter.qzv",
+    params:
+        bray="results/{date}/core-metrics-results/bray_curtis_emperor.qzv",
+        jaccard="results/{date}/core-metrics-results/jaccard_emperor.qzv",
+        unweighted_unifrac="results/{date}/core-metrics-results/unweighted_unifrac_emperor.qzv",
+        weighted_unifrac="results/{date}/core-metrics-results/weighted_unifrac_emperor.qzv",
+    log:
+        "logs/{date}/visualisation/copy-emperor.log",
+    conda:
+        "../envs/python.yaml",
+    shell:
+        "cp {params.bray} {output.bray};"
+        "cp {params.jaccard} {output.jaccard};"
+        "cp {params.unweighted_unifrac} {output.unweighted_unifrac};"
+        "cp {params.weighted_unifrac} {output.weighted_unifrac};"
+        "cp {input.scatter} {output.scatter};"
+
+
 rule emperor:
     input:
         direc="results/{date}/core-metrics-results",
@@ -352,9 +379,9 @@ rule absolute_taxa:
     script:
         "../scripts/absolute_taxabarplot.py"
 
-"""
+
 rule alpha:
-    input: 
+    input:
         "results/{date}/out/table-taxa-filtered.qza",
     output:
         "results/{date}/out/alpha-diversity.qza",
@@ -364,16 +391,17 @@ rule alpha:
         "logs/{date}/visualisation/alpha-diversity.log",
     conda:
         "../envs/qiime-only-env.yaml"
-    script:
+    shell:
         "qiime diversity alpha "
-        "--i-table {input}"
+        "--i-table {input} "
         "--p-metric {params.metric} "
         "--o-alpha-diversity {output} "
-        "--verbose 2> {log} "
-
+        "--verbose 2> {log}"
+    
 
 rule beta:
-    input: "results/{date}/out/table-taxa-filtered.qza",
+    input:
+        "results/{date}/out/table-taxa-filtered.qza",
     output:
         "results/{date}/out/beta-diversity-distance.qza",
     params:
@@ -384,40 +412,34 @@ rule beta:
         "logs/{date}/visualisation/beta-diversity.log",
     conda:
         "../envs/qiime-only-env.yaml"
-    script:
+    shell:
         "qiime diversity beta "
         "--i-table {input} "
         "--p-metric {params.metric} "
         "--p-pseudocount {params.pseudocount} "
         "--p-n-jobs {params.n_jobs} "
-        "--o-distance-matrix {ouput} "
+        "--o-distance-matrix {output} "
         "--verbose 2> {log}"
 
 
-rule beta_correlation:
+rule alpha_phylogeny:
     input:
-         "results/{date}/out/beta-diversity-distance.qza",
+        phylogeny="results/{date}/visual/rooted-tree.qza",
+        table="results/{date}/out/table-taxa-filtered.qza",
     output:
-        distance_matrix="results/{date}/out/beta-correlation.qza",
-        mantel_scatter_vis="results/{date}/out/beta-correlation-scatter.qzv"
+        "results/{date}/out/alpha-phylogeny.qza",
     params:
-        metadata_file="config/pep/sample.tsv",
-        metadata_column=config["diversity"]["beta"]["correlation-column"],
-        method=config["diversity"]["beta"]["correlation-method"],
-        permutations=config["diversity"]["beta"]["correlation-permutations"],
+        metric=config["diversity"]["alpha"]["phylogeny-metric"],
     log:
-        "logs/{date}/visualisation/beta-correlation.log",
+        "logs/{date}/visualisation/alpha-phylogeny.log",
     conda:
         "../envs/qiime-only-env.yaml"
-    script:
-        "qiime diversity beta-correlation "
-        "--i-distance-matrix {input} "
-        "--m-metadata-file {params.metadata_file} "
-        "--m-metadata-column {params.metadata_column} "
-        "--p-method {params.method} "
-        "--p-permutations {params.permutations} "
-        "--o-metadata-distance-matrix {output.distance_matrix} "
-        "--o-mantel-scatter-visualization {output.mantel_scatter_vis} "
+    shell:
+        "qiime diversity alpha-phylogenetic "
+        "--i-phylogeny {input.phylogeny} "
+        "--i-table {input.table} "
+        "--p-metric {params.metric} "
+        "--o-alpha-diversity {output} "
         "--verbose 2> {log}"
 
 
@@ -435,7 +457,7 @@ rule beta_phylogeny:
         "logs/{date}/visualisation/beta-phylogeny.log",
     conda:
         "../envs/qiime-only-env.yaml"
-    script:
+    shell:
         "qiime diversity beta-phylogenetic "
         "--i-table {input.table} "
         "--i-phylogeny {input.phylogeny} "
@@ -445,23 +467,29 @@ rule beta_phylogeny:
         "--o-distance-matrix {output}"
 
 
-rule alpha_phylogeny:
+rule beta_correlation:
     input:
-        table="results/{date}/out/table-taxa-filtered.qza",
-        phylogeny="results/{date}/visual/rooted-tree.qza",
+        "results/{date}/core-metrics-results/",
     output:
-        "results/{date}/out/alpha-phylogeny.qza",
+        distance_matrix="results/{date}/out/beta-correlation.qza",
+        mantel_scatter_vis="results/{date}/out/beta-correlation-scatter.qzv",
     params:
-        metric=config["diversity"]["alpha"]["phylogeny-metric"],
+        matrix="results/{date}/core-metrics-results/jaccard_distance_matrix.qza",
+        metadata_file="config/pep/sample.tsv",
+        metadata_column=config["diversity"]["beta"]["correlation-column"],
+        method=config["diversity"]["beta"]["correlation-method"],
+        permutations=config["diversity"]["beta"]["correlation-permutations"],
     log:
-        "logs/{date}/visualisation/alpha-phylogeny.log",
+        "logs/{date}/visualisation/beta-correlation.log",
     conda:
         "../envs/qiime-only-env.yaml"
-    script:
-        "qiime diversity alpha.phylogenetic "
-        "--i-tabel {input.table} "
-        "--i-phylogeny {input.phylogeny} "
-        "--p-metric {params.metric} "
-        "--o-alpha-diversity {ouput} "
+    shell:
+        "qiime diversity beta-correlation "
+        "--i-distance-matrix {params.matrix} "
+        "--m-metadata-file {params.metadata_file} "
+        "--m-metadata-column {params.metadata_column} "
+        "--p-method {params.method} "
+        "--p-permutations {params.permutations} "
+        "--o-metadata-distance-matrix {output.distance_matrix} "
+        "--o-mantel-scatter-visualization {output.mantel_scatter_vis} "
         "--verbose 2> {log}"
-"""
