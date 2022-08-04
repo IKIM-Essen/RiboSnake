@@ -31,7 +31,7 @@ rule unzip_ref_gen:
     conda:
         "../envs/python.yaml"
     shell:
-        "gzip -dc {input} > {output}; "
+        "gzip -dc {input} > {output} 2> {log}; "
 
 
 rule lower_to_upper:
@@ -61,6 +61,7 @@ rule import_ref_genome:
         "--input-path {input} "
         "--output-path {output} "
         "--type 'FeatureData[Sequence]' "
+        "2> {log} "
 
 
 rule unzip_kraken:
@@ -94,7 +95,8 @@ rule read_samples:
         "--type {params.datatype} "
         "--input-path {params.direc} "
         "--input-format CasavaOneEightSingleLanePerSampleDirFmt "
-        "--output-path {output}"
+        "--output-path {output} "
+        "2> {log} "
 
 
 rule trim_paired:
@@ -126,7 +128,8 @@ rule trim_paired:
             --p-times {params.rep_times} \
             --p-overlap {params.overlap} \
             --p-minimum-length {params.min_length} \
-            --o-trimmed-sequences {output} 
+            --o-trimmed-sequences {output} \
+            --verbose 2> {log}
         else 
             qiime cutadapt trim-single \
             --i-demultiplexed-sequences {input} \
@@ -137,7 +140,8 @@ rule trim_paired:
             --p-times {params.rep_times} \
             --p-overlap {params.overlap} \
             --p-minimum-length {params.min_length} \
-            --o-trimmed-sequences {output}
+            --o-trimmed-sequences {output} \
+            --verbose 2> {log}
         fi
         """
 
@@ -176,4 +180,5 @@ if (
             "--p-qmax {params.qmax} "
             "--p-qmaxout {params.qmaxout} "
             "--p-threads {params.threads} "
-            "--o-joined-sequences {output}"
+            "--o-joined-sequences {output} "
+            "--verbose 2> {log}"
