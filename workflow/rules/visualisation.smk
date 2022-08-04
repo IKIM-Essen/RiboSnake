@@ -506,6 +506,7 @@ rule beta_correlation:
         "--m-metadata-column {params.metadata_column} "
         "--p-method {params.method} "
         "--p-permutations {params.permutations} "
+        "--p-intersect-ids "
         "--o-metadata-distance-matrix {output.distance_matrix} "
         "--o-mantel-scatter-visualization {output.mantel_scatter_vis} "
         "--verbose 2> {log}"
