@@ -51,9 +51,9 @@ sequence_joining:
   # The maximum allowed quality score to use in output.
   qmaxout: 41
   # Number of threads to use
-  threads: 4
+  threads: 1
 # Threads to be used by the different methods
-threads: 10
+threads: 1
 # Parameters necessary for filtering
 filtering:
   # Relative threshold for the abundance filtering
