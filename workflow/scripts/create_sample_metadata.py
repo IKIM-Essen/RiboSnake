@@ -77,7 +77,7 @@ if "SampleData[PairedEndSequencesWithQuality]" in str(snakemake.params.datatype)
 elif "SampleData[SequencesWithQuality]" in str(snakemake.params.datatype):
     sample_info["path1"] = ""
 sample_info.set_index("sample-ID", inplace=True)
-sample_info.drop(labels=["categorical"], axis=0, inplace=True)
+sample_info.drop(labels=["#q2:types"], axis=0, inplace=True)
 i = 0
 while i < len(sample_info.index):
     for file in files_to_copy:
