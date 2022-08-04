@@ -120,7 +120,7 @@ diversity:
     # A pseudocount to handle zeros for compositional metrics
     diversity-pseudocount: 1
     # The number of concurrent jobs to use in performing this calculation
-    diversity-n-jobs: 3
+    diversity-n-jobs: 1
     # Correlation test to be applied ('spearman', 'pearson')
     correlation-method: 'spearman'
     # Column of the metadata-sheet to use
