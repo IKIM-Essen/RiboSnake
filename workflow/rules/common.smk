@@ -85,3 +85,11 @@ def get_reads_for_kraken():
         names.append(kraken_name)
         names = list(dict.fromkeys(names))
     return names
+
+
+def get_metadata_columns():
+    metadata = pd.read_csv(config["metadata"], header=0, delimiter=",")
+    header = metadata.columns.values.tolist()
+    print(header)
+    header = header.remove("sample_name")
+    return header
