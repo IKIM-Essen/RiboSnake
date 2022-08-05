@@ -16,12 +16,24 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 ### Step 1: Obtain a copy of this workflow
 
+If you want to add your own changes to the workflow, create a GitHub repository of your own, then clone this one.
 1. Create a new github repository using this workflow [as a template](https://help.github.com/en/articles/creating-a-repository-from-a-template).
 2. [Clone](https://help.github.com/en/articles/cloning-a-repository) the newly created repository to your local system, into the place where you want to perform the data analysis.
+If you just want to use this workflow locally, then simply clone it or download it as zip-file.
 
 ### Step 2: Configure workflow
 
 Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `metadata.txt` to specify your sample setup.
+
+Some important parameters you should check and set according to your own fatsq-files in the `config.yaml` are primers for the forward and reverse reads, the `datatype`, that should be used by QIIME2 and the `min-seq-length`. Based on the sequencing, the length of the reads can vary.
+
+In addition to that, you need to fit the metadata-parameters to your data. Please change the names of the used metadata-column according to your information.
+
+The workflow is able to perform clustering and denoising either with vsearch, leading to OTU creation, or with DADA2, creating ASVs. You can decide which modus to use by setting the variable "jan-mode" to `True` (DADA2 usage) or `False` (vsearch).
+
+Please make sure, that the names of your fastq files are correctly formatted. They should look like this:
+
+    samplename_SNumber_Lane_R1/R2_001.fastq.gz
 
 ### Step 3: Install Snakemake
 
