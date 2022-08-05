@@ -3,6 +3,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 from pylab import savefig
+import sys
+
+
+sys.stderr = open(snakemake.log[0], "w")
 
 df = pd.read_csv(str(snakemake.input), delimiter="\t", header=1, index_col="taxonomy")
 print(df)

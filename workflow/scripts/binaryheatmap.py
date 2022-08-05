@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 import seaborn as sb
 import numpy as np
 from pylab import savefig
+import sys
+
+
+sys.stderr = open(snakemake.log[0], "w")
 
 # Reading information from a file, holding binary information whether an OTU is present or absent in a sample
 

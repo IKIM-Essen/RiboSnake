@@ -6,6 +6,10 @@ from os import path, getcwd, listdir
 from os import mkdir
 from shutil import copy, copy2
 from datetime import date, datetime
+import sys
+
+
+sys.stderr = open(snakemake.log[0], "w")
 
 # Function to extract results from the qiime2 artifacts, already saved in a zip file
 
@@ -68,12 +72,10 @@ while b < len(subdir):
     if "unweighted-unifrac-emperor" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.unweighted_unifrac_emperor)
-    if "weighted-unifrac-emperor" in subdir[b]:
+    if "weighted-unifrac-emperor-plot" in subdir[b]:
         html = datadir
-        if os.path.exists(snakemake.output.weighted_unifrac_emperor):
-            shutil.rmtree(snakemake.output.weighted_unifrac_emperor)
         shutil.copytree(html, snakemake.output.weighted_unifrac_emperor)
-    if "beta-correlation-scatter" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.beta_correaltion_scatter)
+    #if "beta-correlation-scatter" in subdir[b]:
+    #    html = datadir
+    #    shutil.copytree(html, snakemake.output.beta_correaltion_scatter)
     b = b + 1
