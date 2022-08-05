@@ -485,7 +485,9 @@ rule beta_correlation:
         "results/{date}/core-metrics-results/",
     output:
         distance_matrix="results/{date}/out/beta-correlation-{metadata_column}.qza",
-        mantel_scatter_vis="results/{date}/visual/beta-correlation-scatter-{metadata_column}.qzv",
+        mantel_scatter_vis=(
+            "results/{date}/visual/beta-correlation-scatter-{metadata_column}.qzv"
+        ),
     params:
         matrix="results/{date}/core-metrics-results/jaccard_distance_matrix.qza",
         metadata_file="config/pep/sample.tsv",

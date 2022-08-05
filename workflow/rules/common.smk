@@ -89,6 +89,6 @@ def get_reads_for_kraken():
 
 def get_metadata_columns():
     metadata = pd.read_csv(config["metadata"], header=0, delimiter=",")
-    header = metadata.columns[metadata.isin(['numeric']).any()].values.tolist()
+    header = metadata.columns[metadata.isin(["numeric"]).any()].values.tolist()
     print(header)
     return header

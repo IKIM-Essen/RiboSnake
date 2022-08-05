@@ -160,7 +160,9 @@ rule report_beta_correlation:
         "results/{date}/visual/unzipped/",
     output:
         beta_correlation_scatter=report(
-            directory("results/{date}/visual/report/beta-correlation-scatter-{metadata_column}"),
+            directory(
+                "results/{date}/visual/report/beta-correlation-scatter-{metadata_column}"
+            ),
             caption="../report/beta-correlation-scatter.rst",
             category="3. Analysis",
             subcategory="Beta",
@@ -185,7 +187,7 @@ rule snakemake_report:
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metadata_column}",
             metadata_column=get_metadata_columns(),
-        ),   
+        ),
     output:
         "results/{date}/out/report.zip",
     params:
