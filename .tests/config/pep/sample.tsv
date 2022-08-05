@@ -1,5 +1,5 @@
 sample-ID	barcode-sequence	elevation	extract-concen	amplicon-concentration	extract-group-no	transect-name	site-name	depth	ph	toc	ec	average-soil-relative-humidity	relative-humidity-soil-high	relative-humidity-soil-low	percent-relative-humidity-soil-100	average-soil-temperature	temperature-soil-high	temperature-soil-low	vegetation	percentcover	run_date
-categorical	categorical	numeric	numeric	numeric	categorical	categorical	categorical	numeric	numeric	numeric	numeric	numeric	numeric	numeric	numeric	numeric	numeric	numeric	categorical	numeric	numeric
+#q2:types	categorical	numeric	numeric	numeric	categorical	categorical	categorical	numeric	numeric	numeric	numeric	numeric	numeric	numeric	numeric	numeric	numeric	numeric	categorical	numeric	categorical
 BAQ1552.1.1	ATCCCAGCATGC	1552	0.722	18.830	J	Baquedano	BAQ1552	1	7.87			15.75	35.36	11.1	0	22.63	30.65	10.96	no	0	2022-03-17
 BAQ3473.1	AAGTGAAGCGAG	3473	16.374	1.290	C	Baquedano	BAQ3473	2	7.93	3675	0.42	82.05	100	42.09	35.37	13.46	20.69	5.12	yes	1.2	2022-03-17
 BAQ3473.2	TGCCGCCGTAAT	3473	5.170	11.050	B	Baquedano	BAQ3473	2	7.93	838	0.42	82.05	100	42.09	35.37	13.46	20.69	5.12	yes	1.2	2022-03-17

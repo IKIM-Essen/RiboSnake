@@ -51,9 +51,9 @@ sequence_joining:
   # The maximum allowed quality score to use in output.
   qmaxout: 41
   # Number of threads to use
-  threads: 4
+  threads: 1
 # Threads to be used by the different methods
-threads: 10
+threads: 1
 # Parameters necessary for filtering
 filtering:
   # Relative threshold for the abundance filtering
@@ -105,6 +105,33 @@ rarefaction:
   metric: euclidean
   # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
   clustering_method: nj
+# Parameters for diversity analysis
+diversity:
+  # Parameters for alpha-diversity analysis
+  alpha:
+    # Metric to be computed
+    diversity-metric: 'fisher_alpha'
+    # Metric to be computed
+    phylogeny-metric: 'faith_pd'
+  # Parameters for beta-diversity analysis
+  beta:
+    # Metric to be computed
+    diversity-metric: 'euclidean'
+    # A pseudocount to handle zeros for compositional metrics
+    diversity-pseudocount: 1
+    # The number of concurrent jobs to use in performing this calculation
+    diversity-n-jobs: 1
+    # Correlation test to be applied ('spearman', 'pearson')
+    correlation-method: 'spearman'
+    # Column of the metadata-sheet to use
+    correlation-column: 'elevation'
+    # The number of permutations to be run when computing p-values
+    correlation-permutations: 999
+    # The beta diversity metric to be computed ('weighted_normalized_unifrac',
+    # 'generalized_unifrac', 'weighted_unifrac', 'unweighted_unifrac')
+    phylogeny-metric: 'weighted_normalized_unifrac'
+    # Perform variance adjustment based on Chang et al. BMC Bioinformatics 2011
+    phylogeny-variance-adjusted: True
 # If jan-mode is set to true, these parameters are used for denoising and clustering with DADA2
 dada2:
   # Position at which forward reads should be truncated at the 3' end due to low quality
