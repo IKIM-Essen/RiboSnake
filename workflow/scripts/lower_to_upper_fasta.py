@@ -1,4 +1,8 @@
 import pandas as pd
+import sys
+
+
+sys.stderr = open(snakemake.log[0], "w")
 
 fasta = open(str(snakemake.input), "r")
 fasta_upper_file = open(str(snakemake.output), "w")

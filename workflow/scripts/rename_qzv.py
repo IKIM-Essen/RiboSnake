@@ -3,6 +3,10 @@ import gzip
 import shutil
 import os
 import zipfile
+import sys
+
+
+sys.stderr = open(snakemake.log[0], "w")
 
 # Renaming the qiime2 artifacts for viewing to zip files so the information can be accessed
 

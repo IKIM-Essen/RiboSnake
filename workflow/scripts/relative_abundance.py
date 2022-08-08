@@ -3,6 +3,10 @@ import gzip
 import shutil
 import os
 import zipfile
+import sys
+
+
+sys.stderr = open(snakemake.log[0], "w")
 
 # Extracting the number of total features over all samples from the sample-table.
 # Multiplying the number with the relative abundance filtering value to create a threshold for the

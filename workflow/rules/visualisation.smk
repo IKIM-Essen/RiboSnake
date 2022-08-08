@@ -186,13 +186,11 @@ rule beta_significance:
 rule copy_emperor:
     input:
         direc="results/{date}/core-metrics-results",
-        scatter="results/{date}/out/beta-correlation-scatter.qzv",
     output:
         bray="results/{date}/visual/bray-curtis-emperor.qzv",
         jaccard="results/{date}/visual/jaccard-emperor.qzv",
         unweighted_unifrac="results/{date}/visual/unweighted-unifrac-emperor.qzv",
-        weighted_unifrac="results/{date}/visual/weighted-unifrac-emperor.qzv",
-        scatter="results/{date}/visual/beta-correlation-scatter.qzv",
+        weighted_unifrac="results/{date}/visual/weighted-unifrac-emperor-plot.qzv",
     params:
         bray="results/{date}/core-metrics-results/bray_curtis_emperor.qzv",
         jaccard="results/{date}/core-metrics-results/jaccard_emperor.qzv",
@@ -211,7 +209,6 @@ rule copy_emperor:
         "cp {params.jaccard} {output.jaccard};"
         "cp {params.unweighted_unifrac} {output.unweighted_unifrac};"
         "cp {params.weighted_unifrac} {output.weighted_unifrac};"
-        "cp {input.scatter} {output.scatter};"
 
 
 rule emperor:
@@ -487,23 +484,24 @@ rule beta_correlation:
     input:
         "results/{date}/core-metrics-results/",
     output:
-        distance_matrix="results/{date}/out/beta-correlation.qza",
-        mantel_scatter_vis="results/{date}/out/beta-correlation-scatter.qzv",
+        distance_matrix="results/{date}/out/beta-correlation-{metadata_column}.qza",
+        mantel_scatter_vis=(
+            "results/{date}/visual/beta-correlation-scatter-{metadata_column}.qzv"
+        ),
     params:
         matrix="results/{date}/core-metrics-results/jaccard_distance_matrix.qza",
         metadata_file="config/pep/sample.tsv",
-        metadata_column=config["diversity"]["beta"]["correlation-column"],
         method=config["diversity"]["beta"]["correlation-method"],
         permutations=config["diversity"]["beta"]["correlation-permutations"],
     log:
-        "logs/{date}/visualisation/beta-correlation.log",
+        "logs/{date}/visualisation/beta-correlation-{metadata_column}.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
         "qiime diversity beta-correlation "
         "--i-distance-matrix {params.matrix} "
         "--m-metadata-file {params.metadata_file} "
-        "--m-metadata-column {params.metadata_column} "
+        "--m-metadata-column {wildcards.metadata_column} "
         "--p-method {params.method} "
         "--p-permutations {params.permutations} "
         "--p-intersect-ids "

@@ -5,6 +5,10 @@ from os import path, getcwd, listdir
 from os import mkdir
 from shutil import move, copy2
 from datetime import date, datetime
+import sys
+
+
+sys.stderr = open(snakemake.log[0], "w")
 
 # Creating a metadata sample-sheet, that holds additional information concerning the samples.
 # Metadata information is needed to be able to create plots and for metadata-specific analysis.

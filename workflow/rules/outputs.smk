@@ -40,8 +40,11 @@ rule unzip_reports:
         "results/{date}/visual/bray-curtis-emperor.qzv",
         "results/{date}/visual/jaccard-emperor.qzv",
         "results/{date}/visual/unweighted-unifrac-emperor.qzv",
-        "results/{date}/visual/weighted-unifrac-emperor.qzv",
-        "results/{date}/visual/beta-correlation-scatter.qzv",
+        "results/{date}/visual/weighted-unifrac-emperor-plot.qzv",
+        expand(
+            "results/{{date}}/visual/beta-correlation-scatter-{metadata_column}.qzv",
+            metadata_column=get_metadata_columns(),
+        ),
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -138,15 +141,8 @@ rule report_files:
             htmlindex="index.html",
         ),
         weighted_unifrac_emperor=report(
-            directory("results/{date}/visual/report/weighted-unifrac"),
+            directory("results/{date}/visual/report/weighted-unifrac-emperor"),
             caption="../report/weighted-unifrac-emperor.rst",
-            category="3. Analysis",
-            subcategory="Beta",
-            htmlindex="index.html",
-        ),
-        beta_correaltion_scatter=report(
-            directory("results/{date}/visual/report/beta-correlation-scatter"),
-            caption="../report/beta-correlation-scatter.rst",
             category="3. Analysis",
             subcategory="Beta",
             htmlindex="index.html",
@@ -159,6 +155,27 @@ rule report_files:
         "../scripts/extract_reports.py"
 
 
+rule report_beta_correlation:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        beta_correlation_scatter=report(
+            directory(
+                "results/{date}/visual/report/beta-correlation-scatter-{metadata_column}"
+            ),
+            caption="../report/beta-correlation-scatter.rst",
+            category="3. Analysis",
+            subcategory="Beta",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/outputs/report-beta-correaltion-{metadata_column}.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_beta_corr.py"
+
+
 rule snakemake_report:
     input:
         "results/{date}/visual/heatmap_binary.png",
@@ -167,6 +184,10 @@ rule snakemake_report:
         "results/{date}/visual/unzipped",
         "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/absolute-taxabar-plot.png",
+        expand(
+            "results/{{date}}/visual/report/beta-correlation-scatter-{metadata_column}",
+            metadata_column=get_metadata_columns(),
+        ),
     output:
         "results/{date}/out/report.zip",
     params:
@@ -204,9 +225,11 @@ rule zip_report:
         ),
         "results/{date}/out/alpha-diversity.qza",
         "results/{date}/out/beta-diversity-distance.qza",
-        "results/{date}/out/beta-correlation.qza",
+        expand(
+            "results/{{date}}/out/beta-correlation-{metadata_column}.qza",
+            metadata_column=get_metadata_columns(),
+        ),
         "results/{date}/out/beta-phylogeny.qza",
-        "results/{date}/out/beta-correlation-scatter.qzv",
         "results/{date}/out/alpha-phylogeny.qza",
     output:
         "results/{date}/16S-report.tar.gz",
