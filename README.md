@@ -19,6 +19,7 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 If you want to add your own changes to the workflow, create a GitHub repository of your own, then clone this one.
 1. Create a new github repository using this workflow [as a template](https://help.github.com/en/articles/creating-a-repository-from-a-template).
 2. [Clone](https://help.github.com/en/articles/cloning-a-repository) the newly created repository to your local system, into the place where you want to perform the data analysis.
+
 If you just want to use this workflow locally, then simply clone it or download it as zip-file.
 
 ### Step 2: Configure workflow
@@ -26,6 +27,8 @@ If you just want to use this workflow locally, then simply clone it or download 
 Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `metadata.txt` to specify your sample setup.
 
 Some important parameters you should check and set according to your own fatsq-files in the `config.yaml` are primers for the forward and reverse reads, the `datatype`, that should be used by QIIME2 and the `min-seq-length`. Based on the sequencing, the length of the reads can vary.
+
+The default parameters for filtering and truncation were validated with the help of a mock community and fitted to retrieve all bacteria from that community.
 
 In addition to that, you need to fit the metadata-parameters to your data. Please change the names of the used metadata-column according to your information.
 

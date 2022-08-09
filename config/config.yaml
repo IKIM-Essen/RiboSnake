@@ -57,7 +57,7 @@ threads: 15
 # Parameters necessary for filtering
 filtering:
   # Relative threshold for the abundance filtering
-  relative-abundance-filter: 0.0025
+  relative-abundance-filter: 0.001
   # Minimum length of a sequence to be retained
   min-seq-length: 200
   # Minimum quality score for sequences to pass filter
@@ -139,9 +139,9 @@ dada2:
   # Position at which reverse reads should be truncated at the 3' end due to low quality
   trunc-len-r: 240
   # Position at which forward reads should be truncated at the 5' end due to low quality
-  trim-left-f: 0
+  trim-left-f: 10
   # Position at which reverse reads should be truncated at the 5' end due to low quality
-  trim-left-r: 0
+  trim-left-r: 10
   # Forward reads with number of expected errors higher than this value will be discarded
   max-ee-f: 2.0
   # Reverse reads with number of expected errors higher than this value will be discarded.
