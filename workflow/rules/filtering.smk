@@ -120,7 +120,10 @@ if config["jan-mode"] == False:
             "--verbose 2> {log}"
 
 
-if config["jan-mode"] == True:
+if (
+    config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
+    and config["jan-mode"] == True
+):
 
     rule dada2:
         input:
@@ -130,20 +133,20 @@ if config["jan-mode"] == True:
             seq="results/{date}/out/seq-cluster-lengthfilter.qza",
             stats="results/{date}/out/dada2-stats.qza",
         params:
-            trunc_len_f=config["dada2"]["trunc-len-f"],
-            trunc_len_r=config["dada2"]["trunc-len-r"],
-            trim_left_f=config["dada2"]["trim-left-f"],
-            trim_left_r=config["dada2"]["trim-left-r"],
-            max_ee_f=config["dada2"]["max-ee-f"],
-            max_ee_r=config["dada2"]["max-ee-r"],
-            trunc_q=config["dada2"]["trunc-q"],
-            min_overlap=config["dada2"]["min-overlap"],
-            pooling_method=config["dada2"]["pooling-method"],
-            chimera_method=config["dada2"]["chimera-method"],
-            min_fold_parent_over_abundance=config["dada2"][
+            trunc_len_f=config["dada2-paired"]["trunc-len-f"],
+            trunc_len_r=config["dada2-paired"]["trunc-len-r"],
+            trim_left_f=config["dada2-paired"]["trim-left-f"],
+            trim_left_r=config["dada2-paired"]["trim-left-r"],
+            max_ee_f=config["dada2-paired"]["max-ee-f"],
+            max_ee_r=config["dada2-paired"]["max-ee-r"],
+            trunc_q=config["dada2-paired"]["trunc-q"],
+            min_overlap=config["dada2-paired"]["min-overlap"],
+            pooling_method=config["dada2-paired"]["pooling-method"],
+            chimera_method=config["dada2-paired"]["chimera-method"],
+            min_fold_parent_over_abundance=config["dada2-paired"][
                 "min-fold-parent-over-abundance"
             ],
-            n_reads_learn=config["dada2"]["n-reads-learn"],
+            n_reads_learn=config["dada2-paired"]["n-reads-learn"],
             threads=config["threads"],
         log:
             "logs/{date}/clustering/dada2.log",
@@ -160,6 +163,52 @@ if config["jan-mode"] == True:
             "--p-max-ee-r {params.max_ee_r} "
             "--p-trunc-q {params.trunc_q} "
             "--p-min-overlap {params.min_overlap} "
+            "--p-pooling-method {params.pooling_method} "
+            "--p-chimera-method {params.chimera_method} "
+            "--p-min-fold-parent-over-abundance {params.min_fold_parent_over_abundance} "
+            "--p-n-threads {params.threads} "
+            "--p-n-reads-learn {params.n_reads_learn} "
+            "--o-table {output.table} "
+            "--o-representative-sequences {output.seq} "
+            "--o-denoising-stats {output.stats} "
+            "--verbose 2> {log}"
+
+
+if (
+    config["datatype"] == "SampleData[SequencesWithQuality]"
+    and config["jan-mode"] == True
+):
+
+    rule dada2:
+        input:
+            "results/{date}/out/trimmed-seqs.qza",
+        output:
+            table="results/{date}/out/table-cluster-lengthfilter.qza",
+            seq="results/{date}/out/seq-cluster-lengthfilter.qza",
+            stats="results/{date}/out/dada2-stats.qza",
+        params:
+            trunc_len=config["dada2-single"]["trunc-len"],
+            trim_left=config["dada2-single"]["trim-left"],
+            max_ee=config["dada2-single"]["max-ee"],
+            trunc_q=config["dada2-single"]["trunc-q"],
+            pooling_method=config["dada2-single"]["pooling-method"],
+            chimera_method=config["dada2-single"]["chimera-method"],
+            min_fold_parent_over_abundance=config["dada2-single"][
+                "min-fold-parent-over-abundance"
+            ],
+            n_reads_learn=config["dada2-single"]["n-reads-learn"],
+            threads=config["threads"],
+        log:
+            "logs/{date}/clustering/dada2.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime dada2 denoise-paired "
+            "--i-demultiplexed-seqs {input} "
+            "--p-trunc-len {params.trunc_len_f} "
+            "--p-trim-left {params.trim_left_f} "
+            "--p-max-ee {params.max_ee_f} "
+            "--p-trunc-q {params.trunc_q} "
             "--p-pooling-method {params.pooling_method} "
             "--p-chimera-method {params.chimera_method} "
             "--p-min-fold-parent-over-abundance {params.min_fold_parent_over_abundance} "

@@ -132,8 +132,8 @@ diversity:
     phylogeny-metric: 'weighted_normalized_unifrac'
     # Perform variance adjustment based on Chang et al. BMC Bioinformatics 2011
     phylogeny-variance-adjusted: True
-# If jan-mode is set to true, these parameters are used for denoising and clustering with DADA2
-dada2:
+# If jan-mode is set to true, these parameters are used for denoising and clustering paired-end-data with DADA2
+dada2-paired:
   # Position at which forward reads should be truncated at the 3' end due to low quality
   trunc-len-f: 240
   # Position at which reverse reads should be truncated at the 3' end due to low quality
@@ -150,6 +150,25 @@ dada2:
   trunc-q: 5
   # The minimum length of the overlap required for merging the forward and reverse reads
   min-overlap: 12
+  # The method used to pool samples for denoising ('independent', 'pseudo')
+  pooling-method: 'independent'
+  # The method used to remove chimeras ('none', 'consensus', 'pooled')
+  chimera-method: 'consensus'
+  # The minimum abundance of potential parents of a sequence being tested as chimeric, expressed as a 
+  # fold-change versus the abundance of the sequence being tested
+  min-fold-parent-over-abundance: 1.0
+  # The number of reads to use when training the errormodel
+  n-reads-learn: 1000000
+# If jan-mode is set to true, these parameters are used for denoising and clustering single-end-data with DADA2
+dada2-single:
+  # Position at which reads should be truncated at the 3' end due to low quality
+  trunc-len: 240
+  # Position at which reads should be truncated at the 5' end due to low quality
+  trim-left: 10
+  # Reads with number of expected errors higher than this value will be discarded
+  max-ee: 2.0
+  # Reads are truncated at the first instance of a quality score less than or equal to this value
+  trunc-q: 5
   # The method used to pool samples for denoising ('independent', 'pseudo')
   pooling-method: 'independent'
   # The method used to remove chimeras ('none', 'consensus', 'pooled')
