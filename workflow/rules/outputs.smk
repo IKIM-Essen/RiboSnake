@@ -201,6 +201,24 @@ rule snakemake_report:
         " --report {output} {params.for_testing}"
 
 
+rule compress_kraken:
+    input:
+        expand(
+            "results/{{date}}/out/kraken/{sample}.kreport2",
+            sample=get_reads_for_kraken(),
+        ),
+    output:
+        "results/{date}/out/kraken.tar.gz",
+    params:
+        directory="results/{date}/out/kraken/",
+    log:
+        "logs/{date}/outputs/kraken-compress.log",
+    conda:
+        "../envs/snakemake.yaml"
+    shell:
+        "tar -czvf {output} {params.directory} "
+
+
 rule zip_report:
     input:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
@@ -219,10 +237,7 @@ rule zip_report:
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.png",
-        expand(
-            "results/{{date}}/out/kraken/{sample}.kreport2",
-            sample=get_reads_for_kraken(),
-        ),
+        "results/{date}/out/kraken.tar.gz",
         "results/{date}/out/alpha-diversity.qza",
         "results/{date}/out/beta-diversity-distance.qza",
         expand(
