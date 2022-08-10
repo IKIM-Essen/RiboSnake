@@ -62,11 +62,8 @@ for name in sample_list:
         print("No metadata was found for " + name)
         sample_list.remove(name)
         # Also remove the fastq file from folder?
-# Replacing empty metadata-columns with "NaN" and after that removing them from the file
-# Only columns holding information should be added to the sample-metadata-sheet
-nan_value = float("NaN")
-metadata.replace("", nan_value, inplace=True)
-metadata.dropna(how="any", axis=1, inplace=True)
+# Replacing empty metadata-columns with 0 and after that removing them from the file
+metadata.fillna(0, inplace=True)
 metadata.rename(columns={"sample_name": "sample-ID"}, inplace=True)
 metadata.to_csv(snakemake.output.metadata, sep="\t", index=False)
 
