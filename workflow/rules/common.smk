@@ -90,5 +90,16 @@ def get_reads_for_kraken():
 def get_metadata_columns():
     metadata = pd.read_csv(config["metadata"], header=0, delimiter=",")
     header = metadata.columns[metadata.isin(["numeric"]).any()].values.tolist()
-    print(header)
+    return header
+
+
+def get_metadata_categorical_columns():
+    metadata = pd.read_csv(config["metadata"], header=0, delimiter=",")
+    header = metadata.columns[metadata.isin(["categorical"]).any()].values.tolist()
+    data_only = metadata.drop(labels=0, axis=0)
+    for name in header:
+        if (data_only[name] == data_only[name][1]).all():
+            header.remove(name)
+        elif "date" in name:
+            header.remove(name)
     return header
