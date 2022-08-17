@@ -32,4 +32,3 @@ while b < len(subdir):
         html = datadir
         shutil.copytree(html, snakemake.output.beta_significance)
     b = b + 1
-    
