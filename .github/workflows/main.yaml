@@ -89,7 +89,7 @@ jobs:
       with:
         directory: .tests
         snakefile: workflow/Snakefile
-        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs --conda-frontend conda"
+        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs --conda-frontend mamba"
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
