@@ -84,16 +84,12 @@ jobs:
         rm BAQ4*
         ls
 
-    - name: Set conda
-      uses: s-weigand/setup-conda@v1
-      run: conda config --set channel_priority false
-
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
         directory: .tests
         snakefile: workflow/Snakefile
-        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs --conda-frontend mamba"
+        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs"
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
