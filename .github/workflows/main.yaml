@@ -84,11 +84,6 @@ jobs:
         rm BAQ4*
         ls
 
-    - name: Setup conda
-      uses: actions/checkout@v2
-      run: |
-        conda config --set channel_priority false
-
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
