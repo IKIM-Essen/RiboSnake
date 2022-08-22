@@ -1,8 +1,8 @@
 channels:
   - conda-forge
+  - bioconda
   - qiime2/label/r2022.2
   - https://packages.qiime2.org/qiime2/2022.2/passed/core/
-  - bioconda
   - defaults
 dependencies:
   - _libgcc_mutex=0.1
