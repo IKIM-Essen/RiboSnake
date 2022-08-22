@@ -508,3 +508,26 @@ rule beta_correlation:
         "--o-metadata-distance-matrix {output.distance_matrix} "
         "--o-mantel-scatter-visualization {output.mantel_scatter_vis} "
         "--verbose 2> {log}"
+
+
+rule songbird:
+    input:
+        "results/{date}/out/table.w-taxa-featcount.biom"
+    output:
+        directory("results/{date}/out/songbird/")
+    params:
+    log:
+        "logs/{date}/visualisation/songbird.log"
+    conda:
+        "../envs/songbird.yaml"
+    shell:
+        "songbird multinomial "
+	    "--input-biom {input} "
+	    "--metadata-file data/redsea/redsea_metadata.txt "
+	    "--formula  sex+age "
+	    "--epochs 10000 "
+	    "--differential-prior 0.5 "
+	    "--training-column Testing "
+	    "--summary-interval 1 "
+	    "--summary-dir {output} "
+        "2> {log}"
