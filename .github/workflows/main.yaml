@@ -14,10 +14,9 @@ jobs:
     if: github.ref != 'refs/heads/main'
     steps:
       - uses: khan/pull-request-workflow-cancel@1.0.0
-        credential:
-          username: ubuntu
         with:
           workflows: "main.yml"
+          username: "ubuntu"
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
 
@@ -25,10 +24,10 @@ jobs:
     runs-on: [self-hosted]
     steps:
       - uses: actions/checkout@v2
-        credential:
-          username: ubuntu
       - name: Formatting
         uses: github/super-linter@v4.8.7
+        with:
+          username: "ubuntu"
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
@@ -42,14 +41,13 @@ jobs:
     runs-on: [self-hosted]
     steps:
     - uses: actions/checkout@v1
-      credential:
-          username: ubuntu
     - name: Lint workflow
       uses: snakemake/snakemake-github-action@v1
       with:
         directory: .
         snakefile: workflow/Snakefile
         args: "--lint"
+        username: "ubuntu"
 
   Testing:
     runs-on: [self-hosted]
@@ -92,18 +90,16 @@ jobs:
 
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
-      credential:
-          username: ubuntu
       with:
         directory: .tests
         snakefile: workflow/Snakefile
         args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs"
+        username: "ubuntu"
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
-      credential:
-          username: ubuntu
       with:
         directory: .tests
         snakefile: workflow/Snakefile
         args: "--report report.zip"
+        username: "ubuntu"
