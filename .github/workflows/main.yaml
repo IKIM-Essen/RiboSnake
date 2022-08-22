@@ -46,7 +46,7 @@ jobs:
         args: "--lint"
 
   Testing:
-    runs-on: self-hosted
+    runs-on: [self-hosted]
     needs:
       - Linting
       - Formatting
