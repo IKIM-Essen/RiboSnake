@@ -33,6 +33,8 @@ jobs:
           VALIDATE_SNAKEMAKE_SNAKEFMT: true
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_MARKDOWN: true
+        with:
+          username: ubuntu
 
   Linting:
     runs-on: [self-hosted]
@@ -44,6 +46,7 @@ jobs:
         directory: .
         snakefile: workflow/Snakefile
         args: "--lint"
+        username: ubuntu
 
   Testing:
     runs-on: [self-hosted]
@@ -90,6 +93,7 @@ jobs:
         directory: .tests
         snakefile: workflow/Snakefile
         args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs"
+        username: ubuntu
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
@@ -97,3 +101,4 @@ jobs:
         directory: .tests
         snakefile: workflow/Snakefile
         args: "--report report.zip"
+        username: ubuntu
