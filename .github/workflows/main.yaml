@@ -14,7 +14,8 @@ jobs:
     if: github.ref != 'refs/heads/main'
     steps:
       - uses: khan/pull-request-workflow-cancel@1.0.0
-        options: --user ubuntu
+        registry: 
+          username: "ubuntu"
         with:
           workflows: "main.yml"
         env:
@@ -24,9 +25,10 @@ jobs:
     runs-on: [self-hosted]
     steps:
       - uses: actions/checkout@v2
+        registry: 
+          username: "ubuntu"
       - name: Formatting
         uses: github/super-linter@v4.8.7
-        options: --user ubuntu
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
@@ -40,9 +42,10 @@ jobs:
     runs-on: [self-hosted]
     steps:
     - uses: actions/checkout@v1
+      registry: 
+        username: "ubuntu"
     - name: Lint workflow
       uses: snakemake/snakemake-github-action@v1
-      options: --user ubuntu
       with:
         directory: .
         snakefile: workflow/Snakefile
@@ -89,7 +92,8 @@ jobs:
 
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
-      options: --user ubuntu
+      registry: 
+        username: "ubuntu"
       with:
         directory: .tests
         snakefile: workflow/Snakefile
@@ -97,7 +101,8 @@ jobs:
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
-      options: --user ubuntu
+      registry: 
+        username: "ubuntu"
       with:
         directory: .tests
         snakefile: workflow/Snakefile
