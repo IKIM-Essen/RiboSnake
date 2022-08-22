@@ -10,7 +10,7 @@ on:
 
 jobs:
   Cancel-previous-jobs:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: github.ref != 'refs/heads/main'
     steps:
       - uses: khan/pull-request-workflow-cancel@1.0.0
@@ -20,7 +20,7 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
 
   Formatting:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v2
       - name: Formatting
@@ -35,7 +35,7 @@ jobs:
           VALIDATE_MARKDOWN: true
 
   Linting:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v1
     - name: Lint workflow
@@ -46,7 +46,7 @@ jobs:
         args: "--lint"
 
   Testing:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       - Linting
       - Formatting
