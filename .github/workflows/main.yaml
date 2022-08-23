@@ -23,6 +23,10 @@ jobs:
     runs-on: [self-hosted]
     steps:
       - uses: actions/checkout@v2
+      - name: Clean up GitHub workspace
+        uses: docker://ubuntu:latest
+        with:
+          args: find /github/workspace/. -name . -o -prune -exec rm -rf -- {} +
       - name: Formatting
         uses: github/super-linter@v4.8.7
         with:
@@ -35,10 +39,6 @@ jobs:
           VALIDATE_SNAKEMAKE_SNAKEFMT: true
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_MARKDOWN: true
-      - name: Clean up GitHub workspace
-        uses: docker://ubuntu:latest
-        with:
-          args: find /github/workspace/. -name . -o -prune -exec rm -rf -- {} +
 
   Linting:
     runs-on: [self-hosted]
