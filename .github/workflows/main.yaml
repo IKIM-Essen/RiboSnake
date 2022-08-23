@@ -35,6 +35,10 @@ jobs:
           VALIDATE_SNAKEMAKE_SNAKEFMT: true
           VALIDATE_PYTHON_BLACK: true
           VALIDATE_MARKDOWN: true
+      - name: Clean up GitHub workspace
+        uses: docker://ubuntu:latest
+        with:
+          args: find /github/workspace/. -name . -o -prune -exec rm -rf -- {} +
 
   Linting:
     runs-on: [self-hosted]
