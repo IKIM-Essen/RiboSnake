@@ -1,7 +1,7 @@
 channels:
   - conda-forge
-  - qiime2/label/r2021.11
   - bioconda
+  - qiime2/label/r2021.11
   - defaults
 dependencies:
   - _libgcc_mutex=0.1
