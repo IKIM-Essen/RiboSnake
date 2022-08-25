@@ -1,5 +1,5 @@
 channels:
-  - bioconda
   - conda-forge
+  - bioconda
 dependencies:
-  - snakemake>=6.15.5
+  - snakemake<=6.15.5

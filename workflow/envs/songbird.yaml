@@ -1,6 +1,6 @@
 channels:
-  - anaconda
   - conda-forge
+  - anaconda
 dependencies:
   - songbird
   - pandas>=0.18.0,<1
