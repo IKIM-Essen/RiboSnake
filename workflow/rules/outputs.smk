@@ -184,6 +184,7 @@ rule snakemake_report:
         "results/{date}/visual/unzipped",
         "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/absolute-taxabar-plot.png",
+        "results/{date}/out/qurro_plot",
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metadata_column}",
             metadata_column=get_metadata_columns(),
@@ -240,12 +241,15 @@ rule zip_report:
         "results/{date}/out/kraken.tar.gz",
         "results/{date}/out/alpha-diversity.qza",
         "results/{date}/out/beta-diversity-distance.qza",
+        "results/{date}/out/qurro_plot/",
         expand(
             "results/{{date}}/out/beta-correlation-{metadata_column}.qza",
             metadata_column=get_metadata_columns(),
         ),
         "results/{date}/out/beta-phylogeny.qza",
         "results/{date}/out/alpha-phylogeny.qza",
+        "results/{date}/out/songbird/",
+        "results/{date}/out/differentials_taxonomy.tsv",
     output:
         "results/{date}/16S-report.tar.gz",
     log:

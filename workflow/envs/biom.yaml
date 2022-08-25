@@ -2,3 +2,4 @@ channels:
   - bioconda
 dependencies:
   - biom-format
+  - python=3.10
