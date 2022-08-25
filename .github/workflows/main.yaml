@@ -84,12 +84,6 @@ jobs:
         rm BAQ4*
         ls
 
-    - name: Setup conda
-      uses: s-weigand/setup-conda@v1
-      with:
-        update-conda: true
-      run: conda config --set channel_priority false
-
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
