@@ -1,5 +1,7 @@
 channels:
   - bioconda
+  - conda-forge
+  - anaconda
 dependencies:
-  - biom-format=2.1.7
+  - biom-format
   - python=3.10
