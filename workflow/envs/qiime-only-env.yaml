@@ -152,7 +152,7 @@ dependencies:
   - libffi=3.4.2
   - libgcc
   - libgcc-devel_linux-64=9.4.0
-  - libgcc-ng=11.2.0
+  - libgcc-ng
   - libgfortran-ng=11.2.0
   - libgfortran5=11.2.0
   - libglib=2.70.1
