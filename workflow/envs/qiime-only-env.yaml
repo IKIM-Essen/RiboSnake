@@ -59,7 +59,7 @@ dependencies:
   - click=7.1.2
   - colorama=0.4.4
   - cryptography=35.0.0
-  - curl=7.80.0
+  - curl
   - cutadapt=3.5
   - cycler=0.11.0
   - cython=0.29.24
@@ -144,13 +144,13 @@ dependencies:
   - libbrotlienc=1.0.9
   - libcblas=3.9.0
   - libclang=11.1.0
-  - libcurl=7.80.0
+  - libcurl
   - libdeflate=1.7
   - libedit=3.1.20191231
   - libev=4.33
   - libevent=2.1.10
   - libffi=3.4.2
-  - libgcc=7.2.0
+  - libgcc
   - libgcc-devel_linux-64=9.4.0
   - libgcc-ng=11.2.0
   - libgfortran-ng=11.2.0
