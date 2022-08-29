@@ -156,7 +156,7 @@ dependencies:
   - libgfortran-ng=11.2.0
   - libgfortran5=11.2.0
   - libglib=2.70.1
-  - libgomp=11.2.0
+  - libgomp=12.1.0
   - libiconv=1.16
   - liblapack=3.9.0
   - libllvm10=10.0.1
