@@ -520,6 +520,7 @@ rule songbird:
         min_sample_count=config["songbird"]["min_sample_count"],
         min_feature_count=config["songbird"]["min_feature_count"],
         summary_interval=config["songbird"]["summary_interval"],
+        formula=config["songbird"]["formula"],
     log:
         "logs/{date}/visualisation/songbird.log",
     conda:
@@ -528,7 +529,7 @@ rule songbird:
         "songbird multinomial "
         "--input-biom {input} "
         "--metadata-file config/pep/sample.tsv "
-        "--formula " "sex+age" " "
+        "--formula  {params.formula} "
         "--epochs 10000 "
         "--differential-prior {params.differential_prior} "
         "--min-sample-count {params.min_sample_count} "

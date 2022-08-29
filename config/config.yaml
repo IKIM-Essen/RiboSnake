@@ -188,3 +188,5 @@ songbird:
   min_feature_count: 0
   # Impacts how often a "measurement" is taken for these plots
   summary_interval: 1
+  # Formula
+  formula: "sex+age"
