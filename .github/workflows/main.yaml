@@ -83,7 +83,6 @@ jobs:
         rm BAQ2*
         rm BAQ4*
         ls
-
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
