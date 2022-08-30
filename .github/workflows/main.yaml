@@ -23,14 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Clean up GitHub workspace
-        uses: docker://ubuntu:latest
-        with:
-          args: find /github/workspace/. -name . -o -prune -exec rm -rf -- {} +
       - name: Formatting
         uses: github/super-linter@v4.8.7
-        with:
-          username: "ubuntu"
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
@@ -50,7 +44,6 @@ jobs:
         directory: .
         snakefile: workflow/Snakefile
         args: "--lint"
-        username: "ubuntu"
 
   Testing:
     runs-on: ubuntu-latest
@@ -97,7 +90,6 @@ jobs:
         directory: .tests
         snakefile: workflow/Snakefile
         args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs"
-        username: "ubuntu"
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
@@ -105,4 +97,3 @@ jobs:
         directory: .tests
         snakefile: workflow/Snakefile
         args: "--report report.zip"
-        username: "ubuntu"
