@@ -1,7 +1,7 @@
 channels:
   - conda-forge
-  - bioconda
   - qiime2/label/r2021.11
+  - bioconda
   - defaults
 dependencies:
   - _libgcc_mutex=0.1
@@ -59,7 +59,7 @@ dependencies:
   - click=7.1.2
   - colorama=0.4.4
   - cryptography=35.0.0
-  - curl=7.80.0
+  - curl
   - cutadapt=3.5
   - cycler=0.11.0
   - cython=0.29.24
@@ -144,19 +144,19 @@ dependencies:
   - libbrotlienc=1.0.9
   - libcblas=3.9.0
   - libclang=11.1.0
-  - libcurl=7.80.0
+  - libcurl
   - libdeflate=1.7
   - libedit=3.1.20191231
   - libev=4.33
   - libevent=2.1.10
   - libffi=3.4.2
-  - libgcc=7.2.0
+  - libgcc
   - libgcc-devel_linux-64=9.4.0
-  - libgcc-ng=11.2.0
+  - libgcc-ng>=12
   - libgfortran-ng=11.2.0
   - libgfortran5=11.2.0
   - libglib=2.70.1
-  - libgomp=11.2.0
+  - libgomp=12.1.0
   - libiconv=1.16
   - liblapack=3.9.0
   - libllvm10=10.0.1
@@ -229,24 +229,24 @@ dependencies:
   - pbzip2=1.1.13
   - pcre=8.45
   - pcre2=10.37
-  - perl=5.26.2
-  - perl-archive-tar=2.18
-  - perl-carp=1.38
-  - perl-common-sense=3.74
-  - perl-compress-raw-bzip2=2.087
-  - perl-compress-raw-zlib=2.087
-  - perl-exporter=5.72
-  - perl-exporter-tiny=1.002001
-  - perl-extutils-makemaker=7.36
-  - perl-io-compress=2.087
-  - perl-io-zlib=1.10
-  - perl-json=4.02
-  - perl-json-xs=2.34
-  - perl-list-moreutils=0.413
-  - perl-pathtools=3.75
-  - perl-scalar-list-utils=1.52
-  - perl-threaded=5.26.0
-  - perl-types-serialiser=1.0
+  - perl
+  - perl-archive-tar
+  - perl-carp
+  - perl-common-sense
+  - perl-compress-raw-bzip2
+  - perl-compress-raw-zlib
+  - perl-exporter
+  - perl-exporter-tiny
+  - perl-extutils-makemaker
+  - perl-io-compress
+  - perl-io-zlib
+  - perl-json
+  - perl-json-xs
+  - perl-list-moreutils
+  - perl-pathtools
+  - perl-scalar-list-utils
+  - perl-threaded
+  - perl-types-serialiser
   - pexpect=4.8.0
   - pickleshare=0.7.5
   - pigz=2.6
