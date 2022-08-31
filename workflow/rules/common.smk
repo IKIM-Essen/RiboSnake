@@ -103,6 +103,8 @@ def get_metadata_categorical_columns():
         name = header[y]
         if (data_only[name] == data_only[name][1]).all():
             namelist.remove(name)
+        if "barcode" in name:
+            namelist.remove(name)
         y = y + 1
     print(namelist)
     return namelist

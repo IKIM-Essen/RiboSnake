@@ -179,7 +179,7 @@ rule beta_significance:
         "--m-metadata-file config/pep/sample.tsv "
         "--m-metadata-column {wildcards.metadata_column} "
         "--o-visualization {output.out} "
-        "--p-pairwise "
+        "--p-no-pairwise "
         "--verbose 2> {log}"
 
 
