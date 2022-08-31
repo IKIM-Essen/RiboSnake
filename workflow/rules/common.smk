@@ -96,10 +96,13 @@ def get_metadata_columns():
 def get_metadata_categorical_columns():
     metadata = pd.read_csv(config["metadata"], header=0, delimiter=",")
     header = metadata.columns[metadata.isin(["categorical"]).any()].values.tolist()
+    namelist = metadata.columns[metadata.isin(["categorical"]).any()].values.tolist()
     data_only = metadata.drop(labels=0, axis=0)
-    for name in header:
+    y = 0
+    while y < len(header):
+        name = header[y]
         if (data_only[name] == data_only[name][1]).all():
-            header.remove(name)
-        elif "date" in name:
-            header.remove(name)
+            namelist.remove(name)
+        y = y + 1
+    print(namelist)
     return header
