@@ -105,4 +105,4 @@ def get_metadata_categorical_columns():
             namelist.remove(name)
         y = y + 1
     print(namelist)
-    return header
+    return namelist
