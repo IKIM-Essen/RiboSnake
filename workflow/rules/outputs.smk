@@ -218,8 +218,9 @@ rule snakemake_report:
     conda:
         "../envs/snakemake.yaml"
     shell:
-        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css {input}"
-        " --report {output} {params.for_testing}"
+        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css {input} "
+        "--report {output} {params.for_testing} "
+        "> {log} 2>&1"
 
 
 rule compress_kraken:
