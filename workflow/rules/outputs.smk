@@ -48,6 +48,7 @@ rule unzip_reports:
             "results/{{date}}/visual/beta-correlation-scatter-{metadata_column}.qzv",
             metadata_column=get_metadata_columns(),
         ),
+        "results/{date}/visual/heatmap_gneiss.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -142,6 +143,12 @@ rule report_files:
             category="3. Analysis",
             subcategory="Beta",
             htmlindex="index.html",
+        ),
+        gneiss=report(
+            "results/{date}/visual/heatmap_gneiss.svg",
+            caption="../report/gneiss.rst",
+            category="3. Analysis",
+            subcategory="Gneiss",
         ),
     log:
         "logs/{date}/outputs/report-files.log",
