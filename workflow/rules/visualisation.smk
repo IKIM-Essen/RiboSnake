@@ -163,23 +163,23 @@ rule beta_significance:
     input:
         direc="results/{date}/core-metrics-results",
     output:
-        "results/{date}/visual/unweighted-unifrac-body-site-significance.qzv",
+        out="results/{date}/visual/unweighted-unifrac-body-site-significance-{metadata_column}.qzv",
     params:
         metadata=config["metadata-parameters"]["beta-metadata-column"],  #"extract-group-no"#"swab-site", config["metadata-parameters"]["beta-metadata-column"]
         unifrac=(
             "results/{date}/core-metrics-results/unweighted_unifrac_distance_matrix.qza"
         ),
     log:
-        "logs/{date}/visualisation/beta-significance.log",
+        "logs/{date}/visualisation/beta-significance-{metadata_column}.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
         "qiime diversity beta-group-significance "
         "--i-distance-matrix {params.unifrac} "
         "--m-metadata-file config/pep/sample.tsv "
-        "--m-metadata-column {params.metadata} "
-        "--o-visualization {output} "
-        "--p-pairwise "
+        "--m-metadata-column {wildcards.metadata_column} "
+        "--o-visualization {output.out} "
+        "--p-no-pairwise "
         "--verbose 2> {log}"
 
 

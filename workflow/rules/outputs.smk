@@ -36,7 +36,10 @@ rule unzip_reports:
         "results/{date}/visual/taxonomy.qzv",
         "results/{date}/visual/faith-pd-group-significance.qzv",
         "results/{date}/visual/evenness-group-significance.qzv",
-        #"results/{date}/visual/unweighted-unifrac-body-site-significance.qzv",
+        expand(
+            "results/{{date}}/visual/unweighted-unifrac-body-site-significance-{metadata_column}.qzv",
+            metadata_column=get_metadata_categorical_columns(),
+        ),
         "results/{date}/visual/bray-curtis-emperor.qzv",
         "results/{date}/visual/jaccard-emperor.qzv",
         "results/{date}/visual/unweighted-unifrac-emperor.qzv",
@@ -45,6 +48,7 @@ rule unzip_reports:
             "results/{{date}}/visual/beta-correlation-scatter-{metadata_column}.qzv",
             metadata_column=get_metadata_columns(),
         ),
+        "results/{date}/visual/heatmap_gneiss.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -112,13 +116,6 @@ rule report_files:
             subcategory="Alpha",
             htmlindex="index.html",
         ),
-        #body_site_significance=report(
-        #    directory("results/{date}/visual/report/unweighted-unifrac-body-site-significance"),
-        #    caption="../report/body-site-significance.rst",
-        #    category="3. Analysis",
-        #    subcategory="Beta",
-        #    htmlindex="index.html",
-        #),
         bray_curtis_emperor=report(
             directory("results/{date}/visual/report/bray-curtis-emperor"),
             caption="../report/bray-curtis-emperor.rst",
@@ -146,6 +143,12 @@ rule report_files:
             category="3. Analysis",
             subcategory="Beta",
             htmlindex="index.html",
+        ),
+        gneiss=report(
+            "results/{date}/visual/heatmap_gneiss.svg",
+            caption="../report/gneiss.rst",
+            category="3. Analysis",
+            subcategory="Gneiss",
         ),
     log:
         "logs/{date}/outputs/report-files.log",
@@ -176,6 +179,27 @@ rule report_beta_correlation:
         "../scripts/extract_beta_corr.py"
 
 
+rule report_beta_significance:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        beta_significance=report(
+            directory(
+                "results/{date}/visual/report/unweighted-unifrac-body-site-significance-{metadata_column}"
+            ),
+            caption="../report/body-site-significance.rst",
+            category="3. Analysis",
+            subcategory="Beta",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/outputs/report-significance-{metadata_column}.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_significance.py"
+
+
 rule snakemake_report:
     input:
         "results/{date}/visual/heatmap_binary.png",
@@ -189,6 +213,10 @@ rule snakemake_report:
             "results/{{date}}/visual/report/beta-correlation-scatter-{metadata_column}",
             metadata_column=get_metadata_columns(),
         ),
+        expand(
+            "results/{{date}}/visual/report/unweighted-unifrac-body-site-significance-{metadata_column}",
+            metadata_column=get_metadata_categorical_columns(),
+        ),
     output:
         "results/{date}/out/report.zip",
     params:
@@ -198,8 +226,9 @@ rule snakemake_report:
     conda:
         "../envs/snakemake.yaml"
     shell:
-        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css {input}"
-        " --report {output} {params.for_testing}"
+        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
+        "{params.for_testing} "
+        "> {log} 2>&1"
 
 
 rule compress_kraken:

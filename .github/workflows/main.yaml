@@ -81,9 +81,11 @@ jobs:
         rm YUN*
         rm Rep*
         rm BAQ2*
-        rm BAQ4*
+        rm BAQ3*
+        rm BAQ1*
+        rm BAQ4166.2*
+        rm BAQ4166.3*
         ls
-
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
