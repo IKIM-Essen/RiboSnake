@@ -512,10 +512,10 @@ rule beta_correlation:
 
 rule ancom:
     input:
-        "results/{date}/out/taxa_collapsed.qza"
+        "results/{date}/out/taxa_collapsed.qza",
     output:
         pseudocount_table="results/{date}/out/pseudocount_table.qza",
-        ancom_output="results/{date}/visual/ancom.qzv"
+        ancom_output="results/{date}/visual/ancom.qzv",
     params:
         metadata_column=config["ancom"]["metadata-column"],
         metadata_file="config/pep/sample.tsv",
