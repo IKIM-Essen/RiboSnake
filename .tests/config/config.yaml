@@ -178,3 +178,7 @@ dada2-single:
   min-fold-parent-over-abundance: 1.0
   # The number of reads to use when training the errormodel
   n-reads-learn: 1000000
+# Feature classification with ancom
+ancom:
+  # Catgorical metadata column to analyse
+  metadata-column: extract-group-no
