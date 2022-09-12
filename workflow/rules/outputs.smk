@@ -49,6 +49,7 @@ rule unzip_reports:
             metadata_column=get_metadata_columns(),
         ),
         "results/{date}/visual/heatmap_gneiss.qzv",
+        "results/{date}/visual/ancom.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -149,6 +150,13 @@ rule report_files:
             caption="../report/gneiss.rst",
             category="3. Analysis",
             subcategory="Gneiss",
+        ),
+        ancom=report(
+            directory("results/{date}/visual/report/ancom"),
+            caption="../report/ancom.rst",
+            category="3. Analysis",
+            subcategory="Ancom",
+            htmlindex="index.html",
         ),
     log:
         "logs/{date}/outputs/report-files.log",

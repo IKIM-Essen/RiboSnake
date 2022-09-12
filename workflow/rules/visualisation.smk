@@ -508,3 +508,28 @@ rule beta_correlation:
         "--o-metadata-distance-matrix {output.distance_matrix} "
         "--o-mantel-scatter-visualization {output.mantel_scatter_vis} "
         "--verbose 2> {log}"
+
+
+rule ancom:
+    input:
+        "results/{date}/out/taxa_collapsed.qza"
+    output:
+        pseudocount_table="results/{date}/out/pseudocount_table.qza",
+        ancom_output="results/{date}/visual/ancom.qzv"
+    params:
+        metadata_column=config["ancom"]["metadata-column"],
+        metadata_file="config/pep/sample.tsv",
+    log:
+        "logs/{date}/visualisation/ancom.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime composition add-pseudocount "
+        "--i-table {input} "
+        "--o-composition-table {output.pseudocount_table} \n"
+        "qiime composition ancom "
+        "--i-table {output.pseudocount_table} "
+        "--m-metadata-file {params.metadata_file} "
+        "--m-metadata-column {params.metadata_column} "
+        "--o-visualization {output.ancom_output} "
+        "--verbose 2> {log}"
