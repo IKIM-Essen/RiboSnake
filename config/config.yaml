@@ -20,9 +20,9 @@ database:
   download-path-tax: https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza
   kraken-db: ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/old/minikraken2_v2_8GB_201904.tgz
   ref-genome: https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
-# Forward and reverse primers used for sequencing
-primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
-primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
+# Forward and reverse adapters used for sequencing
+adapter1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
+adapter2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
 # Type of data, single-end: 'SampleData[SequencesWithQuality]' or paired-end: 'SampleData[PairedEndSequencesWithQuality]'
 datatype: 'SampleData[PairedEndSequencesWithQuality]'
 #Primertrimming parameters
@@ -123,8 +123,6 @@ diversity:
     diversity-n-jobs: 3
     # Correlation test to be applied ('spearman', 'pearson')
     correlation-method: 'spearman'
-    # Column of the metadata-sheet to use
-    correlation-column: 'age'
     # The number of permutations to be run when computing p-values
     correlation-permutations: 999
     # The beta diversity metric to be computed ('weighted_normalized_unifrac',
