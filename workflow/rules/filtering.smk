@@ -260,13 +260,13 @@ rule filter_frequency:
         "--i-table {input.table} "
         "--p-min-frequency $value "
         "--o-filtered-table {output.table} "
-        "2> {log} \n"
+        "--verbose 2> {log} \n"
         "qiime feature-table filter-seqs "
         "--i-data {input.seqs} "
         "--i-table {output.table} "
         "--p-no-exclude-ids "
         "--o-filtered-data {output.seqs} "
-        "2> {log} "
+        "--verbose 2> {log} "
 
 
 rule filter_human:
@@ -300,7 +300,7 @@ rule filter_human:
         "--i-table {input.table} "
         "--m-metadata-file {output.seq} "
         "--o-filtered-table {output.table} "
-        "2> {log} "
+        "--verbose 2> {log} "
 
 
 rule taxa_collapse:
@@ -319,7 +319,7 @@ rule taxa_collapse:
         "--i-taxonomy {input.taxonomy} "
         "--p-level 6 "
         "--o-collapsed-table {output} "
-        "2> {log} "
+        "--verbose 2> {log} "
 
 
 rule filter_taxonomy:
@@ -340,10 +340,10 @@ rule filter_taxonomy:
         "--i-taxonomy {input.taxonomy} "
         "--p-exclude mitochondria,chloroplast "
         "--o-filtered-table {output.table} "
-        "2> {log} \n"
+        "--verbose 2> {log} \n"
         "qiime taxa filter-seqs "
         "--i-sequences {input.seq} "
         "--i-taxonomy {input.taxonomy} "
         "--p-exclude mitochondria,chloroplast "
         "--o-filtered-sequences {output.seq} "
-        "2> {log} "
+        "--verbose 2> {log} "
