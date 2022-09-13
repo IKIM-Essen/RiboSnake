@@ -152,11 +152,13 @@ rule alpha_significance:
         "qiime diversity alpha-group-significance "
         "--i-alpha-diversity {params.faith} "
         "--m-metadata-file config/pep/sample.tsv "
-        "--o-visualization {output.faith} \n"
+        "--o-visualization {output.faith} "
+        "--verbose 2> {log} \n"
         "qiime diversity alpha-group-significance "
         "--i-alpha-diversity {params.evenness} "
         "--m-metadata-file config/pep/sample.tsv "
-        "--o-visualization {output.evenness}"
+        "--o-visualization {output.evenness} "
+        "--verbose 2> {log} "
 
 
 rule beta_significance:
@@ -235,13 +237,15 @@ rule emperor:
         "--i-pcoa {params.unifrac_pcoa} "
         "--m-metadata-file config/pep/sample.tsv "
         "--p-custom-axes year "
-        "--o-visualization {output.unifrac} \n"
+        "--o-visualization {output.unifrac} "
+        "--verbose 2> {log} \n"
 
         "qiime emperor plot "
         "--i-pcoa {params.bray_curtis_pcoa} "
         "--m-metadata-file config/pep/sample.tsv "
         "--p-custom-axes year "
-        "--o-visualization {output.bray_curtis}"
+        "--o-visualization {output.bray_curtis} "
+        "--verbose 2> {log}"
 
 
 rule rarefaction:
@@ -477,7 +481,8 @@ rule beta_phylogeny:
         "--p-metric {params.metrics} "
         "--p-threads {params.threads} "
         "--p-variance-adjusted {params.variance_adjusted} "
-        "--o-distance-matrix {output}"
+        "--o-distance-matrix {output} "
+        "--verbose 2> {log}"
 
 
 rule beta_correlation:
