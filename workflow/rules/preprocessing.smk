@@ -172,6 +172,7 @@ if (
         shell:
             "qiime vsearch join-pairs "
             "--i-demultiplexed-seqs {input} "
+            "--p-allowmergestagger "
             "--p-minovlen {params.minovlen} "
             "--p-minlen {params.minlen} "
             "--p-maxdiffs {params.maxdiffs} "
