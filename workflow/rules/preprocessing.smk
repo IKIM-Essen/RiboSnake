@@ -106,8 +106,8 @@ rule trim_paired:
         "results/{date}/out/trimmed-seqs.qza",
     params:
         datatype=config["datatype"],
-        primer1=config["primer1"],
-        primer2=config["primer2"],
+        primer1=config["adapter1"],
+        primer2=config["adapter2"],
         error_rate=config["primertrimming"]["error_rate"],
         rep_times=config["primertrimming"]["rep_times"],
         overlap=config["primertrimming"]["overlap"],
