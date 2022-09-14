@@ -40,7 +40,7 @@ sequence_joining:
   seq_join_length: 30
   # Sequences shorter than minlen after truncation are discarded. 
   minlen: 1
-  # Maximum number of mismatches in the forward/reverse read overlap for joining. 
+  # Maximum number of mismatches in the forward/reverse read overlap for joining. Increase it, if you want reads to be merged that are small/won't match in the first place.
   maxdiffs: 10
   # The minimum allowed quality score in the input.
   qmin: 0
