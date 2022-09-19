@@ -22,6 +22,8 @@ If you want to add your own changes to the workflow, create a GitHub repository 
 
 If you just want to use this workflow locally, then simply clone it or download it as zip-file.
 
+When you have the folder structure added on your local machine, please add a "data" folder manually.
+
 ### Step 2: Configure workflow
 
 Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `metadata.txt` to specify your sample setup.

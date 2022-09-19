@@ -56,6 +56,7 @@ for name in files:
     sample_list.append(sample)
 sample_list = list(set(sample_list))
 metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
+metadata.columns = metadata.columns.str.lower()
 # Samples, that are not mentioned in the metadata.csv are excluded from the sample-metadata-sheet
 for name in sample_list:
     if name not in metadata["sample_name"]:
