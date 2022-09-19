@@ -280,8 +280,8 @@ rule filter_human:
         human_hit="results/{date}/out/human.qza",
     params:
         threads=config["threads"],
-        #perc-identity=config["filtering"]["perc-identity"],
-        #perc-query-aligned=config["filtering"]["perc-query-aligned"],
+        perc_identity=config["filtering"]["perc-identity"],
+        perc_query_aligned=config["filtering"]["perc-query-aligned"],
     log:
         "logs/{date}/filtering/filter-human.log",
     conda:
@@ -291,8 +291,8 @@ rule filter_human:
         "--i-query-sequences {input.seq} "
         "--i-reference-sequences {input.ref_seq} "
         "--p-threads {params.threads} "
-        "--p-perc-identity 0.93 "
-        "--p-perc-query-aligned 0.93 "
+        "--p-perc-identity {params.perc_identity} "
+        "--p-perc-query-aligned {params.perc_query_aligned} "
         "--o-sequence-hits {output.human_hit} "
         "--o-sequence-misses {output.seq} "
         "--verbose 2> {log} \n"
