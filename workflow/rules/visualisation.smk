@@ -498,6 +498,7 @@ rule beta_correlation:
         metadata_file="config/pep/sample.tsv",
         method=config["diversity"]["beta"]["correlation-method"],
         permutations=config["diversity"]["beta"]["correlation-permutations"],
+        metadata="{metadata_column}",
     log:
         "logs/{date}/visualisation/beta-correlation-{metadata_column}.log",
     conda:
@@ -510,6 +511,8 @@ rule beta_correlation:
         "--p-method {params.method} "
         "--p-permutations {params.permutations} "
         "--p-intersect-ids "
+        "--p-label1 jaccard-distance-matrix "
+        "--p-label2 {params.metadata} "
         "--o-metadata-distance-matrix {output.distance_matrix} "
         "--o-mantel-scatter-visualization {output.mantel_scatter_vis} "
         "--verbose 2> {log}"
