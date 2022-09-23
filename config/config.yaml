@@ -113,6 +113,8 @@ diversity:
     diversity-metric: 'fisher_alpha'
     # Metric to be computed
     phylogeny-metric: 'faith_pd'
+    # Alpha-correlation method
+    correlation-method: 'spearman'
   # Parameters for beta-diversity analysis
   beta:
     # Metric to be computed

@@ -538,3 +538,26 @@ rule ancom:
         "--m-metadata-column {params.metadata_column} "
         "--o-visualization {output.ancom_output} "
         "--verbose 2> {log}"
+
+
+rule alpha_correlation:
+    input:
+        direc="results/{date}/core-metrics-results",
+    output:
+        "results/{date}/visual/alpha_correlation.qzv",
+    params:
+        alpha_diversity="results/{date}/core-metrics-results/faith_pd_vector.qza",
+        metadata="config/pep/sample.tsv",
+        method=config["diversity"]["alpha"]["correlation-method"],
+    log:
+        "logs/{date}/visualisation/alpha_correlation.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime diversity alpha-correlation "
+        "--i-alpha-diversity {params.alpha_diversity} "
+        "--m-metadata-file {params.metadata} "
+        "--p-method {params.method} "
+        "--p-intersect-ids "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
