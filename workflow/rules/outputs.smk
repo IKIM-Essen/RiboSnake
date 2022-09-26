@@ -50,6 +50,7 @@ rule unzip_reports:
         ),
         "results/{date}/visual/heatmap_gneiss.qzv",
         "results/{date}/visual/ancom.qzv",
+        "results/{date}/visual/alpha_correlation.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -156,6 +157,13 @@ rule report_files:
             caption="../report/ancom.rst",
             category="3. Analysis",
             subcategory="Ancom",
+            htmlindex="index.html",
+        ),
+        alpha_correlation=report(
+            directory("results/{date}/visual/report/alpha_correlation"),
+            caption="../report/alpha_correlation.rst",
+            category="3. Analysis",
+            subcategory="Alpha",
             htmlindex="index.html",
         ),
     log:
@@ -275,14 +283,14 @@ rule zip_report:
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
-        "results/{date}/out/alpha-diversity.qza",
+        #"results/{date}/out/alpha-diversity.qza",
         "results/{date}/out/beta-diversity-distance.qza",
         expand(
             "results/{{date}}/out/beta-correlation-{metadata_column}.qza",
             metadata_column=get_metadata_columns(),
         ),
-        "results/{date}/out/beta-phylogeny.qza",
-        "results/{date}/out/alpha-phylogeny.qza",
+        #"results/{date}/out/beta-phylogeny.qza",
+        #"results/{date}/out/alpha-phylogeny.qza",
     output:
         "results/{date}/16S-report.tar.gz",
     log:

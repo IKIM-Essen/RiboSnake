@@ -81,4 +81,7 @@ while b < len(subdir):
     if "ancom" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.ancom)
+    if "alpha_correlation" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.alpha_correlation)
     b = b + 1
