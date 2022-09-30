@@ -17,13 +17,30 @@ Gneiss_metadata_column = str(config["metadata-parameters"]["gneiss-metadata-colu
 Ancom_metadata_column = str(config["ancom"]["metadata-column"])
 
 data = {
-    "parameters":["Primer_error_rate", "Relative_abundance_filter", "Min_seq_length", "Rarefaction_depth", "Taxa_heatmap_column", "Beta_metadata_column", "Gneiss_metadata_column", "Ancom_metadata_column"],
-    "values": [Primer_error_rate, Relative_abundance_filter, Min_seq_length, Rarefaction_depth, Taxa_heatmap_column, Beta_metadata_column, Gneiss_metadata_column, Ancom_metadata_column]
-    }
+    "parameters": [
+        "Primer_error_rate",
+        "Relative_abundance_filter",
+        "Min_seq_length",
+        "Rarefaction_depth",
+        "Taxa_heatmap_column",
+        "Beta_metadata_column",
+        "Gneiss_metadata_column",
+        "Ancom_metadata_column",
+    ],
+    "values": [
+        Primer_error_rate,
+        Relative_abundance_filter,
+        Min_seq_length,
+        Rarefaction_depth,
+        Taxa_heatmap_column,
+        Beta_metadata_column,
+        Gneiss_metadata_column,
+        Ancom_metadata_column,
+    ],
+}
 
-df = pd.DataFrame(data = data)
+df = pd.DataFrame(data=data)
 
 
 print(df)
-df.to_csv(str(snakemake.output), sep = ",", header = True, index = False)
-
+df.to_csv(str(snakemake.output), sep=",", header=True, index=False)
