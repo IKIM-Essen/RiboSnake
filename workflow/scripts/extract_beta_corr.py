@@ -42,7 +42,7 @@ print(path_name)
 plot_name = path_name.split("/")[-1]
 while b < len(subdir):
     datadir = subdir[b] + "data/"
-    if plot_name in subdir[b]:
+    if plot_name == subdir[b].split("/")[-2]:
         html = datadir
         shutil.copytree(html, snakemake.output.beta_correlation_scatter)
     b = b + 1
