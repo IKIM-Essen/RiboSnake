@@ -216,6 +216,21 @@ rule report_beta_significance:
         "../scripts/extract_significance.py"
 
 
+rule parameter_summary:
+    output:
+        report(
+            "results/{date}/out/parameter-summary.csv",
+            caption="../report/parameter-summary.rst",
+            category="4. Qualitycontrol",
+        ),
+    log:
+        "logs/{date}/outputs/parameter_summary.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/parameter_summary.py"
+
+
 rule snakemake_report:
     input:
         "results/{date}/visual/heatmap_binary.png",
@@ -285,6 +300,7 @@ rule zip_report:
         "results/{date}/out/kraken.tar.gz",
         #"results/{date}/out/alpha-diversity.qza",
         "results/{date}/out/beta-diversity-distance.qza",
+        "results/{date}/out/parameter-summary.csv",
         expand(
             "results/{{date}}/out/beta-correlation-{metadata_column}.qza",
             metadata_column=get_metadata_columns(),
