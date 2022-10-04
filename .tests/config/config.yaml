@@ -14,6 +14,8 @@ input: ../incoming/
 data: data/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
+# Remove columns from analysis
+remove-columns: ["site-name"]
 # Paths to the databases used for classification and taxonomy
 database:
   download-path-seq: resources/silva-138-99-seqs.qza
