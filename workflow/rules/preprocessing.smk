@@ -106,8 +106,10 @@ rule trim_paired:
         "results/{date}/out/trimmed-seqs.qza",
     params:
         datatype=config["datatype"],
-        primer1=config["adapter1"],
-        primer2=config["adapter2"],
+        adapter1=config["adapter1"],
+        adapter2=config["adapter2"],
+        primer1=config["primertrimming"]["forward"],
+        primer2=config["primertrimming"]["reverse"],
         error_rate=config["primertrimming"]["error_rate"],
         rep_times=config["primertrimming"]["rep_times"],
         overlap=config["primertrimming"]["overlap"],
@@ -122,8 +124,10 @@ rule trim_paired:
         then 
             qiime cutadapt trim-paired \
             --i-demultiplexed-sequences {input} \
-            --p-adapter-f {params.primer1} \
-            --p-front-f {params.primer2} \
+            --p-adapter-f {params.adapter1} \
+            --p-front-f {params.primer1} \
+            --p-front-r {params.primer2} \
+            --p-adapter-r {params.adapter2} \
             --p-error-rate {params.error_rate} \
             --p-times {params.rep_times} \
             --p-overlap {params.overlap} \

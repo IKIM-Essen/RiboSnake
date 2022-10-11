@@ -29,14 +29,16 @@ adapter2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
 datatype: 'SampleData[PairedEndSequencesWithQuality]'
 #Primertrimming parameters
 primertrimming:
-    # Maximum allowed error rate
-    error_rate: 0.1
-    # Remove multiple occurrences of an adapter if it is repeated, up to `times` times
-    rep_times: 1
-    # Require at least `overlap` bases of overlap between read and adapter for an adapter to be found
-    overlap: 3
-    # Discard reads shorter than specified value
-    min_length: 6
+  forward: CCTACGGGNGGCWGCAG
+  reverse: GACTACHVGGGTATCTAATCC
+  # Maximum allowed error rate
+  error_rate: 0.1
+  # Remove multiple occurrences of an adapter if it is repeated, up to `times` times
+  rep_times: 2
+  # Require at least `overlap` bases of overlap between read and adapter for an adapter to be found
+  overlap: 5
+  # Discard reads shorter than specified value
+  min_length: 8
 sequence_joining:
   # Minimum overlap length of forward and reverse reads for joining.
   seq_join_length: 30
