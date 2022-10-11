@@ -165,12 +165,10 @@ rule beta_significance:
     input:
         direc="results/{date}/core-metrics-results",
     output:
-        out="results/{date}/visual/unweighted-unifrac-body-site-significance-{metadata_column}.qzv",
+        out="results/{date}/visual/unweighted-unifrac-significance-{metadata_column}.qzv",
     params:
         metadata=config["metadata-parameters"]["beta-metadata-column"],  #"extract-group-no"#"swab-site", config["metadata-parameters"]["beta-metadata-column"]
-        unifrac=(
-            "results/{date}/core-metrics-results/unweighted_unifrac_distance_matrix.qza"
-        ),
+        unifrac="results/{date}/core-metrics-results/" + config["diversity"]["beta"]["distance-matrix"],
     log:
         "logs/{date}/visualisation/beta-significance-{metadata_column}.log",
     conda:
