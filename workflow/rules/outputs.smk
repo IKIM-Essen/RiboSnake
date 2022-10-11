@@ -217,9 +217,7 @@ rule report_ancom:
         "results/{date}/visual/unzipped/",
     output:
         report(
-            directory(
-                "results/{date}/visual/report/ancom-{metadata_column}"
-            ),
+            directory("results/{date}/visual/report/ancom-{metadata_column}"),
             caption="../report/ancom.rst",
             category="3. Analysis",
             subcategory="Ancom",
