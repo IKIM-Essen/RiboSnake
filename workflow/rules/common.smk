@@ -118,3 +118,7 @@ def get_metadata_categorical_columns():
                 namelist.remove(item)
     print(namelist)
     return namelist
+
+
+def get_ancom_columns():
+    return config["ancom"]["metadata-column"]

@@ -78,9 +78,6 @@ while b < len(subdir):
     if "weighted-unifrac-emperor-plot" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.weighted_unifrac_emperor)
-    if "ancom" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.ancom)
     if "alpha_correlation" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.alpha_correlation)
