@@ -522,13 +522,13 @@ rule ancom:
     input:
         "results/{date}/out/taxa_collapsed.qza",
     output:
-        pseudocount_table="results/{date}/out/pseudocount_table.qza",
-        ancom_output="results/{date}/visual/ancom.qzv",
+        pseudocount_table="results/{date}/out/pseudocount_table-{metadata_column}.qza",
+        ancom_output="results/{date}/visual/ancom-{metadata_column}.qzv",
     params:
-        metadata_column=config["ancom"]["metadata-column"],
+        metadata_column="{metadata_column}",
         metadata_file="config/pep/sample.tsv",
     log:
-        "logs/{date}/visualisation/ancom.log",
+        "logs/{date}/visualisation/ancom-{metadata_column}.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:

@@ -185,4 +185,4 @@ dada2-single:
 # Feature classification with ancom
 ancom:
   # Catgorical metadata column to analyse
-  metadata-column: extract-group-no
+  metadata-column: ["extract-group-no"]

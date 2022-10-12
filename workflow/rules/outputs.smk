@@ -49,7 +49,10 @@ rule unzip_reports:
             metadata_column=get_metadata_columns(),
         ),
         "results/{date}/visual/heatmap_gneiss.qzv",
-        "results/{date}/visual/ancom.qzv",
+        expand(
+            "results/{{date}}/visual/ancom-{metadata_column}.qzv",
+            metadata_column=get_ancom_columns(),
+        ),
         "results/{date}/visual/alpha_correlation.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
@@ -152,13 +155,6 @@ rule report_files:
             category="3. Analysis",
             subcategory="Gneiss",
         ),
-        ancom=report(
-            directory("results/{date}/visual/report/ancom"),
-            caption="../report/ancom.rst",
-            category="3. Analysis",
-            subcategory="Ancom",
-            htmlindex="index.html",
-        ),
         alpha_correlation=report(
             directory("results/{date}/visual/report/alpha_correlation"),
             caption="../report/alpha_correlation.rst",
@@ -178,7 +174,7 @@ rule report_beta_correlation:
     input:
         "results/{date}/visual/unzipped/",
     output:
-        beta_correlation_scatter=report(
+        report(
             directory(
                 "results/{date}/visual/report/beta-correlation-scatter-{metadata_column}"
             ),
@@ -199,7 +195,7 @@ rule report_beta_significance:
     input:
         "results/{date}/visual/unzipped/",
     output:
-        beta_significance=report(
+        report(
             directory(
                 "results/{date}/visual/report/unweighted-unifrac-body-site-significance-{metadata_column}"
             ),
@@ -214,6 +210,25 @@ rule report_beta_significance:
         "../envs/python.yaml"
     script:
         "../scripts/extract_significance.py"
+
+
+rule report_ancom:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            directory("results/{date}/visual/report/ancom-{metadata_column}"),
+            caption="../report/ancom.rst",
+            category="3. Analysis",
+            subcategory="Ancom",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/outputs/ancom-{metadata_column}.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_beta_corr.py"
 
 
 rule parameter_summary:
@@ -246,6 +261,10 @@ rule snakemake_report:
         expand(
             "results/{{date}}/visual/report/unweighted-unifrac-body-site-significance-{metadata_column}",
             metadata_column=get_metadata_categorical_columns(),
+        ),
+        expand(
+            "results/{{date}}/visual/report/ancom-{metadata_column}",
+            metadata_column=get_ancom_columns(),
         ),
     output:
         "results/{date}/out/report.zip",
