@@ -37,7 +37,7 @@ rule unzip_reports:
         "results/{date}/visual/faith-pd-group-significance.qzv",
         "results/{date}/visual/evenness-group-significance.qzv",
         expand(
-            "results/{{date}}/visual/unweighted-unifrac-body-site-significance-{metadata_column}.qzv",
+            "results/{{date}}/visual/unweighted-unifrac-significance-{metadata_column}.qzv",
             metadata_column=get_metadata_categorical_columns(),
         ),
         "results/{date}/visual/bray-curtis-emperor.qzv",
@@ -197,9 +197,9 @@ rule report_beta_significance:
     output:
         report(
             directory(
-                "results/{date}/visual/report/unweighted-unifrac-body-site-significance-{metadata_column}"
+                "results/{date}/visual/report/unweighted-unifrac-significance-{metadata_column}"
             ),
-            caption="../report/body-site-significance.rst",
+            caption="../report/beta-significance.rst",
             category="3. Analysis",
             subcategory="Beta",
             htmlindex="index.html",
@@ -259,7 +259,7 @@ rule snakemake_report:
             metadata_column=get_metadata_columns(),
         ),
         expand(
-            "results/{{date}}/visual/report/unweighted-unifrac-body-site-significance-{metadata_column}",
+            "results/{{date}}/visual/report/unweighted-unifrac-significance-{metadata_column}",
             metadata_column=get_metadata_categorical_columns(),
         ),
         expand(
