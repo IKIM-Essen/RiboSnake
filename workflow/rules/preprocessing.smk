@@ -98,6 +98,7 @@ rule read_samples:
         "--output-path {output} "
         "2> {log} "
 
+
 if config["jan-mode"] == False:
 
     rule trim_paired:
