@@ -127,7 +127,7 @@ if (
 
     rule dada2:
         input:
-            "results/{date}/out/trimmed-seqs.qza",
+            "results/{date}/out/demux-paired-end.qza",
         output:
             table="results/{date}/out/table-cluster-lengthfilter.qza",
             seq="results/{date}/out/seq-cluster-lengthfilter.qza",
@@ -181,7 +181,7 @@ if (
 
     rule dada2:
         input:
-            "results/{date}/out/trimmed-seqs.qza",
+            "results/{date}/out/demux-paired-end.qza",
         output:
             table="results/{date}/out/table-cluster-lengthfilter.qza",
             seq="results/{date}/out/seq-cluster-lengthfilter.qza",

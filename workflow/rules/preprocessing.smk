@@ -98,56 +98,57 @@ rule read_samples:
         "--output-path {output} "
         "2> {log} "
 
+if config["jan-mode"] == False:
 
-rule trim_paired:
-    input:
-        "results/{date}/out/demux-paired-end.qza",
-    output:
-        "results/{date}/out/trimmed-seqs.qza",
-    params:
-        datatype=config["datatype"],
-        adapter1=config["adapter1"],
-        adapter2=config["adapter2"],
-        primer1=config["primertrimming"]["forward"],
-        primer2=config["primertrimming"]["reverse"],
-        error_rate=config["primertrimming"]["error_rate"],
-        rep_times=config["primertrimming"]["rep_times"],
-        overlap=config["primertrimming"]["overlap"],
-        min_length=config["primertrimming"]["min_length"],
-    log:
-        "logs/{date}/preprocessing/trim-paired.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        """
-        if [[ '${params.datatype}' == '$SampleData[PairedEndSequencesWithQuality]' ]] 
-        then 
-            qiime cutadapt trim-paired \
-            --i-demultiplexed-sequences {input} \
-            --p-adapter-f {params.adapter1} \
-            --p-front-f {params.primer1} \
-            --p-front-r {params.primer2} \
-            --p-adapter-r {params.adapter2} \
-            --p-error-rate {params.error_rate} \
-            --p-times {params.rep_times} \
-            --p-overlap {params.overlap} \
-            --p-minimum-length {params.min_length} \
-            --o-trimmed-sequences {output} \
-            --verbose 2> {log}
-        else 
-            qiime cutadapt trim-single \
-            --i-demultiplexed-sequences {input} \
-            --p-cores 10 \
-            --p-adapter {params.primer1} \
-            --p-front {params.primer2} \
-            --p-error-rate {params.error_rate} \
-            --p-times {params.rep_times} \
-            --p-overlap {params.overlap} \
-            --p-minimum-length {params.min_length} \
-            --o-trimmed-sequences {output} \
-            --verbose 2> {log}
-        fi
-        """
+    rule trim_paired:
+        input:
+            "results/{date}/out/demux-paired-end.qza",
+        output:
+            "results/{date}/out/trimmed-seqs.qza",
+        params:
+            datatype=config["datatype"],
+            adapter1=config["adapter1"],
+            adapter2=config["adapter2"],
+            primer1=config["primertrimming"]["forward"],
+            primer2=config["primertrimming"]["reverse"],
+            error_rate=config["primertrimming"]["error_rate"],
+            rep_times=config["primertrimming"]["rep_times"],
+            overlap=config["primertrimming"]["overlap"],
+            min_length=config["primertrimming"]["min_length"],
+        log:
+            "logs/{date}/preprocessing/trim-paired.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            """
+            if [[ '${params.datatype}' == '$SampleData[PairedEndSequencesWithQuality]' ]] 
+            then 
+                qiime cutadapt trim-paired \
+                --i-demultiplexed-sequences {input} \
+                --p-adapter-f {params.adapter1} \
+                --p-front-f {params.primer1} \
+                --p-front-r {params.primer2} \
+                --p-adapter-r {params.adapter2} \
+                --p-error-rate {params.error_rate} \
+                --p-times {params.rep_times} \
+                --p-overlap {params.overlap} \
+                --p-minimum-length {params.min_length} \
+                --o-trimmed-sequences {output} \
+                --verbose 2> {log}
+            else 
+                qiime cutadapt trim-single \
+                --i-demultiplexed-sequences {input} \
+                --p-cores 10 \
+                --p-adapter {params.primer1} \
+                --p-front {params.primer2} \
+                --p-error-rate {params.error_rate} \
+                --p-times {params.rep_times} \
+                --p-overlap {params.overlap} \
+                --p-minimum-length {params.min_length} \
+                --o-trimmed-sequences {output} \
+                --verbose 2> {log}
+            fi
+            """
 
 
 if (
