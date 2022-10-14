@@ -44,5 +44,7 @@ number = frequency["0"].sum()
 abundance = float(str(snakemake.params))
 endnumber = number * abundance
 endnumber = int(endnumber)
+if endnumber == 0:
+    endnumber += 1
 with open(str(snakemake.output.abundance), "w") as f:
     f.write(str(endnumber))
