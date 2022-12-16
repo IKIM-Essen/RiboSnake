@@ -20,15 +20,24 @@ include: "rules/common.smk"
 include: "rules/preprocessing.smk"
 include: "rules/filtering.smk"
 include: "rules/qualitycontroll.smk"
-include: "rules/visualisation.smk"
 include: "rules/classification.smk"
-include: "rules/outputs.smk"
 include: "rules/chimera_checking.smk"
 
 
 if config["include-data-prep"]:
 
     include: "rules/preparedata.smk"
+
+
+if config["reduced-analysis"]:
+
+    include: "rules/reduced_analysis.smk"
+
+
+if config["reduced-analysis"] == False:
+
+    include: "rules/outputs.smk"
+    include: "rules/visualisation.smk"
 
 
 rule all:

@@ -9,6 +9,8 @@ testing: True
 include-data-prep: False
 # Modus: If true, analysis will be done with DADA2 instead of vsearch
 jan-mode: False
+# Shorter analysis for small number of samples or samples without metadata
+reduced-analysis: False
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/
