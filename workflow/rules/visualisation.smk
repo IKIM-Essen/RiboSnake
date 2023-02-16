@@ -30,6 +30,28 @@ rule visualise_table:
         "--verbose 2> {log}"
 
 
+rule table_compare_human:
+    input:
+        table_wh="results/{date}/out/derepl-table.qza",
+        table_woh="results/{date}/out/derep-table-nonhum.qza",
+    output:
+        visual_wh="results/{date}/visual/table-whuman.qzv",
+        visual_woh="results/{date}/visual/table-wohuman.qzv",
+    log:
+        "logs/{date}/visualisation/table-compare-human.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table summarize "
+        "--i-table {input.table_wh} "
+        "--o-visualization {output.visual_wh} "
+        "--verbose 2> {log} \n"
+        "qiime feature-table summarize "
+        "--i-table {input.table_woh} "
+        "--o-visualization {output.visual_woh} "
+        "--verbose 2> {log}"
+
+
 rule visualise_fastq:
     input:
         "results/{date}/out/demux-paired-end.qza",
@@ -58,6 +80,22 @@ rule demux_stats:
     shell:
         "qiime metadata tabulate "
         "--m-input-file {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
+rule visual_humancount:
+    input:
+        "results/{date}/out/human.qza",
+    output:
+        "results/{date}/visual/human-count.qzv",
+    log:
+        "logs/{date}/visualisation/human-count.log",
+    conda:
+        "../envs/qiime-only-env.yaml",
+    shell:
+        "qiime feature-table tabulate-seqs "
+        "--i-data {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
 
@@ -565,3 +603,23 @@ rule alpha_correlation:
         "--p-intersect-ids "
         "--o-visualization {output} "
         "--verbose 2> {log}"
+
+
+rule hum_filter_difference:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            "results/{date}/visual/sample_frequencys_difference.csv",
+            caption="../report/hum_filter_difference.rst",
+            category="4. Qualitycontrol",
+        )
+    params:
+        visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
+        visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
+    log:
+        "logs/{date}/visualisation/frequency_difference.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/sample_freq_difference.py"

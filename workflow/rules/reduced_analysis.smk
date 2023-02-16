@@ -62,6 +62,22 @@ rule demux_stats:
         "--verbose 2> {log}"
 
 
+rule visual_humancount:
+    input:
+        "results/{date}/out/human.qza",
+    output:
+        "results/{date}/visual/human-count.qzv",
+    log:
+        "logs/{date}/visualisation/human-count.log",
+    conda:
+        "../envs/qiime-only-env.yaml",
+    shell:
+        "qiime feature-table tabulate-seqs "
+        "--i-data {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
 rule taxa_heatmap:
     input:
         "results/{date}/out/taxa_collapsed.qza",
@@ -256,6 +272,12 @@ rule unzip_reports:
         "results/{date}/visual/taxa-bar-plots.qzv",
         "results/{date}/visual/rooted-tree.qza",
         "results/{date}/visual/taxonomy.qzv",
+        "results/{date}/visual/table-whuman.qzv",
+        "results/{date}/visual/table-wohuman.qzv",
+        "results/{date}/visual/paired-seqs.qzv",
+        "results/{date}/visual/fastq_stats.qzv",
+        "results/{date}/visual/demux-joined-filter-stats.qzv",
+        "results/{date}/visual/human-count.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -287,6 +309,30 @@ rule report_files:
             caption="../report/taxa-barplot.rst",
             category="2. Taxonomy",
             subcategory="Taxa Barplot",
+            htmlindex="index.html",
+        ),
+        paired_seqs=report(
+            directory("results/{date}/visual/report/paired_seqs"),
+            caption="../report/paired-seqs.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+        fastq_stats=report(
+            directory("results/{date}/visual/report/fastq_stats"),
+            caption="../report/fastq-stats.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+        demux_filter_stats=report(
+            directory("results/{date}/visual/report/demux-joined-filter-stats"),
+            caption="../report/demux-filter-stats.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+        human_count=report(
+            directory("results/{date}/visual/report/human-count"),
+            caption="../report/human-count.rst",
+            category="4. Qualitycontrol",
             htmlindex="index.html",
         ),
     log:
@@ -351,6 +397,48 @@ rule compress_kraken:
         "tar -czvf {output} {params.directory} "
 
 
+rule table_compare_human:
+    input:
+        table_wh="results/{date}/out/derepl-table.qza",
+        table_woh="results/{date}/out/derep-table-nonhum.qza",
+    output:
+        visual_wh="results/{date}/visual/table-whuman.qzv",
+        visual_woh="results/{date}/visual/table-wohuman.qzv",
+    log:
+        "logs/{date}/visualisation/table-compare-human.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table summarize "
+        "--i-table {input.table_wh} "
+        "--o-visualization {output.visual_wh} "
+        "--verbose 2> {log} \n"
+        "qiime feature-table summarize "
+        "--i-table {input.table_woh} "
+        "--o-visualization {output.visual_woh} "
+        "--verbose 2> {log}"
+
+
+rule hum_filter_difference:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            "results/{date}/visual/sample_frequencys_difference.csv",
+            caption="../report/hum_filter_difference.rst",
+            category="4. Qualitycontrol",
+        )
+    params:
+        visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
+        visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
+    log:
+        "logs/{date}/visualisation/frequency_difference.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/sample_freq_difference.py"
+
+
 rule zip_report:
     input:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
@@ -370,6 +458,7 @@ rule zip_report:
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
         "results/{date}/out/parameter-summary.csv",
+        "results/{date}/visual/sample_frequencys_difference.csv",
     output:
         "results/{date}/16S-report.tar.gz",
     log:

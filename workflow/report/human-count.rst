@@ -1,0 +1,1 @@
+Shows filtered out human reads with sequence, sequence length and statistics for sequences.

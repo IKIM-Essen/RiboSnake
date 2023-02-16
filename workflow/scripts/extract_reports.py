@@ -81,4 +81,16 @@ while b < len(subdir):
     if "alpha_correlation" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.alpha_correlation)
+    if "paired-seqs" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.paired_seqs)
+    if "fastq_stats" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.fastq_stats)
+    if "demux-joined-filter-stats" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.demux_filter_stats)
+    if "human-count" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.human_count)
     b = b + 1
