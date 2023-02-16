@@ -213,8 +213,8 @@ dependencies:
   - notebook=6.4.6
   - nspr=4.32
   - nss=3.72
-  - numba=0.53.1
-  - numpy=1.21.4
+  - numba
+  - numpy=1.21.0
   - olefile=0.46
   - oniguruma=6.9.7.1
   - openjdk=11.0.1
