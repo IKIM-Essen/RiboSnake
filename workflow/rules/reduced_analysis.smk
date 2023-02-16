@@ -70,7 +70,7 @@ rule visual_humancount:
     log:
         "logs/{date}/visualisation/human-count.log",
     conda:
-        "../envs/qiime-only-env.yaml",
+        "../envs/qiime-only-env.yaml"
     shell:
         "qiime feature-table tabulate-seqs "
         "--i-data {input} "
@@ -427,7 +427,7 @@ rule hum_filter_difference:
             "results/{date}/visual/sample_frequencys_difference.csv",
             caption="../report/hum_filter_difference.rst",
             category="4. Qualitycontrol",
-        )
+        ),
     params:
         visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
         visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
