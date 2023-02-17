@@ -48,7 +48,8 @@ rule classification:
         reference_reads="resources/silva-138-99-seqs.qza",
         reference_taxonomy="resources/silva-138-99-tax.qza",
     output:
-        "results/{date}/out/taxonomy.qza",
+        tax="results/{date}/out/taxonomy.qza",
+        search="results/{date}/out/blast-search-results.qza"
     params:
         perc_identity=config["classification"]["perc-identity"],
         maxaccepts=config["classification"]["maxaccepts"],
@@ -71,7 +72,8 @@ rule classification:
         "--p-query-cov {params.query_cov} "
         "--p-min-consensus {params.min_consensus} "
         "--p-threads {params.threads} "
-        "--o-classification {output} "
+        "--o-classification {output.tax} "
+        "--o-search-results {output.search} "
         "--verbose 2> {log} "
 
 
