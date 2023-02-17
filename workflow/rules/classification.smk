@@ -49,7 +49,7 @@ rule classification:
         reference_taxonomy="resources/silva-138-99-tax.qza",
     output:
         tax="results/{date}/out/taxonomy.qza",
-        search="results/{date}/out/blast-search-results.qza"
+        search="results/{date}/out/blast-search-results.qza",
     params:
         perc_identity=config["classification"]["perc-identity"],
         maxaccepts=config["classification"]["maxaccepts"],
