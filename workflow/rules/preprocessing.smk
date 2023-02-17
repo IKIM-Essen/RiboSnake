@@ -166,26 +166,22 @@ if (
             minovlen=config["sequence_joining"]["seq_join_length"],
             minlen=config["sequence_joining"]["minlen"],
             maxdiffs=config["sequence_joining"]["maxdiffs"],
-            qmin=config["sequence_joining"]["qmin"],
-            qminout=config["sequence_joining"]["qminout"],
-            qmax=config["sequence_joining"]["qmax"],
-            qmaxout=config["sequence_joining"]["qmaxout"],
+            #qmin=config["sequence_joining"]["qmin"],
+            #qminout=config["sequence_joining"]["qminout"],
+            #qmax=config["sequence_joining"]["qmax"],
+            #qmaxout=config["sequence_joining"]["qmaxout"],
             threads=config["sequence_joining"]["threads"],
         log:
             "logs/{date}/preprocessing/join-ends.log",
         conda:
             "../envs/qiime-only-env.yaml"
         shell:
-            "qiime vsearch join-pairs "
+            "qiime vsearch merge-pairs "
             "--i-demultiplexed-seqs {input} "
             "--p-allowmergestagger "
             "--p-minovlen {params.minovlen} "
             "--p-minlen {params.minlen} "
             "--p-maxdiffs {params.maxdiffs} "
-            "--p-qmin {params.qmin} "
-            "--p-qminout {params.qminout} "
-            "--p-qmax {params.qmax} "
-            "--p-qmaxout {params.qmaxout} "
             "--p-threads {params.threads} "
-            "--o-joined-sequences {output} "
+            "--o-merged-sequences {output} "
             "--verbose 2> {log}"
