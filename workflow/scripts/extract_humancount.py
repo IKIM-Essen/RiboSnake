@@ -45,9 +45,8 @@ while i < len(dirlist):
 
 b = 0
 while b < len(subdir):
-    datadir = subdir[b] + "/" +"data/"
+    datadir = subdir[b] + "/" + "data/"
     if "human-count" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.human_count)
     b += 1
-

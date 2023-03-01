@@ -101,18 +101,19 @@ if config["data-type"] == "human":
             "--o-visualization {output} "
             "--verbose 2> {log}"
 
-    
     rule unzip_human_count:
         input:
             "results/{date}/visual/human-count.qzv",
         output:
             between=directory("results/{date}/visual/report/human-count-unzipped"),
             human_count=report(
-            directory("results/{date}/visual/report/human-count-unzipped/human-count"),
-            caption="../report/human-count.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
+                directory(
+                    "results/{date}/visual/report/human-count-unzipped/human-count"
+                ),
+                caption="../report/human-count.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
         log:
             "logs/{date}/visualisation/human-count-unzip.log",
         conda:
@@ -125,7 +126,7 @@ if config["data-type"] == "environmental":
 
     rule unzip_human_dummy:
         output:
-            directory("results/{date}/visual/report/human-count")
+            directory("results/{date}/visual/report/human-count"),
         log:
             "logs/{date}/visualisation/human-count-dummy.log",
         conda:
