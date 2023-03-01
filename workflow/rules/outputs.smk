@@ -54,6 +54,11 @@ rule unzip_reports:
             metadata_column=get_ancom_columns(),
         ),
         "results/{date}/visual/alpha_correlation.qzv",
+        "results/{date}/visual/table-whuman.qzv",
+        "results/{date}/visual/table-wohuman.qzv",
+        "results/{date}/visual/paired-seqs.qzv",
+        "results/{date}/visual/fastq_stats.qzv",
+        "results/{date}/visual/demux-joined-filter-stats.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -162,6 +167,24 @@ rule report_files:
             subcategory="Alpha",
             htmlindex="index.html",
         ),
+        paired_seqs=report(
+            directory("results/{date}/visual/report/paired-seqs"),
+            caption="../report/paired-seqs.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+        fastq_stats=report(
+            directory("results/{date}/visual/report/fastq_stats"),
+            caption="../report/fastq-stats.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+        demux_filter_stats=report(
+            directory("results/{date}/visual/report/demux-joined-filter-stats"),
+            caption="../report/demux-filter-stats.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
     log:
         "logs/{date}/outputs/report-files.log",
     conda:
@@ -254,6 +277,7 @@ rule snakemake_report:
         "results/{date}/visual/unzipped",
         "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/absolute-taxabar-plot.png",
+        "results/{date}/visual/report/human-count",
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metadata_column}",
             metadata_column=get_metadata_columns(),
@@ -313,7 +337,7 @@ rule zip_report:
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
         "results/{date}/out/report.zip",
-        "results/{date}/visual/fastq_stats.qzv",
+        #"results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
@@ -324,6 +348,7 @@ rule zip_report:
             "results/{{date}}/out/beta-correlation-{metadata_column}.qza",
             metadata_column=get_metadata_columns(),
         ),
+        "results/{date}/visual/sample_frequencys_difference.csv",
         #"results/{date}/out/beta-phylogeny.qza",
         #"results/{date}/out/alpha-phylogeny.qza",
     output:

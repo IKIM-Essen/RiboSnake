@@ -1,0 +1,1 @@
+Statistics showing total reads, reads after filtering and number of truncated reads because of length or quality.

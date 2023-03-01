@@ -11,6 +11,8 @@ include-data-prep: False
 jan-mode: False
 # Shorter analysis for small number of samples or samples without metadata
 reduced-analysis: False
+# Set if environmental or human data is processed
+data-type: environmental
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/

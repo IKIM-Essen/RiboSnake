@@ -11,6 +11,8 @@ include-data-prep: True
 jan-mode: False
 # Shorter analysis for small number of samples or samples without metadata
 reduced-analysis: False
+# Set if environmental or human data is processed
+data-type: human
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/
@@ -48,14 +50,6 @@ sequence_joining:
   minlen: 1
   # Maximum number of mismatches in the forward/reverse read overlap for joining. Increase it, if you want reads to be merged that are small/won't match in the first place.
   maxdiffs: 10
-  # The minimum allowed quality score in the input.
-  qmin: 0
-  # The minimum allowed quality score to use in output.
-  qminout: 0
-  # The maximum allowed quality score in the input.
-  qmax: 41
-  # The maximum allowed quality score to use in output.
-  qmaxout: 41
   # Number of threads to use
   threads: 4
 # Threads to be used by the different methods
