@@ -109,7 +109,7 @@ if config["data-type"] == "environmental":
         log:
             "logs/{date}/visualisation/human-count-dummy.log",
         conda:
-            "../env/snakemake.yaml"
+            "../envs/snakemake.yaml"
         shell:
             "mkdir {output}"
 
