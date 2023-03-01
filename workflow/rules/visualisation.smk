@@ -84,20 +84,54 @@ rule demux_stats:
         "--verbose 2> {log}"
 
 
-rule visual_humancount:
-    input:
-        "results/{date}/out/human.qza",
-    output:
-        "results/{date}/visual/human-count.qzv",
-    log:
-        "logs/{date}/visualisation/human-count.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime feature-table tabulate-seqs "
-        "--i-data {input} "
-        "--o-visualization {output} "
-        "--verbose 2> {log}"
+if config["data-type"] == "human":
+
+    rule visual_humancount:
+        input:
+            "results/{date}/out/human.qza",
+        output:
+            "results/{date}/visual/human-count.qzv",
+        log:
+            "logs/{date}/visualisation/human-count.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table tabulate-seqs "
+            "--i-data {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+    
+    rule unzip_human_count:
+        input:
+            "results/{date}/visual/human-count.qzv",
+        output:
+            between=directory("results/{date}/visual/report/human-count-unzipped"),
+            human_count=report(
+            directory("results/{date}/visual/report/human-count-unzipped/human-count"),
+            caption="../report/human-count.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+        log:
+            "logs/{date}/visualisation/human-count-unzip.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        script:
+            "../scripts/extract_humancount.py"
+
+
+if config["data-type"] == "environmental":
+
+    rule unzip_human_dummy:
+        output:
+            directory("results/{date}/visual/report/human-count")
+        log:
+            "logs/{date}/visualisation/human-count-dummy.log",
+        conda:
+            "../env/snakemake.yaml"
+        shell:
+            "mkdir {output}"
 
 
 rule taxa_heatmap:

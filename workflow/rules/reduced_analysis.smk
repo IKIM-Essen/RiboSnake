@@ -62,20 +62,57 @@ rule demux_stats:
         "--verbose 2> {log}"
 
 
-rule visual_humancount:
-    input:
-        "results/{date}/out/human.qza",
-    output:
-        "results/{date}/visual/human-count.qzv",
-    log:
-        "logs/{date}/visualisation/human-count.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime feature-table tabulate-seqs "
-        "--i-data {input} "
-        "--o-visualization {output} "
-        "--verbose 2> {log}"
+if config["data-type"] == "human":
+
+    rule visual_humancount:
+        input:
+            "results/{date}/out/human.qza",
+        output:
+            "results/{date}/visual/human-count.qzv",
+        log:
+            "logs/{date}/visualisation/human-count.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table tabulate-seqs "
+            "--i-data {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+    
+    rule unzip_human_count:
+        input:
+            qzv="results/{date}/visual/human-count.qzv",
+            unzipped="results/{date}/visual/unzipped/",
+        output:
+            #between=directory("results/{date}/visual/report/human-count-unzipped"),
+            human_count=report(
+            directory("results/{date}/visual/report/human-count"),
+            caption="../report/human-count.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+        params:
+            between=directory("results/{date}/visual/report/human-count-unzipped"),
+        log:
+            "logs/{date}/visualisation/human-count-unzip.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        script:
+            "../scripts/extract_humancount.py"
+
+
+if config["data-type"] == "environmental":
+
+    rule unzip_human_dummy:
+        output:
+            directory("results/{date}/visual/report/human-count")
+        log:
+            "logs/{date}/visualisation/human-count-dummy.log",
+        conda:
+            "../env/snakemake.yaml"
+        shell:
+            "mkdir {output}"
 
 
 rule taxa_heatmap:
@@ -277,7 +314,6 @@ rule unzip_reports:
         "results/{date}/visual/paired-seqs.qzv",
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/visual/demux-joined-filter-stats.qzv",
-        "results/{date}/visual/human-count.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -329,12 +365,6 @@ rule report_files:
             category="4. Qualitycontrol",
             htmlindex="index.html",
         ),
-        human_count=report(
-            directory("results/{date}/visual/report/human-count"),
-            caption="../report/human-count.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
     log:
         "logs/{date}/outputs/report-files.log",
     conda:
@@ -365,6 +395,7 @@ rule snakemake_report:
         "results/{date}/visual/unzipped",
         "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/absolute-taxabar-plot.png",
+        "results/{date}/visual/report/human-count",
     output:
         "results/{date}/out/report.zip",
     params:

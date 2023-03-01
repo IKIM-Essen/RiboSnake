@@ -59,7 +59,6 @@ rule unzip_reports:
         "results/{date}/visual/paired-seqs.qzv",
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/visual/demux-joined-filter-stats.qzv",
-        "results/{date}/visual/human-count.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -186,16 +185,6 @@ rule report_files:
             category="4. Qualitycontrol",
             htmlindex="index.html",
         ),
-        human_count=report(
-            directory("results/{date}/visual/report/human-count"),
-            caption="../report/human-count.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
-        #"results/{date}/visual/paired-seqs.qzv",
-        #"results/{date}/visual/fastq_stats.qzv",
-        #"results/{date}/visual/demux-joined-filter-stats.qzv",
-        #"results/{date}/visual/human-count.qzv",
     log:
         "logs/{date}/outputs/report-files.log",
     conda:
@@ -288,6 +277,7 @@ rule snakemake_report:
         "results/{date}/visual/unzipped",
         "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/absolute-taxabar-plot.png",
+        "results/{date}/visual/report/human-count",
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metadata_column}",
             metadata_column=get_metadata_columns(),

@@ -90,7 +90,4 @@ while b < len(subdir):
     if "demux-joined-filter-stats" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.demux_filter_stats)
-    if "human-count" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.human_count)
     b = b + 1
