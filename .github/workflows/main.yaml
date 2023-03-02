@@ -103,7 +103,7 @@ jobs:
 
     - name: Test variable value
       if: ${{ env.abundancevalue <= env.testvalue }}
-      uses: actions/github-script@v3
+      #uses: actions/github-script@v3
       run: |
         echo env.abundancevalue
         echo env.testvalue
