@@ -97,7 +97,7 @@ jobs:
       run: |
         cd .tests/results/2022-03-17/out
         abundancevalue=$(<abundance.txt) >> $GITHUB_ENV
-        echo $abdundancevalue
+        echo $abundancevalue
 
     #- name: Test variable value
     #  if: ${{abundancevalue}} <= 0
