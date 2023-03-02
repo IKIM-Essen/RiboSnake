@@ -106,8 +106,8 @@ jobs:
       uses: actions/github-script@v3
       with:
         script: |
-          echo $abundancevalue
-          echo $testvalue
+          echo $env.abundancevalue
+          echo $env.testvalue
           core.setFailed('No abundance filtered!')
 
     - name: Test report
