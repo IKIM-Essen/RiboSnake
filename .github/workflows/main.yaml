@@ -93,6 +93,18 @@ jobs:
         snakefile: workflow/Snakefile
         args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs"
 
+    - name: Get test variable
+      run: |
+        cd .tests/results/2022-03-17/out
+        abundancevalue=$(<abundance.txt) >> $GITHUB_ENV
+
+    - name: Test variable value
+      if: ${{abundancevalue}} <= 0
+      uses: actions/github-script@v3
+      with:
+        script: |
+          core.setFailed('No abundance filtered!')
+
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
       with:

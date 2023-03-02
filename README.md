@@ -111,3 +111,17 @@ In case you have also changed or added steps, please consider contributing them 
 
 Test cases are in the subfolder `.test`. They are automatically executed via continuous integration with [Github Actions](https://github.com/features/actions).
 
+## Tools
+
+A list of the tools used in this pipeline:
+
+| Tool         | Link                                              |
+|--------------|---------------------------------------------------|
+| QIIME2       | www.doi.org/10.1038/s41587-019-0209-9             |
+| Snakemake    | www.doi.org/10.12688/f1000research.29032.1        |
+| FastQC       | www.bioinformatics.babraham.ac.uk/projects/fastqc |
+| MultiQC      | www.doi.org/10.1093/bioinformatics/btw354         |
+| pandas       | pandas.pydata.org                                 |
+| kraken2      | www.doi.org/10.1186/s13059-019-1891-0             |
+| vsearch      | www.github.com/torognes/vsearch                   |
+| DADA2        | www.doi.org/10.1038/nmeth.3869                    |
