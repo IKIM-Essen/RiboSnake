@@ -101,7 +101,7 @@ jobs:
         echo $abundancevalue
 
     - name: Test variable value
-      if: ${{abundancevalue}} -gt ${{testvalue}}
+      if: ${{$abundancevalue -gt $testvalue}}
       uses: actions/github-script@v3
       with:
         script: |
