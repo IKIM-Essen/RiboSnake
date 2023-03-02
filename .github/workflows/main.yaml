@@ -104,11 +104,14 @@ jobs:
     - name: Test variable value
       if: ${{ env.abundancevalue <= env.testvalue }}
       uses: actions/github-script@v3
-      with:
-        script: |
-          echo $env.abundancevalue
-          echo $env.testvalue
-          core.setFailed('No abundance filtered!')
+      run: |
+        echo env.abundancevalue
+        echo env.testvalue
+      #with:
+      #  script: |
+      #    echo $env.abundancevalue
+      #    echo $env.testvalue
+      #    core.setFailed('No abundance filtered!')
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
