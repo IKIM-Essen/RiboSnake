@@ -99,12 +99,15 @@ jobs:
         abundancevalue=$(<abundance.txt) >> $GITHUB_ENV
         testvalue=0 >> $GITHUB_ENV
         echo $abundancevalue
+        echo $testvalue
 
     - name: Test variable value
       if: ${{ env.abundancevalue <= env.testvalue }}
       uses: actions/github-script@v3
       with:
         script: |
+          echo $abundancevalue
+          echo $testvalue
           core.setFailed('No abundance filtered!')
 
     - name: Test report
