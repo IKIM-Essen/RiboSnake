@@ -97,14 +97,15 @@ jobs:
       run: |
         cd .tests/results/2022-03-17/out
         abundancevalue=$(<abundance.txt) >> $GITHUB_ENV
+        testvalue=0 >> $GITHUB_ENV
         echo $abundancevalue
 
-    #- name: Test variable value
-    #  if: ${{abundancevalue}} <= 0
-    #  uses: actions/github-script@v3
-    #  with:
-    #    script: |
-    #      core.setFailed('No abundance filtered!')
+    - name: Test variable value
+      if: ${{abundancevalue}} <= ${{testvalue}}
+      uses: actions/github-script@v3
+      with:
+        script: |
+          core.setFailed('No abundance filtered!')
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
