@@ -57,7 +57,7 @@ jobs:
         cd .tests/resources
         wget --no-check-certificate https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
         gzip -d GRCh38_latest_genomic.fna.gz
-        wget --no-check-certificate https://genome-idx.s3.amazonaws.com/kraken/minikraken2_v2_8GB_201904.tgz
+        wget https://genome-idx.s3.amazonaws.com/kraken/minikraken2_v2_8GB_201904.tgz
         mkdir minikraken2_v2_8GB_201904_UPDATE
         tar -xf minikraken2_v2_8GB_201904.tgz -C minikraken2_v2_8GB_201904_UPDATE/
         cd ..
