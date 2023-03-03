@@ -55,8 +55,8 @@ jobs:
     - name: Download test dataset
       run: |
         cd .tests/resources
-        wget https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
-        wget https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza 
+        wget https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza --no-check-certificate
+        wget https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza --no-check-certificate
         wget https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
         wget ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/16S_Silva138_20200326.tgz
         gzip -d GRCh38_latest_genomic.fna.gz
