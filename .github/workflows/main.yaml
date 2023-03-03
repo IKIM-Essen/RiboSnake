@@ -94,19 +94,20 @@ jobs:
         args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs"
 
     - name: Get test variable
+      id: value_generator
       run: |
         cd .tests/results/2022-03-17/out
-        abundancevalue=$(<abundance.txt) >> $GITHUB_ENV
-        testvalue=0 >> $GITHUB_ENV
+        abundancevalue=$(<abundance.txt) >> $GITHUB_OUTPUT
+        testvalue=0 >> $GITHUB_OUTPUT
         echo $abundancevalue
         echo $testvalue
 
     - name: Test variable value
-      if: ${{ env.abundancevalue <= env.testvalue }}
+      if: ${{ steps.value_generator.outputs.abundancevalue <= steps.value_generator.outputs.testvalue }}
       #uses: actions/github-script@v3
       run: |
-        echo env.abundancevalue
-        echo env.testvalue
+        echo steps.value_generator.outputs.abundancevalue
+        echo steps.value_generator.outputs.testvalue
       #with:
       #  script: |
       #    echo $env.abundancevalue
