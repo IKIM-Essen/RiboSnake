@@ -26,7 +26,7 @@ rule get_database:
 rule get_SILVA:
     output:
         seq_rna="resources/silva-138.1-ssu-nr99-rna-seqs.qza",
-        tax="resources/silva-138.1-ssu-nr99-tax.qza",
+        tax="resources/silva-138-99-tax.qza",
     params:
         version="138.1",
         target="SSURef_NR99",
@@ -48,7 +48,7 @@ rule rna_to_dna_SILVA:
     input:
         "resources/silva-138.1-ssu-nr99-rna-seqs.qza",
     output:
-        "resources/silva-138.1-ssu-nr99-seqs.qza",
+        "resources/silva-138-99-seqs.qza",
     log:
         "logs/prerp_SILVA_toDNA.log",
     conda:
