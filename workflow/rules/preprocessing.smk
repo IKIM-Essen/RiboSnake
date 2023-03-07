@@ -1,7 +1,7 @@
 rule get_database:
     output:
-        seq="resources/silva-138-99-seqs.qza",
-        tax="resources/silva-138-99-tax.qza",
+        #seq="resources/silva-138-99-seqs.qza",
+        #tax="resources/silva-138-99-tax.qza",
         genomic=temp("resources/GRCh38_latest_genomic.fna.gz"),
         kraken=temp("resources/minikraken2_v2_8GB_201904.tgz"),
     params:
@@ -15,10 +15,47 @@ rule get_database:
         "../envs/python.yaml"
     shell:
         "cd resources; "
-        "wget {params.seq}; "
-        "wget {params.tax}; "
         "wget {params.genomic}; "
         "wget {params.kraken}; "
+        #"wget {params.seq}; "
+        #"wget {params.tax}; "
+
+
+rule get_SILVA:
+    output:
+        seq_rna=temp("resources/silva-138.1-ssu-nr99-rna-seqs.qza"),
+        tax=temp("resources/silva-138-99-tax.qza"),
+    params:
+        version="138.1",
+        target="SSURef_NR99",
+    log:
+        "logs/prerp_SILVA.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime rescript get-silva-data "
+        "--p-version {params.version} "
+        "--p-target {params.target} "
+        "--p-include-species-labels "
+        "--o-silva-sequences {output.seq_rna} "
+        "--o-silva-taxonomy {output.tax} "
+        "2> {log}"
+
+
+rule rna_to_dna_SILVA:
+    input:
+        "resources/silva-138.1-ssu-nr99-rna-seqs.qza",
+    output:
+        temp("resources/silva-138-99-seqs.qza"),
+    log:
+        "logs/prerp_SILVA_toDNA.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime rescript reverse-transcribe "
+        "--i-rna-sequences {input} "
+        "--o-dna-sequences {output} "
+        "2> {log}"
 
 
 rule unzip_ref_gen:
@@ -51,7 +88,7 @@ rule import_ref_genome:
     input:
         "resources/GRCh38_latest_genomic_upper.fna",
     output:
-        "resources/GRCh38_latest_genomic_upper.qza",
+        temp("resources/GRCh38_latest_genomic_upper.qza"),
     log:
         "logs/import_ref_gen.log",
     conda:
@@ -68,7 +105,7 @@ rule unzip_kraken:
     input:
         "resources/minikraken2_v2_8GB_201904.tgz",
     output:
-        directory("resources/minikraken2_v2_8GB_201904_UPDATE"),
+        temp(directory("resources/minikraken2_v2_8GB_201904_UPDATE")),
     log:
         "logs/unzip_kraken_db.log",
     conda:
@@ -82,7 +119,7 @@ rule read_samples:
         tsv="config/pep/sample.tsv",
         info="config/pep/sample_info.txt",
     output:
-        "results/{date}/out/demux-paired-end.qza",
+        temp("results/{date}/out/demux-paired-end.qza"),
     params:
         direc=get_data_dir(),
         datatype=config["datatype"],
@@ -105,7 +142,7 @@ if config["jan-mode"] == False:
         input:
             "results/{date}/out/demux-paired-end.qza",
         output:
-            "results/{date}/out/trimmed-seqs.qza",
+            temp("results/{date}/out/trimmed-seqs.qza"),
         params:
             datatype=config["datatype"],
             adapter1=config["adapter1"],
@@ -161,7 +198,7 @@ if (
         input:
             "results/{date}/out/trimmed-seqs.qza",
         output:
-            "results/{date}/out/joined-seqs.qza",
+            temp("results/{date}/out/joined-seqs.qza"),
         params:
             minovlen=config["sequence_joining"]["seq_join_length"],
             minlen=config["sequence_joining"]["minlen"],
