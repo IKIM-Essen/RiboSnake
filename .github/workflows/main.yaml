@@ -93,17 +93,17 @@ jobs:
       id: value_generator
       run: |
         cd .tests/results/2022-03-17/out
-        abundancevalue=$(<abundance.txt) >> $GITHUB_OUTPUT
-        testvalue=0 >> $GITHUB_OUTPUT
-        echo $abundancevalue
-        echo $testvalue
+        abundancevalue=$(<abundance.txt)
+        testvalue=0
+        echo '::set-output name=AbundanceValue::$abundancevalue'
+        echo '::set-output name=TestValue::$testvalue'
 
     - name: Test variable value
-      if: ${{ steps.value_generator.outputs.abundancevalue >= steps.value_generator.outputs.testvalue }}
+      if: ${{ steps.value_generator.outputs.AbundanceValue >= steps.value_generator.outputs.TestValue }}
       #uses: actions/github-script@v3
       run: |
-        echo ${{ steps.value_generator.outputs.abundancevalue }}
-        echo ${{ steps.value_generator.outputs.testvalue }}
+        echo ${{ steps.value_generator.outputs.AbundanceValue }}
+        echo ${{ steps.value_generator.outputs.TestValue }}
       #with:
       #  script: |
       #    echo $env.abundancevalue
