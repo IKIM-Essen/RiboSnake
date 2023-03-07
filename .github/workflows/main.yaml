@@ -99,7 +99,7 @@ jobs:
         echo $testvalue
 
     - name: Test variable value
-      if: ${{ steps.value_generator.outputs.abundancevalue <= steps.value_generator.outputs.testvalue }}
+      if: ${{ steps.value_generator.outputs.abundancevalue >= steps.value_generator.outputs.testvalue }}
       #uses: actions/github-script@v3
       run: |
         echo ${{ steps.value_generator.outputs.abundancevalue }}
