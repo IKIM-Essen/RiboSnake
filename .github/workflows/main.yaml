@@ -102,8 +102,8 @@ jobs:
       if: ${{ steps.value_generator.outputs.abundancevalue <= steps.value_generator.outputs.testvalue }}
       #uses: actions/github-script@v3
       run: |
-        echo steps.value_generator.outputs.abundancevalue
-        echo steps.value_generator.outputs.testvalue
+        echo ${{ steps.value_generator.outputs.abundancevalue }}
+        echo ${{ steps.value_generator.outputs.testvalue }}
       #with:
       #  script: |
       #    echo $env.abundancevalue
