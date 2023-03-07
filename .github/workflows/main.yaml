@@ -95,6 +95,8 @@ jobs:
         cd .tests/results/2022-03-17/out
         abundancevalue=$(<abundance.txt)
         testvalue=0
+        echo $abundancevalue
+        echo $testvalue
         if [$abundancevalue < $testvalue]; then
         exit 1;
         fi
