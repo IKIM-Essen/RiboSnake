@@ -95,20 +95,16 @@ jobs:
         cd .tests/results/2022-03-17/out
         abundancevalue=$(<abundance.txt)
         testvalue=0
-        echo '::set-output name=AbundanceValue::$abundancevalue'
-        echo '::set-output name=TestValue::$testvalue'
+        if [$abundancevalue < $testvalue]; then
+        exit 1;
+        fi
 
-    - name: Test variable value
-      if: ${{ steps.value_generator.outputs.AbundanceValue >= steps.value_generator.outputs.TestValue }}
-      #uses: actions/github-script@v3
-      run: |
-        echo ${{ steps.value_generator.outputs.AbundanceValue }}
-        echo ${{ steps.value_generator.outputs.TestValue }}
-      #with:
-      #  script: |
-      #    echo $env.abundancevalue
-      #    echo $env.testvalue
-      #    core.setFailed('No abundance filtered!')
+    #- name: Test variable value
+    #  if: ${{ steps.value_generator.outputs.AbundanceValue <= steps.value_generator.outputs.TestValue }}
+    #  uses: actions/github-script@v3
+    #  run: |
+    #    echo ${{ steps.value_generator.outputs.AbundanceValue }}
+    #    echo ${{ steps.value_generator.outputs.TestValue }}
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
