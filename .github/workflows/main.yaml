@@ -100,11 +100,14 @@ jobs:
 
     - name: Test variable value
       if: ${{ steps.value_generator.outputs.abundancevalue >= steps.value_generator.outputs.abundancevalue }}
-      uses: actions/github-script@v3
-      with:
-        script: |
-          echo "${{ steps.value_generator.outputs.abundancevalue }}"
-          echo "${{ steps.value_generator.outputs.abundancevalue }}"
+      run: |
+        echo "${{ steps.value_generator.outputs.abundancevalue }}"
+        echo "${{ steps.value_generator.outputs.abundancevalue }}"
+      #uses: actions/github-script@v3
+      #with:
+      #  script: |
+      #    echo "${{ steps.value_generator.outputs.abundancevalue }}"
+      #    echo "${{ steps.value_generator.outputs.abundancevalue }}"
          # core.setFailed("No abundance filtered!")
 
     - name: Test report
