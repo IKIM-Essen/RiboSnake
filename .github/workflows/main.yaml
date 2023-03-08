@@ -105,7 +105,7 @@ jobs:
         script: |
           echo "${{ steps.value_generator.outputs.abundancevalue }}"
           echo "${{ steps.value_generator.outputs.abundancevalue }}"
-          #core.setFailed("No abundance filtered!")
+         # core.setFailed("No abundance filtered!")
 
     - name: Test report
       uses: snakemake/snakemake-github-action@v1
