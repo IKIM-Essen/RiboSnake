@@ -95,8 +95,8 @@ jobs:
         cd .tests/results/2022-03-17/out
         abundancevalue=$(<abundance.txt)
         testvalue=0
-        echo "$abundancevalue" >> $GITHUB_OUTPUT
-        echo "$testvalue" >> $GITHUB_OUTPUT
+        echo "ABUNDANCE_VALUE = $abundancevalue" >> $GITHUB_OUTPUT
+        echo "TESTVALUE = $testvalue" >> $GITHUB_OUTPUT
 
     - name: Test variable value
       if: ${{ steps.value_generator.outputs.abundancevalue >= steps.value_generator.outputs.abundancevalue }}
