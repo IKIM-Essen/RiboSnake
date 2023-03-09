@@ -97,14 +97,14 @@ jobs:
         testvalue=0
         echo $abundancevalue
         echo $testvalue
-        echo "ABUNDANCE_VALUE = $abundancevalue" >> $GITHUB_OUTPUT
-        echo "TESTVALUE = $testvalue" >> $GITHUB_OUTPUT
+        echo "ABUNDANCE_VALUE = $abundancevalue" >> $GITHUB_ENV
+        echo "TESTVALUE = $testvalue" >> $GITHUB_ENV
 
     - name: Test variable value
-      if: ${{ steps.value_generator.outputs.abundancevalue >= steps.value_generator.outputs.abundancevalue }}
+     # if: ${{ steps.value_generator.env.abundancevalue >= steps.value_generator.outputs.abundancevalue }}
       run: |
-        echo ${{ steps.value_generator.outputs.abundancevalue }}
-        echo ${{ steps.value_generator.outputs.abundancevalue }}
+        echo ${{ env.ABUNDANCE_VALUE }}
+        echo ${{ env.TESTVALUE }}
       #uses: actions/github-script@v3
       #with:
       #  script: |
