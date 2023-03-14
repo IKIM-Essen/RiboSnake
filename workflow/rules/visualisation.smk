@@ -105,15 +105,16 @@ if config["data-type"] == "human":
         input:
             "results/{date}/visual/human-count.qzv",
         output:
-            between=directory("results/{date}/visual/report/human-count-unzipped"),
             human_count=report(
                 directory(
-                    "results/{date}/visual/report/human-count-unzipped/human-count"
+                    "results/{date}/visual/report/human-count"
                 ),
                 caption="../report/human-count.rst",
                 category="4. Qualitycontrol",
                 htmlindex="index.html",
             ),
+        params:
+            between="results/{date}/visual/report/human-count-unzipped",
         log:
             "logs/{date}/visualisation/human-count-unzip.log",
         conda:
