@@ -1,5 +1,4 @@
 import os
-import pandas as pd
 import shutil
 import gzip
 import zipfile
@@ -13,7 +12,7 @@ import sys
 
 sys.stderr = open(snakemake.log[0], "w")
 
-file = str(snakemake.input.qzv)
+file = str(snakemake.input)
 name = os.path.splitext(file)[0]
 shutil.copy(file, name + ".zip")
 zipped_file = name + ".zip"
@@ -31,15 +30,15 @@ dir_name = new_dir.split("/")[-1]
 for f in os.listdir(orig_dir):
     path = orig_dir + "/" + f
     print(path)
-    unzipped_path = str(snakemake.input.unzipped) + "/" + dir_name + "/" + f
+    unzipped_path = str(snakemake.params.between) + "/" + dir_name + "/" + f
     shutil.move(path, unzipped_path)
 os.rmdir(orig_dir)
 
-dirlist = os.listdir(str(snakemake.input.unzipped))
+dirlist = os.listdir(str(snakemake.params.between))
 subdir = []
 i = 0
 while i < len(dirlist):
-    directory = str(snakemake.input.unzipped) + "/" + dirlist[i] + "/"
+    directory = str(snakemake.params.between) + "/" + dirlist[i] + "/"
     subdir.append(directory)
     i = i + 1
 
