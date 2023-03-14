@@ -106,9 +106,7 @@ if config["data-type"] == "human":
             "results/{date}/visual/human-count.qzv",
         output:
             human_count=report(
-                directory(
-                    "results/{date}/visual/report/human-count"
-                ),
+                directory("results/{date}/visual/report/human-count"),
                 caption="../report/human-count.rst",
                 category="4. Qualitycontrol",
                 htmlindex="index.html",
