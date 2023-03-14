@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.4.0](https://github.com/IKIM-Essen/16S/compare/v0.3.0...v0.4.0) (2023-03-14)
+
+
+### Features
+
+* Added README and new test ([#77](https://github.com/IKIM-Essen/16S/issues/77)) ([ac2e037](https://github.com/IKIM-Essen/16S/commit/ac2e0376046a874daa63710c01f18bb504131b5c))
+* Filtering statistics added ([#75](https://github.com/IKIM-Essen/16S/issues/75)) ([6539af4](https://github.com/IKIM-Essen/16S/commit/6539af440b006b797fba1d9719e2f99bd493cd87))
+* list as ancom input ([#70](https://github.com/IKIM-Essen/16S/issues/70)) ([904f897](https://github.com/IKIM-Essen/16S/commit/904f89748e468a84f1af9169a5dd25d3f2dc734f))
+* shorter version of workflow for little information ([#74](https://github.com/IKIM-Essen/16S/issues/74)) ([0c7a91f](https://github.com/IKIM-Essen/16S/commit/0c7a91f58c3efe2b625ec97ae26b9f09d8ef3429))
+
+
+### Bug Fixes
+
+* changed dada2-input for functionality ([#72](https://github.com/IKIM-Essen/16S/issues/72)) ([bd172dc](https://github.com/IKIM-Essen/16S/commit/bd172dcacecbfadbaa178c34a8c3f9ba4875e286))
+* changed primer and adapter trimming ([#68](https://github.com/IKIM-Essen/16S/issues/68)) ([d27b73c](https://github.com/IKIM-Essen/16S/commit/d27b73c939373d3aedb392a97991aba8e5c7b60f))
+* human_count error ([#79](https://github.com/IKIM-Essen/16S/issues/79)) ([1db80f5](https://github.com/IKIM-Essen/16S/commit/1db80f50a1cbf38c0c97689f16e6ea8f3b32d7d6))
+* silva download change ([#78](https://github.com/IKIM-Essen/16S/issues/78)) ([0d47b84](https://github.com/IKIM-Essen/16S/commit/0d47b841a135998209d6e4691a3012d0cd69e2bf))
+* test for sample names and error correction ([#73](https://github.com/IKIM-Essen/16S/issues/73)) ([4f380f5](https://github.com/IKIM-Essen/16S/commit/4f380f59835167b96e3062eca6cffe1640e11f8f))
+
 ## [0.3.0](https://github.com/IKIM-Essen/16S/compare/v0.2.0...v0.3.0) (2022-10-04)
 
 
