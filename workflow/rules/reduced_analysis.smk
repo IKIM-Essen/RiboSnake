@@ -81,10 +81,8 @@ if config["data-type"] == "human":
 
     rule unzip_human_count:
         input:
-            qzv="results/{date}/visual/human-count.qzv",
-            unzipped="results/{date}/visual/unzipped/",
+            "results/{date}/visual/human-count.qzv",
         output:
-            #between=directory("results/{date}/visual/report/human-count-unzipped"),
             human_count=report(
                 directory("results/{date}/visual/report/human-count"),
                 caption="../report/human-count.rst",
@@ -92,7 +90,7 @@ if config["data-type"] == "human":
                 htmlindex="index.html",
             ),
         params:
-            between=directory("results/{date}/visual/report/human-count-unzipped"),
+            between="results/{date}/visual/report/human-count-unzipped",
         log:
             "logs/{date}/visualisation/human-count-unzip.log",
         conda:
