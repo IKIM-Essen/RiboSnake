@@ -96,7 +96,9 @@ sample_info.drop(labels=["#q2:types"], axis=0, inplace=True)
 i = 0
 while i < len(sample_info.index):
     for file in files_to_copy:
-        if sample_info.index[i] in file:
+        if sample_info.index[i] in file and len(sample_info.index[i]) == len(
+            file.split("_")[0]
+        ):
             if "SampleData[PairedEndSequencesWithQuality]" in str(
                 snakemake.params.datatype
             ):
