@@ -19,7 +19,7 @@ data: data/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
 # Remove columns from analysis
-remove-columns: ["site-name"]
+remove-columns: ["site_name"]
 # Paths to the databases used for classification and taxonomy
 database:
   download-path-seq: resources/silva-138-99-seqs.qza
@@ -82,9 +82,9 @@ filtering:
   perc-query-aligned: 0.93
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: extract-group-no
-  beta-metadata-column: extract-group-no
-  gneiss-metadata-column: site-name
+  taxa-heatmap-column: extract_group_no
+  beta-metadata-column: extract_group_no
+  gneiss-metadata-column: site_name
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification
@@ -194,4 +194,4 @@ dada2-single:
 # Feature classification with ancom
 ancom:
   # Catgorical metadata column to analyse
-  metadata-column: ["extract-group-no"]
+  metadata-column: ["extract_group_no"]
