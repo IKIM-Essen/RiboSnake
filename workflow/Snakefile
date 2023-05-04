@@ -22,6 +22,7 @@ include: "rules/filtering.smk"
 include: "rules/qualitycontroll.smk"
 include: "rules/classification.smk"
 include: "rules/chimera_checking.smk"
+include: "rules/statistic_analysis.smk"
 
 
 if config["include-data-prep"]:

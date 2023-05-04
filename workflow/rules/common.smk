@@ -122,3 +122,16 @@ def get_metadata_categorical_columns():
 
 def get_ancom_columns():
     return config["ancom"]["metadata-column"]
+
+
+def get_metric(diversity):
+    if diversity == "alpha":
+        return config["diversity"]["alpha"]["diversity-metric"]
+    if diversity == "beta":
+        return config["diversity"]["beta"]["diversity-metric"]
+
+def get_phylogenetic_metric(diversity):
+    if diversity == "beta":
+        return config["diversity"]["beta"]["phylogeny-metric"]
+    if diversity == "alpha":
+        return config["diversity"]["alpha"]["phylogeny-metric"]
