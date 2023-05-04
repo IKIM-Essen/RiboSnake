@@ -99,6 +99,7 @@ rule unzip_reports:
     script:
         "../scripts/rename_qzv.py"
 
+
 rule report_files:
     input:
         "results/{date}/visual/unzipped/",
@@ -263,9 +264,7 @@ rule report_emperor:
         "results/{date}/visual/unzipped/",
     output:
         report(
-            directory(
-                "results/{date}/visual/report/emperor-{metric}-{diversity}"
-            ),
+            directory("results/{date}/visual/report/emperor-{metric}-{diversity}"),
             caption="../report/jaccard-emperor.rst",
             category="3. Analysis",
             subcategory="Beta",

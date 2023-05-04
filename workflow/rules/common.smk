@@ -130,6 +130,7 @@ def get_metric(diversity):
     if diversity == "beta":
         return config["diversity"]["beta"]["diversity-metric"]
 
+
 def get_phylogenetic_metric(diversity):
     if diversity == "beta":
         return config["diversity"]["beta"]["phylogeny-metric"]

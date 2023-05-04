@@ -21,7 +21,7 @@ rule get_database:
         "wget {params.tax}; "
 
 
-#rule get_SILVA:
+# rule get_SILVA:
 #    output:
 #        seq_rna=temp("resources/silva-138.1-ssu-nr99-rna-seqs.qza"),
 #        tax=temp("resources/silva-138-99-tax.qza"),
@@ -42,20 +42,20 @@ rule get_database:
 #        "2> {log}"
 
 
-#rule rna_to_dna_SILVA:
+# rule rna_to_dna_SILVA:
 #    input:
 #        "resources/silva-138.1-ssu-nr99-rna-seqs.qza",
- #   output:
- #       temp("resources/silva-138-99-seqs.qza"),
- #   log:
- #       "logs/prerp_SILVA_toDNA.log",
- #   conda:
- #       "../envs/qiime-only-env.yaml"
- #   shell:
- #       "qiime rescript reverse-transcribe "
- #       "--i-rna-sequences {input} "
- #       "--o-dna-sequences {output} "
- #       "2> {log}"
+#   output:
+#       temp("resources/silva-138-99-seqs.qza"),
+#   log:
+#       "logs/prerp_SILVA_toDNA.log",
+#   conda:
+#       "../envs/qiime-only-env.yaml"
+#   shell:
+#       "qiime rescript reverse-transcribe "
+#       "--i-rna-sequences {input} "
+#       "--o-dna-sequences {output} "
+#       "2> {log}"
 
 
 rule unzip_ref_gen:

@@ -104,9 +104,7 @@ rule beta_correlation:
         "results/{date}/out/beta-diversity-{metric}-{diversity}.qza",
     output:
         distance_matrix="results/{date}/out/beta-correlation-{metric}-{diversity}-{metadata_column}.qza",
-        mantel_scatter_vis=(
-            "results/{date}/visual/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}.qzv"
-        ),
+        mantel_scatter_vis="results/{date}/visual/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}.qzv",
     params:
         metadata_file="config/pep/sample.tsv",
         method=config["diversity"]["beta"]["correlation-method"],
@@ -195,9 +193,9 @@ rule emperor:
     input:
         "results/{date}/visual/beta-pcoa-{metric}-{diversity}.qza",
     output:
-        "results/{date}/visual/emperor-{metric}-{diversity}.qzv"
+        "results/{date}/visual/emperor-{metric}-{diversity}.qzv",
     params:
-        metadata="config/pep/sample.tsv"
+        metadata="config/pep/sample.tsv",
     log:
         "logs/{date}/visualisation/emperor-{metric}-{diversity}.log",
     conda:

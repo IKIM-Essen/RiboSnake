@@ -101,6 +101,8 @@ rarefaction:
   max-depth: 500 #400
   # The total frequency that each sample should be rarefied to prior to computing the diversity metric
   sampling_depth: 100
+  # How often rarefaction should be repeated
+  repeats: 50
   # The beta diversity metric to be computed
   metric: euclidean
   # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
