@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.4.0](https://github.com/IKIM-Essen/16S/compare/v0.3.0...v0.4.0) (2023-03-14)
+
+
+### Features
+
+* Added README and new test ([#77](https://github.com/IKIM-Essen/16S/issues/77)) ([ac2e037](https://github.com/IKIM-Essen/16S/commit/ac2e0376046a874daa63710c01f18bb504131b5c))
+* Filtering statistics added ([#75](https://github.com/IKIM-Essen/16S/issues/75)) ([6539af4](https://github.com/IKIM-Essen/16S/commit/6539af440b006b797fba1d9719e2f99bd493cd87))
+* list as ancom input ([#70](https://github.com/IKIM-Essen/16S/issues/70)) ([904f897](https://github.com/IKIM-Essen/16S/commit/904f89748e468a84f1af9169a5dd25d3f2dc734f))
+* shorter version of workflow for little information ([#74](https://github.com/IKIM-Essen/16S/issues/74)) ([0c7a91f](https://github.com/IKIM-Essen/16S/commit/0c7a91f58c3efe2b625ec97ae26b9f09d8ef3429))
+
+
+### Bug Fixes
+
+* changed dada2-input for functionality ([#72](https://github.com/IKIM-Essen/16S/issues/72)) ([bd172dc](https://github.com/IKIM-Essen/16S/commit/bd172dcacecbfadbaa178c34a8c3f9ba4875e286))
+* changed primer and adapter trimming ([#68](https://github.com/IKIM-Essen/16S/issues/68)) ([d27b73c](https://github.com/IKIM-Essen/16S/commit/d27b73c939373d3aedb392a97991aba8e5c7b60f))
+* human_count error ([#79](https://github.com/IKIM-Essen/16S/issues/79)) ([1db80f5](https://github.com/IKIM-Essen/16S/commit/1db80f50a1cbf38c0c97689f16e6ea8f3b32d7d6))
+* silva download change ([#78](https://github.com/IKIM-Essen/16S/issues/78)) ([0d47b84](https://github.com/IKIM-Essen/16S/commit/0d47b841a135998209d6e4691a3012d0cd69e2bf))
+* test for sample names and error correction ([#73](https://github.com/IKIM-Essen/16S/issues/73)) ([4f380f5](https://github.com/IKIM-Essen/16S/commit/4f380f59835167b96e3062eca6cffe1640e11f8f))
+
+## [0.3.0](https://github.com/IKIM-Essen/16S/compare/v0.2.0...v0.3.0) (2022-10-04)
+
+
+### Features
+
+* added all beta-significance plots ([#56](https://github.com/IKIM-Essen/16S/issues/56)) ([e137555](https://github.com/IKIM-Essen/16S/commit/e137555ddaf709057b8913dff39d168c017820c9))
+* Added alpha correlation ([#64](https://github.com/IKIM-Essen/16S/issues/64)) ([c39f46c](https://github.com/IKIM-Essen/16S/commit/c39f46ce06f6015c8a129ec8fa454cbfa00c78bd))
+* added DADA2 option to pipeline ([#47](https://github.com/IKIM-Essen/16S/issues/47)) ([efc3ab0](https://github.com/IKIM-Essen/16S/commit/efc3ab0e67ab8675131cc8d7e6490bc38ffffe4a))
+* alpha beta analysis added ([#50](https://github.com/IKIM-Essen/16S/issues/50)) ([267f1cb](https://github.com/IKIM-Essen/16S/commit/267f1cbc3a80d381b1f81f3e4adf9ba60e6342c4))
+* ancom ([#58](https://github.com/IKIM-Essen/16S/issues/58)) ([93548b2](https://github.com/IKIM-Essen/16S/commit/93548b2677d3f91d8bb04302ce643876fe16a7f9))
+* merg staggered reads ([#61](https://github.com/IKIM-Essen/16S/issues/61)) ([bde51b4](https://github.com/IKIM-Essen/16S/commit/bde51b401046d9235afff2ce7f91469626074e05))
+* metadata reader ([#52](https://github.com/IKIM-Essen/16S/issues/52)) ([46b7301](https://github.com/IKIM-Essen/16S/commit/46b7301cb453007e2616d3f40b7e083bdf079dbe))
+* parameters printed to csv ([#66](https://github.com/IKIM-Essen/16S/issues/66)) ([209a0f9](https://github.com/IKIM-Essen/16S/commit/209a0f9b6d1522a94581a1ffa420b1bdec54ebc7))
+* possibility to manually exclude metadata columns ([#67](https://github.com/IKIM-Essen/16S/issues/67)) ([6758bf5](https://github.com/IKIM-Essen/16S/commit/6758bf51ce1e2a40b2d9a44a9a4517f6da187f15))
+* ReadMe-Update ([#51](https://github.com/IKIM-Essen/16S/issues/51)) ([2bbe88d](https://github.com/IKIM-Essen/16S/commit/2bbe88d945d4387bf950ab883682610a0339dc0e))
+
+
+### Bug Fixes
+
+* beta analysis ([#65](https://github.com/IKIM-Essen/16S/issues/65)) ([e44e757](https://github.com/IKIM-Essen/16S/commit/e44e757e4cb0da8c7bb9c95cb5a4761f3afaa5fc))
+* compressed kraken output ([#55](https://github.com/IKIM-Essen/16S/issues/55)) ([2f2cffc](https://github.com/IKIM-Essen/16S/commit/2f2cffcbf3d1442dc8f3d3776a08ac19df056ffe))
+* filled missing values with 0, added DADA2 for single end data([#54](https://github.com/IKIM-Essen/16S/issues/54)) ([b474957](https://github.com/IKIM-Essen/16S/commit/b474957f2ba136607f86779515800851d9c558c0))
+* log and verbose information now written to all logs ([#49](https://github.com/IKIM-Essen/16S/issues/49)) ([2c1ed55](https://github.com/IKIM-Essen/16S/commit/2c1ed551b26478ddd95024a05f5890cadcdcc88c))
+
 ## [0.2.0](https://github.com/IKIM-Essen/16S/compare/v0.1.0...v0.2.0) (2022-07-21)
 
 

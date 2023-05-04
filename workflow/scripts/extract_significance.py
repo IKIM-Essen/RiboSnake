@@ -23,12 +23,12 @@ while i < len(dirlist):
 
 # Iterating through the different subdirectories and copying the important information into the output directory
 b = 0
-path_name = str(snakemake.output.beta_significance)
+path_name = str(snakemake.output)
 print(path_name)
 plot_name = path_name.split("/")[-1]
 while b < len(subdir):
     datadir = subdir[b] + "data/"
-    if plot_name in subdir[b]:
+    if plot_name == subdir[b].split("/")[-2]:
         html = datadir
-        shutil.copytree(html, snakemake.output.beta_significance)
+        shutil.copytree(html, str(snakemake.output))
     b = b + 1

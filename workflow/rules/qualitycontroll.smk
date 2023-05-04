@@ -69,7 +69,7 @@ rule multiqc:
     log:
         "logs/{date}/multiqc.log",
     wrapper:
-        "v1.3.1/bio/multiqc"
+        "v1.23.3/bio/multiqc"
 
 
 rule multiqc_report:
@@ -92,4 +92,4 @@ rule multiqc_report:
     log:
         "logs/{date}/multiqc.log",
     wrapper:
-        "v1.3.1/bio/multiqc"
+        "v1.23.3/bio/multiqc"

@@ -1,0 +1,1 @@
+Summary of the demultiplexed sequence counts. Sequence counts for forward and reverse reads as well as for each sample.

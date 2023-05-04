@@ -90,6 +90,11 @@ def get_reads_for_kraken():
 def get_metadata_columns():
     metadata = pd.read_csv(config["metadata"], header=0, delimiter=",")
     header = metadata.columns[metadata.isin(["numeric"]).any()].values.tolist()
+    remove_list = config["remove-columns"]
+    if len(remove_list) != 0:
+        for item in remove_list:
+            if item in header:
+                header.remove(item)
     return header
 
 
@@ -106,5 +111,14 @@ def get_metadata_categorical_columns():
         if "barcode" in name:
             namelist.remove(name)
         y = y + 1
+    remove_list = config["remove-columns"]
+    if len(remove_list) != 0:
+        for item in remove_list:
+            if item in header:
+                namelist.remove(item)
     print(namelist)
     return namelist
+
+
+def get_ancom_columns():
+    return config["ancom"]["metadata-column"]

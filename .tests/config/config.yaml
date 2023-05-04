@@ -9,32 +9,40 @@ testing: True
 include-data-prep: False
 # Modus: If true, analysis will be done with DADA2 instead of vsearch
 jan-mode: False
+# Shorter analysis for small number of samples or samples without metadata
+reduced-analysis: False
+# Set if environmental or human data is processed
+data-type: environmental
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
+# Remove columns from analysis
+remove-columns: ["site-name"]
 # Paths to the databases used for classification and taxonomy
 database:
   download-path-seq: resources/silva-138-99-seqs.qza
   download-path-tax: resources/silva-138-99-tax.qza
   kraken-db: ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/old/minikraken2_v2_8GB_201904.tgz
   ref-genome: https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
-# Forward and reverse primers used for sequencing
-primer1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
-primer2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
+# Forward and reverse adapters used for sequencing
+adapter1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
+adapter2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
 # Type of data, single-end: 'SampleData[SequencesWithQuality]' or paired-end: 'SampleData[PairedEndSequencesWithQuality]'
 datatype: 'SampleData[PairedEndSequencesWithQuality]'
 #Primertrimming parameters
 primertrimming:
-    # Maximum allowed error rate
-    error_rate: 0.1
-    # Remove multiple occurrences of an adapter if it is repeated, up to `times` times
-    rep_times: 1
-    # Require at least `overlap` bases of overlap between read and adapter for an adapter to be found
-    overlap: 3
-    # Discard reads shorter than specified value
-    min_length: 6
+  forward: CCTACGGGNGGCWGCAG
+  reverse: GACTACHVGGGTATCTAATCC
+  # Maximum allowed error rate
+  error_rate: 0.1
+  # Remove multiple occurrences of an adapter if it is repeated, up to `times` times
+  rep_times: 1
+  # Require at least `overlap` bases of overlap between read and adapter for an adapter to be found
+  overlap: 3
+  # Discard reads shorter than specified value
+  min_length: 6
 sequence_joining:
   # Minimum overlap length of forward and reverse reads for joining.
   seq_join_length: 30
@@ -113,8 +121,13 @@ diversity:
     diversity-metric: 'fisher_alpha'
     # Metric to be computed
     phylogeny-metric: 'faith_pd'
+    # Alpha-correlation method
+    correlation-method: 'spearman'
   # Parameters for beta-diversity analysis
   beta:
+    # Distance matrix to be used for beta-significance. Choose between "weighted_unifrac_distance_matrix.qza"
+    # and "unweighted_unifrac_distance_matrix.qza"
+    distance-matrix: "unweighted_unifrac_distance_matrix.qza"
     # Metric to be computed
     diversity-metric: 'euclidean'
     # A pseudocount to handle zeros for compositional metrics
@@ -123,8 +136,6 @@ diversity:
     diversity-n-jobs: 1
     # Correlation test to be applied ('spearman', 'pearson')
     correlation-method: 'spearman'
-    # Column of the metadata-sheet to use
-    correlation-column: 'elevation'
     # The number of permutations to be run when computing p-values
     correlation-permutations: 999
     # The beta diversity metric to be computed ('weighted_normalized_unifrac',
@@ -190,3 +201,7 @@ songbird:
   summary_interval: 1
   # Formula
   formula: "toc"
+# Feature classification with ancom
+ancom:
+  # Catgorical metadata column to analyse
+  metadata-column: ["extract-group-no"]

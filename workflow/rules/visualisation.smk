@@ -30,6 +30,28 @@ rule visualise_table:
         "--verbose 2> {log}"
 
 
+rule table_compare_human:
+    input:
+        table_wh="results/{date}/out/derepl-table.qza",
+        table_woh="results/{date}/out/derep-table-nonhum.qza",
+    output:
+        visual_wh="results/{date}/visual/table-whuman.qzv",
+        visual_woh="results/{date}/visual/table-wohuman.qzv",
+    log:
+        "logs/{date}/visualisation/table-compare-human.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table summarize "
+        "--i-table {input.table_wh} "
+        "--o-visualization {output.visual_wh} "
+        "--verbose 2> {log} \n"
+        "qiime feature-table summarize "
+        "--i-table {input.table_woh} "
+        "--o-visualization {output.visual_woh} "
+        "--verbose 2> {log}"
+
+
 rule visualise_fastq:
     input:
         "results/{date}/out/demux-paired-end.qza",
@@ -60,6 +82,56 @@ rule demux_stats:
         "--m-input-file {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
+
+
+if config["data-type"] == "human":
+
+    rule visual_humancount:
+        input:
+            "results/{date}/out/human.qza",
+        output:
+            "results/{date}/visual/human-count.qzv",
+        log:
+            "logs/{date}/visualisation/human-count.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table tabulate-seqs "
+            "--i-data {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+    rule unzip_human_count:
+        input:
+            "results/{date}/visual/human-count.qzv",
+        output:
+            human_count=report(
+                directory("results/{date}/visual/report/human-count"),
+                caption="../report/human-count.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+        params:
+            between="results/{date}/visual/report/human-count-unzipped",
+        log:
+            "logs/{date}/visualisation/human-count-unzip.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        script:
+            "../scripts/extract_humancount.py"
+
+
+if config["data-type"] == "environmental":
+
+    rule unzip_human_dummy:
+        output:
+            directory("results/{date}/visual/report/human-count"),
+        log:
+            "logs/{date}/visualisation/human-count-dummy.log",
+        conda:
+            "../envs/snakemake.yaml"
+        shell:
+            "mkdir {output}"
 
 
 rule taxa_heatmap:
@@ -152,22 +224,25 @@ rule alpha_significance:
         "qiime diversity alpha-group-significance "
         "--i-alpha-diversity {params.faith} "
         "--m-metadata-file config/pep/sample.tsv "
-        "--o-visualization {output.faith} \n"
+        "--o-visualization {output.faith} "
+        "--verbose 2> {log} \n"
         "qiime diversity alpha-group-significance "
         "--i-alpha-diversity {params.evenness} "
         "--m-metadata-file config/pep/sample.tsv "
-        "--o-visualization {output.evenness}"
+        "--o-visualization {output.evenness} "
+        "--verbose 2> {log} "
 
 
 rule beta_significance:
     input:
         direc="results/{date}/core-metrics-results",
     output:
-        out="results/{date}/visual/unweighted-unifrac-body-site-significance-{metadata_column}.qzv",
+        out="results/{date}/visual/unweighted-unifrac-significance-{metadata_column}.qzv",
     params:
         metadata=config["metadata-parameters"]["beta-metadata-column"],  #"extract-group-no"#"swab-site", config["metadata-parameters"]["beta-metadata-column"]
         unifrac=(
-            "results/{date}/core-metrics-results/unweighted_unifrac_distance_matrix.qza"
+            "results/{date}/core-metrics-results/"
+            + config["diversity"]["beta"]["distance-matrix"]
         ),
     log:
         "logs/{date}/visualisation/beta-significance-{metadata_column}.log",
@@ -235,13 +310,15 @@ rule emperor:
         "--i-pcoa {params.unifrac_pcoa} "
         "--m-metadata-file config/pep/sample.tsv "
         "--p-custom-axes year "
-        "--o-visualization {output.unifrac} \n"
+        "--o-visualization {output.unifrac} "
+        "--verbose 2> {log} \n"
 
         "qiime emperor plot "
         "--i-pcoa {params.bray_curtis_pcoa} "
         "--m-metadata-file config/pep/sample.tsv "
         "--p-custom-axes year "
-        "--o-visualization {output.bray_curtis}"
+        "--o-visualization {output.bray_curtis} "
+        "--verbose 2> {log}"
 
 
 rule rarefaction:
@@ -477,7 +554,8 @@ rule beta_phylogeny:
         "--p-metric {params.metrics} "
         "--p-threads {params.threads} "
         "--p-variance-adjusted {params.variance_adjusted} "
-        "--o-distance-matrix {output}"
+        "--o-distance-matrix {output} "
+        "--verbose 2> {log}"
 
 
 rule beta_correlation:
@@ -493,6 +571,7 @@ rule beta_correlation:
         metadata_file="config/pep/sample.tsv",
         method=config["diversity"]["beta"]["correlation-method"],
         permutations=config["diversity"]["beta"]["correlation-permutations"],
+        metadata="{metadata_column}",
     log:
         "logs/{date}/visualisation/beta-correlation-{metadata_column}.log",
     conda:
@@ -505,6 +584,8 @@ rule beta_correlation:
         "--p-method {params.method} "
         "--p-permutations {params.permutations} "
         "--p-intersect-ids "
+        "--p-label1 jaccard-distance-matrix "
+        "--p-label2 {params.metadata} "
         "--o-metadata-distance-matrix {output.distance_matrix} "
         "--o-mantel-scatter-visualization {output.mantel_scatter_vis} "
         "--verbose 2> {log}"
@@ -584,3 +665,69 @@ rule qurro:
         "--feature-metadata {input.feature_metadata} "
         "--output-dir {output.plot} "
         "2> {log} "
+rule ancom:
+    input:
+        "results/{date}/out/taxa_collapsed.qza",
+    output:
+        pseudocount_table="results/{date}/out/pseudocount_table-{metadata_column}.qza",
+        ancom_output="results/{date}/visual/ancom-{metadata_column}.qzv",
+    params:
+        metadata_column="{metadata_column}",
+        metadata_file="config/pep/sample.tsv",
+    log:
+        "logs/{date}/visualisation/ancom-{metadata_column}.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime composition add-pseudocount "
+        "--i-table {input} "
+        "--o-composition-table {output.pseudocount_table} \n"
+        "qiime composition ancom "
+        "--i-table {output.pseudocount_table} "
+        "--m-metadata-file {params.metadata_file} "
+        "--m-metadata-column {params.metadata_column} "
+        "--o-visualization {output.ancom_output} "
+        "--verbose 2> {log}"
+
+
+rule alpha_correlation:
+    input:
+        direc="results/{date}/core-metrics-results",
+    output:
+        "results/{date}/visual/alpha_correlation.qzv",
+    params:
+        alpha_diversity="results/{date}/core-metrics-results/faith_pd_vector.qza",
+        metadata="config/pep/sample.tsv",
+        method=config["diversity"]["alpha"]["correlation-method"],
+    log:
+        "logs/{date}/visualisation/alpha_correlation.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime diversity alpha-correlation "
+        "--i-alpha-diversity {params.alpha_diversity} "
+        "--m-metadata-file {params.metadata} "
+        "--p-method {params.method} "
+        "--p-intersect-ids "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
+rule hum_filter_difference:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            "results/{date}/visual/sample_frequencys_difference.csv",
+            caption="../report/hum_filter_difference.rst",
+            category="4. Qualitycontrol",
+        ),
+    params:
+        visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
+        visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
+    log:
+        "logs/{date}/visualisation/frequency_difference.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/sample_freq_difference.py"

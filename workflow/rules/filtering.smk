@@ -127,7 +127,7 @@ if (
 
     rule dada2:
         input:
-            "results/{date}/out/trimmed-seqs.qza",
+            "results/{date}/out/demux-paired-end.qza",
         output:
             table="results/{date}/out/table-cluster-lengthfilter.qza",
             seq="results/{date}/out/seq-cluster-lengthfilter.qza",
@@ -181,7 +181,7 @@ if (
 
     rule dada2:
         input:
-            "results/{date}/out/trimmed-seqs.qza",
+            "results/{date}/out/demux-paired-end.qza",
         output:
             table="results/{date}/out/table-cluster-lengthfilter.qza",
             seq="results/{date}/out/seq-cluster-lengthfilter.qza",
@@ -259,12 +259,14 @@ rule filter_frequency:
         "qiime feature-table filter-features "
         "--i-table {input.table} "
         "--p-min-frequency $value "
-        "--o-filtered-table {output.table} \n"
+        "--o-filtered-table {output.table} "
+        "--verbose 2> {log} \n"
         "qiime feature-table filter-seqs "
         "--i-data {input.seqs} "
         "--i-table {output.table} "
         "--p-no-exclude-ids "
-        "--o-filtered-data {output.seqs}"
+        "--o-filtered-data {output.seqs} "
+        "--verbose 2> {log} "
 
 
 rule filter_human:
@@ -278,8 +280,8 @@ rule filter_human:
         human_hit="results/{date}/out/human.qza",
     params:
         threads=config["threads"],
-        #perc-identity=config["filtering"]["perc-identity"],
-        #perc-query-aligned=config["filtering"]["perc-query-aligned"],
+        perc_identity=config["filtering"]["perc-identity"],
+        perc_query_aligned=config["filtering"]["perc-query-aligned"],
     log:
         "logs/{date}/filtering/filter-human.log",
     conda:
@@ -289,8 +291,8 @@ rule filter_human:
         "--i-query-sequences {input.seq} "
         "--i-reference-sequences {input.ref_seq} "
         "--p-threads {params.threads} "
-        "--p-perc-identity 0.93 "
-        "--p-perc-query-aligned 0.93 "
+        "--p-perc-identity {params.perc_identity} "
+        "--p-perc-query-aligned {params.perc_query_aligned} "
         "--o-sequence-hits {output.human_hit} "
         "--o-sequence-misses {output.seq} "
         "--verbose 2> {log} \n"
@@ -298,6 +300,7 @@ rule filter_human:
         "--i-table {input.table} "
         "--m-metadata-file {output.seq} "
         "--o-filtered-table {output.table} "
+        "--verbose 2> {log} "
 
 
 rule taxa_collapse:
@@ -315,7 +318,8 @@ rule taxa_collapse:
         "--i-table {input.table} "
         "--i-taxonomy {input.taxonomy} "
         "--p-level 6 "
-        "--o-collapsed-table {output}"
+        "--o-collapsed-table {output} "
+        "--verbose 2> {log} "
 
 
 rule filter_taxonomy:
@@ -335,9 +339,11 @@ rule filter_taxonomy:
         "--i-table {input.table} "
         "--i-taxonomy {input.taxonomy} "
         "--p-exclude mitochondria,chloroplast "
-        "--o-filtered-table {output.table} \n"
+        "--o-filtered-table {output.table} "
+        "--verbose 2> {log} \n"
         "qiime taxa filter-seqs "
         "--i-sequences {input.seq} "
         "--i-taxonomy {input.taxonomy} "
         "--p-exclude mitochondria,chloroplast "
         "--o-filtered-sequences {output.seq} "
+        "--verbose 2> {log} "

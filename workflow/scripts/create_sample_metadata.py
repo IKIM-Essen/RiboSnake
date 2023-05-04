@@ -48,7 +48,7 @@ for file in files_to_copy:
 print(files_to_copy)
 
 # Reading the sample names and the metadata from the file-names and the metadata.csv file, that needs to be provided
-files = os.listdir(IN_PATH)
+files = os.listdir(DATA_PATH)
 print(files)
 sample_list = []
 for name in files:
@@ -56,12 +56,26 @@ for name in files:
     sample_list.append(sample)
 sample_list = list(set(sample_list))
 metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
+metadata.columns = metadata.columns.str.lower()
 # Samples, that are not mentioned in the metadata.csv are excluded from the sample-metadata-sheet
 for name in sample_list:
-    if name not in metadata["sample_name"]:
+    if name not in metadata["sample_name"].tolist():
         print("No metadata was found for " + name)
         sample_list.remove(name)
         # Also remove the fastq file from folder?
+
+# Error if names don't fit
+metadata_name_list = metadata["sample_name"].tolist()
+metadata_name_list.remove("#q2:types")
+if len(sample_list) == len(metadata_name_list):
+    if set(sample_list) != set(metadata_name_list):
+        print(
+            "There seems to be a discrepancy between fastq file and metadata. Please check the spelling in the metadata.txt."
+        )
+        raise Exception(
+            "There seems to be a discrepancy between fastq file and metadata. Please check the spelling in the metadata.txt."
+        )
+
 # Replacing empty metadata-columns with 0 and after that removing them from the file
 metadata.fillna(0, inplace=True)
 metadata.rename(columns={"sample_name": "sample-ID"}, inplace=True)
@@ -82,7 +96,9 @@ sample_info.drop(labels=["#q2:types"], axis=0, inplace=True)
 i = 0
 while i < len(sample_info.index):
     for file in files_to_copy:
-        if sample_info.index[i] in file:
+        if sample_info.index[i] in file and len(sample_info.index[i]) == len(
+            file.split("_")[0]
+        ):
             if "SampleData[PairedEndSequencesWithQuality]" in str(
                 snakemake.params.datatype
             ):
@@ -102,4 +118,4 @@ while i < len(sample_info.index):
         else:
             continue
     i = i + 1
-sample_info.to_csv(snakemake.output.sample_info, sep=",")
+sample_info.to_csv(snakemake.output.sample_info, sep=",", mode="a")

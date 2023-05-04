@@ -37,7 +37,7 @@ rule unzip_reports:
         "results/{date}/visual/faith-pd-group-significance.qzv",
         "results/{date}/visual/evenness-group-significance.qzv",
         expand(
-            "results/{{date}}/visual/unweighted-unifrac-body-site-significance-{metadata_column}.qzv",
+            "results/{{date}}/visual/unweighted-unifrac-significance-{metadata_column}.qzv",
             metadata_column=get_metadata_categorical_columns(),
         ),
         "results/{date}/visual/bray-curtis-emperor.qzv",
@@ -49,6 +49,16 @@ rule unzip_reports:
             metadata_column=get_metadata_columns(),
         ),
         "results/{date}/visual/heatmap_gneiss.qzv",
+        expand(
+            "results/{{date}}/visual/ancom-{metadata_column}.qzv",
+            metadata_column=get_ancom_columns(),
+        ),
+        "results/{date}/visual/alpha_correlation.qzv",
+        "results/{date}/visual/table-whuman.qzv",
+        "results/{date}/visual/table-wohuman.qzv",
+        "results/{date}/visual/paired-seqs.qzv",
+        "results/{date}/visual/fastq_stats.qzv",
+        "results/{date}/visual/demux-joined-filter-stats.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -150,6 +160,31 @@ rule report_files:
             category="3. Analysis",
             subcategory="Gneiss",
         ),
+        alpha_correlation=report(
+            directory("results/{date}/visual/report/alpha_correlation"),
+            caption="../report/alpha_correlation.rst",
+            category="3. Analysis",
+            subcategory="Alpha",
+            htmlindex="index.html",
+        ),
+        paired_seqs=report(
+            directory("results/{date}/visual/report/paired-seqs"),
+            caption="../report/paired-seqs.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+        fastq_stats=report(
+            directory("results/{date}/visual/report/fastq_stats"),
+            caption="../report/fastq-stats.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+        demux_filter_stats=report(
+            directory("results/{date}/visual/report/demux-joined-filter-stats"),
+            caption="../report/demux-filter-stats.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
     log:
         "logs/{date}/outputs/report-files.log",
     conda:
@@ -162,7 +197,7 @@ rule report_beta_correlation:
     input:
         "results/{date}/visual/unzipped/",
     output:
-        beta_correlation_scatter=report(
+        report(
             directory(
                 "results/{date}/visual/report/beta-correlation-scatter-{metadata_column}"
             ),
@@ -183,11 +218,11 @@ rule report_beta_significance:
     input:
         "results/{date}/visual/unzipped/",
     output:
-        beta_significance=report(
+        report(
             directory(
-                "results/{date}/visual/report/unweighted-unifrac-body-site-significance-{metadata_column}"
+                "results/{date}/visual/report/unweighted-unifrac-significance-{metadata_column}"
             ),
-            caption="../report/body-site-significance.rst",
+            caption="../report/beta-significance.rst",
             category="3. Analysis",
             subcategory="Beta",
             htmlindex="index.html",
@@ -200,6 +235,40 @@ rule report_beta_significance:
         "../scripts/extract_significance.py"
 
 
+rule report_ancom:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            directory("results/{date}/visual/report/ancom-{metadata_column}"),
+            caption="../report/ancom.rst",
+            category="3. Analysis",
+            subcategory="Ancom",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/outputs/ancom-{metadata_column}.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_beta_corr.py"
+
+
+rule parameter_summary:
+    output:
+        report(
+            "results/{date}/out/parameter-summary.csv",
+            caption="../report/parameter-summary.rst",
+            category="4. Qualitycontrol",
+        ),
+    log:
+        "logs/{date}/outputs/parameter_summary.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/parameter_summary.py"
+
+
 rule snakemake_report:
     input:
         "results/{date}/visual/heatmap_binary.png",
@@ -209,13 +278,18 @@ rule snakemake_report:
         "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/qurro_plot",
+        "results/{date}/visual/report/human-count",
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metadata_column}",
             metadata_column=get_metadata_columns(),
         ),
         expand(
-            "results/{{date}}/visual/report/unweighted-unifrac-body-site-significance-{metadata_column}",
+            "results/{{date}}/visual/report/unweighted-unifrac-significance-{metadata_column}",
             metadata_column=get_metadata_categorical_columns(),
+        ),
+        expand(
+            "results/{{date}}/visual/report/ancom-{metadata_column}",
+            metadata_column=get_ancom_columns(),
         ),
     output:
         "results/{date}/out/report.zip",
@@ -264,13 +338,14 @@ rule zip_report:
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
         "results/{date}/out/report.zip",
-        "results/{date}/visual/fastq_stats.qzv",
+        #"results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
-        "results/{date}/out/alpha-diversity.qza",
+        #"results/{date}/out/alpha-diversity.qza",
         "results/{date}/out/beta-diversity-distance.qza",
         "results/{date}/out/qurro_plot/",
+        "results/{date}/out/parameter-summary.csv",
         expand(
             "results/{{date}}/out/beta-correlation-{metadata_column}.qza",
             metadata_column=get_metadata_columns(),
@@ -279,6 +354,9 @@ rule zip_report:
         "results/{date}/out/alpha-phylogeny.qza",
         "results/{date}/out/songbird/",
         "results/{date}/out/differentials_taxonomy.tsv",
+        "results/{date}/visual/sample_frequencys_difference.csv",
+        #"results/{date}/out/beta-phylogeny.qza",
+        #"results/{date}/out/alpha-phylogeny.qza",
     output:
         "results/{date}/16S-report.tar.gz",
     log:
