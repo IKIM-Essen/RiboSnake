@@ -282,6 +282,7 @@ rule filter_human:
         threads=config["threads"],
         perc_identity=config["filtering"]["perc-identity"],
         perc_query_aligned=config["filtering"]["perc-query-aligned"],
+    threads: 50
     log:
         "logs/{date}/filtering/filter-human.log",
     conda:

@@ -19,7 +19,7 @@ data: data/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
 # Remove columns from analysis
-remove-columns: ["site-name"]
+remove-columns: ["site_name"]
 # Paths to the databases used for classification and taxonomy
 database:
   download-path-seq: resources/silva-138-99-seqs.qza
@@ -82,9 +82,9 @@ filtering:
   perc-query-aligned: 0.93
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: extract-group-no
-  beta-metadata-column: extract-group-no
-  gneiss-metadata-column: site-name
+  taxa-heatmap-column: extract_group_no
+  beta-metadata-column: extract_group_no
+  gneiss-metadata-column: site_name
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification
@@ -109,6 +109,8 @@ rarefaction:
   max-depth: 400
   # The total frequency that each sample should be rarefied to prior to computing the diversity metric
   sampling_depth: 100
+  # How often rarefaction should be repeated
+  repeats: 50
   # The beta diversity metric to be computed
   metric: euclidean
   # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
@@ -118,9 +120,9 @@ diversity:
   # Parameters for alpha-diversity analysis
   alpha:
     # Metric to be computed
-    diversity-metric: 'fisher_alpha'
+    diversity-metric: ["pielou_e"]
     # Metric to be computed
-    phylogeny-metric: 'faith_pd'
+    phylogeny-metric: ["faith_pd"]
     # Alpha-correlation method
     correlation-method: 'spearman'
   # Parameters for beta-diversity analysis
@@ -129,7 +131,7 @@ diversity:
     # and "unweighted_unifrac_distance_matrix.qza"
     distance-matrix: "unweighted_unifrac_distance_matrix.qza"
     # Metric to be computed
-    diversity-metric: 'euclidean'
+    diversity-metric: ["euclidean"]
     # A pseudocount to handle zeros for compositional metrics
     diversity-pseudocount: 1
     # The number of concurrent jobs to use in performing this calculation
@@ -204,4 +206,4 @@ songbird:
 # Feature classification with ancom
 ancom:
   # Catgorical metadata column to analyse
-  metadata-column: ["extract-group-no"]
+  metadata-column: ["extract_group_no"]
