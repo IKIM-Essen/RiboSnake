@@ -120,3 +120,24 @@ rule core_metrics:
         "--m-metadata-file {input.metadata} "
         "--output-dir {output} "
         "--verbose 2> {log}"
+
+
+rule repeat_rarefaction:
+    input:
+        table="results/{date}/out/taxa_collapsed.qza",
+    output:
+        table="results/{date}/out/average-rarefied-table.qza",
+    params:
+        sampling_depth=config["rarefaction"]["sampling_depth"],
+        repeats=config["rarefaction"]["repeats"],
+    log:
+        "logs/{date}/classification/repeat_rarefaction.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime repeat-rarefy repeat-rarefy "
+        "--i-table {input.table} "
+        "--p-sampling-depth {params.sampling_depth} "
+        "--p-repeat-times {params.repeats} "
+        "--o-rarefied-table {output.table} "
+        "--verbose 2> {log}"

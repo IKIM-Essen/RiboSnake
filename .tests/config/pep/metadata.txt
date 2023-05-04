@@ -1,4 +1,4 @@
-sample_name,barcode-sequence,elevation,extract-concen,amplicon-concentration,extract-group-no,transect-name,site-name,depth,ph,toc,ec,average-soil-relative-humidity,relative-humidity-soil-high,relative-humidity-soil-low,percent-relative-humidity-soil-100,average-soil-temperature,temperature-soil-high,temperature-soil-low,vegetation,percentcover,run_date
+sample_name,barcode_sequence,elevation,extract_concen,amplicon_concentration,extract_group_no,transect_name,site_name,depth,ph,toc,ec,average_soil_relative_humidity,relative_humidity_soil_high,relative_humidity_soil_low,percent_relative_humidity_soil_100,average_soil_temperature,temperature_soil_high,temperature_soil_low,vegetation,percentcover,run_date
 #q2:types,categorical,numeric,numeric,numeric,categorical,categorical,categorical,numeric,numeric,numeric,numeric,numeric,numeric,numeric,numeric,numeric,numeric,numeric,categorical,numeric,categorical
 BAQ4166.1.1,GTGCTTGTGTAG,4166,33.492,3.160,C,Baquedano,BAQ4166,1,5.64,2060,0.060,100,100,100,100,9.41,17.54,1.42,yes,7.1,2022-03-17
 BAQ4166.1.2,CAACTAGACTCG,4166,16.086,18.250,B,Baquedano,BAQ4166,2,7.22,2085,0.084,100,100,100,100,9.41,17.54,1.42,yes,7.1,2022-03-17

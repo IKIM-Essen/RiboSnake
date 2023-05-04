@@ -60,27 +60,6 @@ while b < len(subdir):
     if "alpha-rarefaction" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.alpha_html)
-    if "evenness-group-significance" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.alpha_significance)
-    if "faith-pd-group-significance" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.faith_pd)
-    if "bray-curtis-emperor" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.bray_curtis_emperor)
-    if "jaccard-emperor" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.jaccard_emperor)
-    if "unweighted-unifrac-emperor" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.unweighted_unifrac_emperor)
-    if "weighted-unifrac-emperor-plot" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.weighted_unifrac_emperor)
-    if "alpha_correlation" in subdir[b]:
-        html = datadir
-        shutil.copytree(html, snakemake.output.alpha_correlation)
     if "paired-seqs" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.paired_seqs)

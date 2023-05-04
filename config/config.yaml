@@ -101,6 +101,8 @@ rarefaction:
   max-depth: 500 #400
   # The total frequency that each sample should be rarefied to prior to computing the diversity metric
   sampling_depth: 100
+  # How often rarefaction should be repeated
+  repeats: 50
   # The beta diversity metric to be computed
   metric: euclidean
   # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
@@ -110,10 +112,10 @@ diversity:
   # Parameters for alpha-diversity analysis
   alpha:
     # Metric to be computed
-    diversity-metric: 'fisher_alpha'
+    diversity-metric: ["pielou_e"]
     # Metric to be computed
-    phylogeny-metric: 'faith_pd'
-    # Alpha-correlation method
+    phylogeny-metric: ["faith_pd"]
+    # Alpha-correlation method: spearman or pearson
     correlation-method: 'spearman'
   # Parameters for beta-diversity analysis
   beta:
@@ -121,7 +123,7 @@ diversity:
     # and "unweighted_unifrac_distance_matrix.qza"
     distance-matrix: "unweighted_unifrac_distance_matrix.qza"
     # Metric to be computed
-    diversity-metric: 'euclidean'
+    diversity-metric: ["euclidean"]
     # A pseudocount to handle zeros for compositional metrics
     diversity-pseudocount: 1
     # The number of concurrent jobs to use in performing this calculation

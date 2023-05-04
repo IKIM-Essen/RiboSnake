@@ -28,37 +28,68 @@ rule biom_file:
 
 rule unzip_reports:
     input:
+        expand(
+            "results/{{date}}/visual/alpha-correlation-{metric_alpha}-normal.qzv",
+            metric_alpha=get_metric("alpha"),
+        ),
+        expand(
+            "results/{{date}}/visual/alpha-significance-{metric_alpha}-normal.qzv",
+            metric_alpha=get_metric("alpha"),
+        ),
+        expand(
+            "results/{{date}}/visual/alpha-correlation-{metric_alpha}-phylogenetic.qzv",
+            metric_alpha=get_phylogenetic_metric("alpha"),
+        ),
+        expand(
+            "results/{{date}}/visual/alpha-significance-{metric_alpha}-phylogenetic.qzv",
+            metric_alpha=get_phylogenetic_metric("alpha"),
+        ),
+        expand(
+            "results/{{date}}/visual/beta-significance-{metric}-normal-{metadata_column}.qzv",
+            metric=get_metric("beta"),
+            metadata_column=get_metadata_categorical_columns(),
+        ),
+        expand(
+            "results/{{date}}/visual/beta-significance-{metric}-phylogenetic-{metadata_column}.qzv",
+            metric=get_phylogenetic_metric("beta"),
+            metadata_column=get_metadata_categorical_columns(),
+        ),
+        expand(
+            "results/{{date}}/visual/beta-correlation-scatter-{metric}-normal-{metadata_column}.qzv",
+            metric=get_metric("beta"),
+            metadata_column=get_metadata_columns(),
+        ),
+        expand(
+            "results/{{date}}/visual/beta-correlation-scatter-{metric}-phylogenetic-{metadata_column}.qzv",
+            metric=get_phylogenetic_metric("beta"),
+            metadata_column=get_metadata_columns(),
+        ),
+        expand(
+            "results/{{date}}/visual/emperor-{metric}-{diversity}.qzv",
+            diversity="normal",
+            metric=get_metric("beta"),
+        ),
+        expand(
+            "results/{{date}}/visual/emperor-{metric}-{diversity}.qzv",
+            metric=get_phylogenetic_metric("beta"),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/ancom-{metadata_column}.qzv",
+            metadata_column=get_ancom_columns(),
+        ),
         "results/{date}/visual/alpha-rarefaction.qzv",
         "results/{date}/visual/beta-rarefaction.qzv",
         "results/{date}/visual/heatmap.qzv",
         "results/{date}/visual/taxa-bar-plots.qzv",
         "results/{date}/visual/rooted-tree.qza",
         "results/{date}/visual/taxonomy.qzv",
-        "results/{date}/visual/faith-pd-group-significance.qzv",
-        "results/{date}/visual/evenness-group-significance.qzv",
-        expand(
-            "results/{{date}}/visual/unweighted-unifrac-significance-{metadata_column}.qzv",
-            metadata_column=get_metadata_categorical_columns(),
-        ),
-        "results/{date}/visual/bray-curtis-emperor.qzv",
-        "results/{date}/visual/jaccard-emperor.qzv",
-        "results/{date}/visual/unweighted-unifrac-emperor.qzv",
-        "results/{date}/visual/weighted-unifrac-emperor-plot.qzv",
-        expand(
-            "results/{{date}}/visual/beta-correlation-scatter-{metadata_column}.qzv",
-            metadata_column=get_metadata_columns(),
-        ),
-        "results/{date}/visual/heatmap_gneiss.qzv",
-        expand(
-            "results/{{date}}/visual/ancom-{metadata_column}.qzv",
-            metadata_column=get_ancom_columns(),
-        ),
-        "results/{date}/visual/alpha_correlation.qzv",
         "results/{date}/visual/table-whuman.qzv",
         "results/{date}/visual/table-wohuman.qzv",
         "results/{date}/visual/paired-seqs.qzv",
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/visual/demux-joined-filter-stats.qzv",
+        "results/{date}/visual/heatmap_gneiss.qzv",
     output:
         directory("results/{date}/visual/unzipped"),
     log:
@@ -112,60 +143,11 @@ rule report_files:
             subcategory="Alpha",
             htmlindex="index.html",
         ),
-        alpha_significance=report(
-            directory("results/{date}/visual/report/evenness-group-significance"),
-            caption="../report/alpha-significance.rst",
-            category="3. Analysis",
-            subcategory="Alpha",
-            htmlindex="index.html",
-        ),
-        faith_pd=report(
-            directory("results/{date}/visual/report/faith-pd-group-significance"),
-            caption="../report/faith-pd-significance.rst",
-            category="3. Analysis",
-            subcategory="Alpha",
-            htmlindex="index.html",
-        ),
-        bray_curtis_emperor=report(
-            directory("results/{date}/visual/report/bray-curtis-emperor"),
-            caption="../report/bray-curtis-emperor.rst",
-            category="3. Analysis",
-            subcategory="Beta",
-            htmlindex="index.html",
-        ),
-        jaccard_emperor=report(
-            directory("results/{date}/visual/report/jaccard-emperor"),
-            caption="../report/jaccard-emperor.rst",
-            category="3. Analysis",
-            subcategory="Beta",
-            htmlindex="index.html",
-        ),
-        unweighted_unifrac_emperor=report(
-            directory("results/{date}/visual/report/unweighted-unifrac-emperor"),
-            caption="../report/unweighted-unifrac-emperor.rst",
-            category="3. Analysis",
-            subcategory="Beta",
-            htmlindex="index.html",
-        ),
-        weighted_unifrac_emperor=report(
-            directory("results/{date}/visual/report/weighted-unifrac-emperor"),
-            caption="../report/weighted-unifrac-emperor.rst",
-            category="3. Analysis",
-            subcategory="Beta",
-            htmlindex="index.html",
-        ),
         gneiss=report(
             "results/{date}/visual/heatmap_gneiss.svg",
             caption="../report/gneiss.rst",
             category="3. Analysis",
             subcategory="Gneiss",
-        ),
-        alpha_correlation=report(
-            directory("results/{date}/visual/report/alpha_correlation"),
-            caption="../report/alpha_correlation.rst",
-            category="3. Analysis",
-            subcategory="Alpha",
-            htmlindex="index.html",
         ),
         paired_seqs=report(
             directory("results/{date}/visual/report/paired-seqs"),
@@ -199,7 +181,7 @@ rule report_beta_correlation:
     output:
         report(
             directory(
-                "results/{date}/visual/report/beta-correlation-scatter-{metadata_column}"
+                "results/{date}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}"
             ),
             caption="../report/beta-correlation-scatter.rst",
             category="3. Analysis",
@@ -207,7 +189,7 @@ rule report_beta_correlation:
             htmlindex="index.html",
         ),
     log:
-        "logs/{date}/outputs/report-beta-correaltion-{metadata_column}.log",
+        "logs/{date}/outputs/report-beta-correlation-{metric}-{diversity}-{metadata_column}.log",
     conda:
         "../envs/python.yaml"
     script:
@@ -220,7 +202,7 @@ rule report_beta_significance:
     output:
         report(
             directory(
-                "results/{date}/visual/report/unweighted-unifrac-significance-{metadata_column}"
+                "results/{date}/visual/report/beta-significance-{metric}-{diversity}-{metadata_column}"
             ),
             caption="../report/beta-significance.rst",
             category="3. Analysis",
@@ -228,7 +210,68 @@ rule report_beta_significance:
             htmlindex="index.html",
         ),
     log:
-        "logs/{date}/outputs/report-significance-{metadata_column}.log",
+        "logs/{date}/outputs/report-significance-{metric}-{diversity}-{metadata_column}.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_significance.py"
+
+
+rule report_alpha_correlation:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            directory(
+                "results/{date}/visual/report/alpha-correlation-{metric_alpha}-{diversity}"
+            ),
+            caption="../report/alpha-correlation.rst",
+            category="3. Analysis",
+            subcategory="Alpha",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/outputs/report-alpha-correlation-{metric_alpha}-{diversity}.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_significance.py"
+
+
+rule report_alpha_significance:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            directory(
+                "results/{date}/visual/report/alpha-significance-{metric_alpha}-{diversity}"
+            ),
+            caption="../report/alpha-significance.rst",
+            category="3. Analysis",
+            subcategory="Alpha",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/outputs/report-alpha-significance-{metric_alpha}-{diversity}.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_significance.py"
+
+
+rule report_emperor:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            directory("results/{date}/visual/report/emperor-{metric}-{diversity}"),
+            caption="../report/jaccard-emperor.rst",
+            category="3. Analysis",
+            subcategory="Beta",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/outputs/report-emperor-{metric}-{diversity}.log",
     conda:
         "../envs/python.yaml"
     script:
@@ -279,12 +322,58 @@ rule snakemake_report:
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/visual/report/human-count",
         expand(
-            "results/{{date}}/visual/report/beta-correlation-scatter-{metadata_column}",
+            "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
+            metric=get_metric("beta"),
             metadata_column=get_metadata_columns(),
+            diversity="normal",
         ),
         expand(
-            "results/{{date}}/visual/report/unweighted-unifrac-significance-{metadata_column}",
+            "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
+            metric=get_phylogenetic_metric("beta"),
+            metadata_column=get_metadata_columns(),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/beta-significance-{metric}-{diversity}-{metadata_column}",
+            metric=get_phylogenetic_metric("beta"),
             metadata_column=get_metadata_categorical_columns(),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/beta-significance-{metric}-{diversity}-{metadata_column}",
+            metric=get_metric("beta"),
+            metadata_column=get_metadata_categorical_columns(),
+            diversity="normal",
+        ),
+        expand(
+            "results/{{date}}/visual/report/alpha-correlation-{metric_alpha}-{diversity}",
+            metric_alpha=get_metric("alpha"),
+            diversity="normal",
+        ),
+        expand(
+            "results/{{date}}/visual/report/alpha-correlation-{metric_alpha}-{diversity}",
+            metric_alpha=get_phylogenetic_metric("alpha"),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/alpha-significance-{metric_alpha}-{diversity}",
+            metric_alpha=get_metric("alpha"),
+            diversity="normal",
+        ),
+        expand(
+            "results/{{date}}/visual/report/alpha-significance-{metric_alpha}-{diversity}",
+            metric_alpha=get_phylogenetic_metric("alpha"),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/emperor-{metric}-{diversity}",
+            metric=get_phylogenetic_metric("beta"),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/emperor-{metric}-{diversity}",
+            metric=get_metric("beta"),
+            diversity="normal",
         ),
         expand(
             "results/{{date}}/visual/report/ancom-{metadata_column}",
@@ -341,16 +430,20 @@ rule zip_report:
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
-        #"results/{date}/out/alpha-diversity.qza",
-        "results/{date}/out/beta-diversity-distance.qza",
         "results/{date}/out/parameter-summary.csv",
         expand(
-            "results/{{date}}/out/beta-correlation-{metadata_column}.qza",
+            "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
+            metric=get_metric("beta"),
             metadata_column=get_metadata_columns(),
+            diversity="normal",
+        ),
+        expand(
+            "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
+            metric=get_phylogenetic_metric("beta"),
+            metadata_column=get_metadata_columns(),
+            diversity="phylogenetic",
         ),
         "results/{date}/visual/sample_frequencys_difference.csv",
-        #"results/{date}/out/beta-phylogeny.qza",
-        #"results/{date}/out/alpha-phylogeny.qza",
     output:
         "results/{date}/16S-report.tar.gz",
     log:
