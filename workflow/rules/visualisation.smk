@@ -421,7 +421,7 @@ rule qurro:
     log:
         "logs/{date}/visualisation/qurro.log",
     conda:
-        "../envs/qurro.yaml"
+        "../envs/songbird.yaml"
     shell:
         "qurro "
         "--ranks {params.differentials} "

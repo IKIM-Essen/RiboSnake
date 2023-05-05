@@ -5,3 +5,4 @@ dependencies:
   - songbird
   - pandas>=0.18.0,<1
   - tensorflow=1.14
+  - qurro
