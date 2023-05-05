@@ -82,6 +82,12 @@ jobs:
         rm BAQ4166.2*
         rm BAQ4166.3*
 
+    - name: cache test_data
+      uses: actions/cache@v3
+      with:
+        path: .tests/resources/
+        key: ${{ runner.os }}-my-cache
+
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
