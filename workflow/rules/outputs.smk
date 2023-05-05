@@ -431,8 +431,6 @@ rule zip_report:
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
-        #"results/{date}/out/alpha-diversity.qza",
-        "results/{date}/out/beta-diversity-distance.qza",
         "results/{date}/out/qurro_plot/",
         "results/{date}/out/parameter-summary.csv",
         expand(
@@ -447,8 +445,6 @@ rule zip_report:
             metadata_column=get_metadata_columns(),
             diversity="phylogenetic",
         ),
-        "results/{date}/out/beta-phylogeny.qza",
-        "results/{date}/out/alpha-phylogeny.qza",
         "results/{date}/out/songbird/",
         "results/{date}/out/differentials_taxonomy.tsv",
         "results/{date}/visual/sample_frequencys_difference.csv",
