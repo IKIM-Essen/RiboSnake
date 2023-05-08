@@ -59,7 +59,8 @@ jobs:
         path: .tests/resources/
         key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources//*') }}
       run: |
-        echo "CACHE_HIT=$abundancevalue" >> $GITHUB_ENV
+        cache_hit = ${{ steps.check-cache.outputs.cache-hit }}
+        echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
 
     - name: Download test dataset
       uses: actions/checkout@v2
