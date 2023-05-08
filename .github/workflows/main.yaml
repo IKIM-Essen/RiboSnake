@@ -58,15 +58,15 @@ jobs:
       with:
         path: .tests/resources/
         key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources//*') }}
-      env:
-          CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
+      #env:
+      #    CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
       #run: |
       #  cache_hit = ${{ steps.check-cache.outputs.cache-hit }}
       #  echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
 
     - name: Download test dataset
       uses: actions/checkout@v2
-      if: ${{env.CACHE_HIT != 'true'}}
+      if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
         cd .tests/resources
         wget https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
@@ -99,7 +99,7 @@ jobs:
     - name: Cache test_data
       id: cache-test-data
       uses: actions/cache@v3
-      if: ${{env.CACHE_HIT != 'true'}}
+      if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       with:
         path: .tests/resources/
         key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources//*') }}
@@ -111,7 +111,7 @@ jobs:
     - name: Restore data from cache
       id: restore-cache
       uses: actions/cache@v3
-      if: ${{env.CACHE_HIT == 'true'}}
+      if: ${{ steps.check-cache.outputs.cache-hit == 'true' }}
       with:
         path: .tests/resources/
         key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources//*') }}
