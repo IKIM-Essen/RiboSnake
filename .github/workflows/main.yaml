@@ -51,7 +51,6 @@ jobs:
       - Linting
       - Formatting
     steps:
-    - if: ${{ steps.cache_test_data.outputs.cache-hit != 'true' }}
     - uses: actions/checkout@v2
     - name: Download test dataset
       run: |
