@@ -51,7 +51,7 @@ jobs:
       - Linting
       - Formatting
     steps:
-
+    - uses: actions/checkout@v2
     - name: Check for cache
       id: check-cache
       uses: actions/cache@v2
@@ -65,7 +65,6 @@ jobs:
       #  echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
 
     - name: Download test dataset
-      uses: actions/checkout@v2
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
         cd .tests/resources
