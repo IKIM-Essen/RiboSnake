@@ -57,7 +57,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: .tests/resources/
-        key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+        key: ${{ runner.os }}-my-cache-
       #env:
       #    CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
       #run: |
