@@ -52,7 +52,20 @@ jobs:
       - Formatting
     steps:
     - uses: actions/checkout@v2
+    - name: Check for cache
+      id: check-cache
+      uses: actions/cache@v2
+      with:
+        path: .tests/resources/
+        key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+      #env:
+      #    CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
+      #run: |
+      #  cache_hit = ${{ steps.check-cache.outputs.cache-hit }}
+      #  echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
+
     - name: Download test dataset
+      if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
         cd .tests/resources
         wget https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
@@ -81,6 +94,30 @@ jobs:
         rm BAQ1*
         rm BAQ4166.2*
         rm BAQ4166.3*
+
+    - name: Cache test_data
+      id: cache-test-data
+      uses: actions/cache@v3
+      if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
+      with:
+        path: .tests/resources/
+        key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources//*') }}
+        restore-keys: |
+            ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources//*') }}
+            ${{ runner.os }}-my-cache-
+            ${{ runner.os }}-
+    
+    - name: Restore data from cache
+      id: restore-cache
+      uses: actions/cache@v3
+      if: ${{ steps.check-cache.outputs.cache-hit == 'true' }}
+      with:
+        path: .tests/resources/
+        key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+        restore-keys: |
+            ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+            ${{ runner.os }}-my-cache-
+            ${{ runner.os }}-
 
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
