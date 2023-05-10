@@ -71,7 +71,7 @@ jobs:
     - name: Check cache input
       id: cache-check
       run: |
-      ls -la .tests/resources/
+        ls -la .tests/resources/
     - name: Download test dataset
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
