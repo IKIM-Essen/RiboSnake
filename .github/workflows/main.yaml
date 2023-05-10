@@ -56,7 +56,9 @@ jobs:
       id: check-cache
       uses: actions/cache@v2
       with:
-        path: .tests/resources/
+        path: |
+          .tests/resources/*
+          data/2022-03-17/*
         key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
         restore-keys: |
             ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
@@ -108,7 +110,9 @@ jobs:
       uses: actions/cache@v3
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       with:
-        path: .tests/resources/
+        path: |
+          .tests/resources/*
+          data/2022-03-17/*
         key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
         restore-keys: |
             ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
@@ -120,7 +124,9 @@ jobs:
       uses: actions/cache@v3
       if: ${{ steps.check-cache.outputs.cache-hit == 'true' }}
       with:
-        path: .tests/resources/
+        path: |
+          .tests/resources/*
+          data/2022-03-17/*
         key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
         restore-keys: |
             ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
