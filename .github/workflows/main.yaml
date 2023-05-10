@@ -59,10 +59,10 @@ jobs:
         path: |
           .tests/resources/*
           data/2022-03-17/*
-        key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
         restore-keys: |
-            ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
-            ${{ runner.os }}-my-cache-
+            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+            ${{ runner.os }}-data-cache-
             ${{ runner.os }}-
       env:
           CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
@@ -113,9 +113,9 @@ jobs:
         path: |
           .tests/resources/*
           data/2022-03-17/*
-        key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
         restore-keys: |
-            ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
             ${{ runner.os }}-my-cache-
             ${{ runner.os }}-
     
@@ -127,9 +127,9 @@ jobs:
         path: |
           .tests/resources/*
           data/2022-03-17/*
-        key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
         restore-keys: |
-            ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
             ${{ runner.os }}-my-cache-
             ${{ runner.os }}-
 
