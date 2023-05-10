@@ -68,7 +68,10 @@ jobs:
       #  cache_hit = ${{ steps.check-cache.outputs.cache-hit }}
       #  echo $cache_hit
       #  echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
-
+    - name: Check cache input
+      id: cache-check
+      run: |
+      ls -la .tests/resources/
     - name: Download test dataset
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
