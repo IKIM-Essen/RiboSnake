@@ -64,9 +64,10 @@ jobs:
             ${{ runner.os }}-
       #env:
       #    CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
-      #run: |
-      #  cache_hit = ${{ steps.check-cache.outputs.cache-hit }}
-      #  echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
+      run: |
+        cache_hit = ${{ steps.check-cache.outputs.cache-hit }}
+        echo $cache_hit
+        echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
 
     - name: Download test dataset
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
