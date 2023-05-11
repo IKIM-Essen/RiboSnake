@@ -410,9 +410,9 @@ rule copy_diversity:
         expand(
             "results/{{date}}/out/beta-diversity-{metric}-phylogenetic.qza",
             metric=get_phylogenetic_metric("beta"),
-        )
+        ),
     output:
-        directory("results/{date}/out/distance_matrices/")
+        directory("results/{date}/out/distance_matrices/"),
     log:
         "logs/{date}/visualisation/distance_matrices_copy.log",
     conda:
@@ -423,7 +423,7 @@ rule copy_diversity:
 
 rule create_heatmap:
     input:
-        "results/{date}/out/distance_matrices/"
+        "results/{date}/out/distance_matrices/",
     output:
         report(
             "results/{date}/visual/beta-diversity-{metric}.png",

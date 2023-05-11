@@ -136,7 +136,8 @@ def get_phylogenetic_metric(diversity):
         return config["diversity"]["beta"]["phylogeny-metric"]
     if diversity == "alpha":
         return config["diversity"]["alpha"]["phylogeny-metric"]
-    
+
+
 def get_complete_beta_metric():
     complete = []
     complete.extend(config["diversity"]["beta"]["phylogeny-metric"])
