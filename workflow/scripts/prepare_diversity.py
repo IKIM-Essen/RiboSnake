@@ -41,7 +41,3 @@ while z < len(directory):
         shutil.move(path, new_dir)
     os.rmdir(orig_dir)
     z = z + 1
-
-
-
-
