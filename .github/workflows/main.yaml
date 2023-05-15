@@ -56,14 +56,24 @@ jobs:
       id: check-cache
       uses: actions/cache@v2
       with:
-        path: .tests/resources/
-        key: ${{ runner.os }}-my-cache-
-      #env:
-      #    CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
+        path: |
+          .tests/resources/*
+          data/2022-03-17/*
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+        restore-keys: |
+            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+            ${{ runner.os }}-data-cache-
+            ${{ runner.os }}-
+      env:
+          CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
       #run: |
       #  cache_hit = ${{ steps.check-cache.outputs.cache-hit }}
+      #  echo $cache_hit
       #  echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
-
+    - name: Check cache input
+      id: cache-check
+      run: |
+        ls -la .tests/resources/
     - name: Download test dataset
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
@@ -100,22 +110,22 @@ jobs:
       uses: actions/cache@v3
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       with:
-        path: .tests/resources/
-        key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources//*') }}
-        restore-keys: |
-            ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources//*') }}
-            ${{ runner.os }}-my-cache-
-            ${{ runner.os }}-
+        path: |
+          .tests/resources/*
+          data/2022-03-17/*
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
     
     - name: Restore data from cache
       id: restore-cache
       uses: actions/cache@v3
       if: ${{ steps.check-cache.outputs.cache-hit == 'true' }}
       with:
-        path: .tests/resources/
-        key: ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+        path: |
+          .tests/resources/*
+          data/2022-03-17/*
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
         restore-keys: |
-            ${{ runner.os }}-my-cache-${{ hashFiles('.tests/resources/*') }}
+            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
             ${{ runner.os }}-my-cache-
             ${{ runner.os }}-
 
