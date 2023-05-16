@@ -15,7 +15,7 @@ if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
         log:
             "logs/{date}/kraken/{sample}.log",
         conda:
-            "../envs/kraken2.yaml"
+            "../envs/python.yaml"
         shell:
             "(kraken2 --db {input.db} --memory-mapping --threads {params.threads} --paired --use-names --report {output.report} {input.read1} {input.read2}) 2> {log}"
 
@@ -36,7 +36,7 @@ if config["datatype"] == "SampleData[SequencesWithQuality]":
         log:
             "logs/{date}/kraken/{sample}.log",
         conda:
-            "../envs/kraken2.yaml"
+            "../envs/python.yaml"
         shell:
             "(kraken2 --db {input.db} --memory-mapping --threads {params.threads} --use-names --report {output.report} {input.read}) 2> {log}"
 
