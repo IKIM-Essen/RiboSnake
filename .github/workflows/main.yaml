@@ -105,6 +105,7 @@ jobs:
         rm BAQ1*
         rm BAQ4166.2*
         rm BAQ4166.3*
+        ls -lah
 
     - name: Cache test_data
       id: cache-test-data
