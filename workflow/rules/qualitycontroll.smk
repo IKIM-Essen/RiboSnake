@@ -54,7 +54,7 @@ rule fastqc:
         "v1.3.1/bio/fastqc"
 
 
-#rule multiqc:
+# rule multiqc:
 #    input:
 #        expand(
 #            "results/{{date}}/out/fastqc/{names}_fastqc.zip",
