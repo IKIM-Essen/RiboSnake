@@ -91,7 +91,7 @@ rule unzip_reports:
         "results/{date}/visual/demux-joined-filter-stats.qzv",
         "results/{date}/visual/heatmap_gneiss.qzv",
     output:
-        directory("results/{date}/visual/unzipped"),
+        temp(directory("results/{date}/visual/unzipped")),
     log:
         "logs/{date}/outputs/unzip-reports.log",
     conda:
