@@ -459,4 +459,5 @@ rule zip_report:
         mkdir results/{wildcards.date}/16S-report
         cp -r {input} results/{wildcards.date}/16S-report/
         tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
+        rm -r results/{wildcards.date}/16S-report
         """
