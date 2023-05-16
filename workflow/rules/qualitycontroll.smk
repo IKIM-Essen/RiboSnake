@@ -54,22 +54,22 @@ rule fastqc:
         "v1.3.1/bio/fastqc"
 
 
-rule multiqc:
-    input:
-        expand(
-            "results/{{date}}/out/fastqc/{names}_fastqc.zip",
-            names=get_filenames(),
-        ),
-        expand(
-            "results/{{date}}/out/kraken/{sample}.kreport2",
-            sample=get_reads_for_kraken(),
-        ),
-    output:
-        "results/{date}/out/multiqc.html",
-    log:
-        "logs/{date}/multiqc.log",
-    wrapper:
-        "v1.23.3/bio/multiqc"
+#rule multiqc:
+#    input:
+#        expand(
+#            "results/{{date}}/out/fastqc/{names}_fastqc.zip",
+#            names=get_filenames(),
+#        ),
+#        expand(
+#            "results/{{date}}/out/kraken/{sample}.kreport2",
+#            sample=get_reads_for_kraken(),
+#       ),
+#    output:
+#        "results/{date}/out/multiqc.html",
+#    log:
+#        "logs/{date}/multiqc.log",
+#    wrapper:
+#        "v1.23.3/bio/multiqc"
 
 
 rule multiqc_report:
