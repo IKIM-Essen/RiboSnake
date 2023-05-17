@@ -380,6 +380,10 @@ rule snakemake_report:
             "results/{{date}}/visual/report/ancom-{metadata_column}",
             metadata_column=get_ancom_columns(),
         ),
+        expand(
+            "results/{{date}}/visual/beta-diversity-{metric}.png",
+            metric=get_complete_beta_metric(),
+        ),
     output:
         "results/{date}/out/report.zip",
     params:
