@@ -52,28 +52,28 @@ jobs:
       - Formatting
     steps:
     - uses: actions/checkout@v2
-    - name: Check for cache
-      id: check-cache
-      uses: actions/cache@v2
-      with:
-        path: |
-          .tests/resources/*
-          data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
-        restore-keys: |
-            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
-            ${{ runner.os }}-data-cache-
-            ${{ runner.os }}-
+    #- name: Check for cache
+    #  id: check-cache
+    #  uses: actions/cache@v2
+    #  with:
+    #    path: |
+    #      .tests/resources/*
+    #      data/2022-03-17/*
+    #    key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+    #    restore-keys: |
+    #        ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+    #        ${{ runner.os }}-data-cache-
+    #        ${{ runner.os }}-
       #env:
       #    CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
       #run: |
       #  cache_hit = ${{ steps.check-cache.outputs.cache-hit }}
       #  echo $cache_hit
       #  echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
-    - name: Check cache input
-      id: cache-check
-      run: |
-        ls -la .tests/resources/
+    #- name: Check cache input
+    #  id: cache-check
+    #  run: |
+    #    ls -la .tests/resources/
     - name: Download test dataset
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
@@ -109,29 +109,29 @@ jobs:
         rm BAQ4697.3*
         ls -lah
 
-    - name: Cache test_data
-      id: cache-test-data
-      uses: actions/cache@v3
-      if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
-      with:
-        path: |
-          .tests/resources/*
-          data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+    #- name: Cache test_data
+    #  id: cache-test-data
+    #  uses: actions/cache@v3
+    #  if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
+    #  with:
+    #    path: |
+    #      .tests/resources/*
+    #      data/2022-03-17/*
+    #    key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
     
-    - name: Restore data from cache
-      id: restore-cache
-      uses: actions/cache@v3
-      if: ${{ steps.check-cache.outputs.cache-hit == 'true' }}
-      with:
-        path: |
-          .tests/resources/*
-          data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
-        restore-keys: |
-            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
-            ${{ runner.os }}-my-cache-
-            ${{ runner.os }}-
+    #- name: Restore data from cache
+    #  id: restore-cache
+    #  uses: actions/cache@v3
+    #  if: ${{ steps.check-cache.outputs.cache-hit == 'true' }}
+    #  with:
+    #    path: |
+    #      .tests/resources/*
+    #      data/2022-03-17/*
+    #    key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+    #    restore-keys: |
+    #        ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+    #        ${{ runner.os }}-my-cache-
+    #        ${{ runner.os }}-
 
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
