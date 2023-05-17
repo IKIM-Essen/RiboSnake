@@ -475,3 +475,41 @@ rule hum_filter_difference:
         "../envs/python.yaml"
     script:
         "../scripts/sample_freq_difference.py"
+
+
+rule copy_diversity:
+    input:
+        expand(
+            "results/{{date}}/out/beta-diversity-{metric}-normal.qza",
+            metric=get_metric("beta"),
+        ),
+        expand(
+            "results/{{date}}/out/beta-diversity-{metric}-phylogenetic.qza",
+            metric=get_phylogenetic_metric("beta"),
+        ),
+    output:
+        directory("results/{date}/out/distance_matrices/"),
+    log:
+        "logs/{date}/visualisation/distance_matrices_copy.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/prepare_diversity.py"
+
+
+rule create_heatmap:
+    input:
+        "results/{date}/out/distance_matrices/",
+    output:
+        report(
+            "results/{date}/visual/beta-diversity-{metric}.png",
+            caption="../report/distance-matrices.rst",
+            category="3. Analysis",
+            subcategory="Beta",
+        ),
+    log:
+        "logs/{date}/visualisation/beta-diversity-{metric}.log",
+    conda:
+        "../envs/plot.yaml"
+    script:
+        "../scripts/plot_distance.py"

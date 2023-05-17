@@ -142,7 +142,7 @@ diversity:
     correlation-permutations: 999
     # The beta diversity metric to be computed ('weighted_normalized_unifrac',
     # 'generalized_unifrac', 'weighted_unifrac', 'unweighted_unifrac')
-    phylogeny-metric: 'weighted_normalized_unifrac'
+    phylogeny-metric: ['weighted_normalized_unifrac']
     # Perform variance adjustment based on Chang et al. BMC Bioinformatics 2011
     phylogeny-variance-adjusted: True
 # If jan-mode is set to true, these parameters are used for denoising and clustering paired-end-data with DADA2
