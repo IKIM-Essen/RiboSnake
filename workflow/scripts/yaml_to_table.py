@@ -97,7 +97,7 @@ CSS_TEXT = """
 
 
 def listToString(inList):
-    """ Convert list to String """
+    """Convert list to String"""
     ret = ""
     for line in inList:
         ret = ret + line
@@ -106,9 +106,9 @@ def listToString(inList):
 
 def printDic(inDictionary, inPTable, indent):
     """
-        Iterate over Dictionary
-           If needed call same function again (recursively) until we key : value dictionary
-           Add key , value , isItRequired , description to pretty table object (inPTable)
+    Iterate over Dictionary
+        If needed call same function again (recursively) until we key : value dictionary
+        Add key , value , isItRequired , description to pretty table object (inPTable)
     """
     global SPACE_CHAR  # No space character that will be replaced when we print this table to text/html
 
