@@ -3,3 +3,5 @@ channels:
   - conda-forge
 dependencies:
   - pandas=1.2.5
+  - prettytable
+  - oyaml
