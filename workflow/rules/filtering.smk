@@ -236,7 +236,7 @@ rule abundance_frequency:
     log:
         "logs/{date}/filtering/abundance-frequency.log",
     conda:
-        "../envs/abundancefiltering.yaml"
+        "../envs/python.yaml"
     script:
         "../scripts/relative_abundance.py"
 

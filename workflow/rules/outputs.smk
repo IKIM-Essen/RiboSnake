@@ -91,7 +91,7 @@ rule unzip_reports:
         "results/{date}/visual/demux-joined-filter-stats.qzv",
         "results/{date}/visual/heatmap_gneiss.qzv",
     output:
-        directory("results/{date}/visual/unzipped"),
+        temp(directory("results/{date}/visual/unzipped")),
     log:
         "logs/{date}/outputs/unzip-reports.log",
     conda:
@@ -441,7 +441,7 @@ rule zip_report:
         "results/{date}/out/biom_table/",
         "results/{date}/out/taxonomy_biom/",
         "results/{date}/out/binary_biom/",
-        "results/{date}/out/multiqc.html",
+        "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/heatmap_binary.png",
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
@@ -477,4 +477,5 @@ rule zip_report:
         mkdir results/{wildcards.date}/16S-report
         cp -r {input} results/{wildcards.date}/16S-report/
         tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
+        rm -r results/{wildcards.date}/16S-report
         """

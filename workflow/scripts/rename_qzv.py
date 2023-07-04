@@ -26,6 +26,7 @@ while z < len(zipped_files):
         name = zipped_files[z].split("/")[-1]
         new_dir = str(snakemake.output) + "/" + name
         zip_ref.extractall(os.path.splitext(new_dir)[0] + "/")
+        os.remove(zipped_files[z])
     z = z + 1
 directory = os.listdir(str(snakemake.output))
 # Iterating through the directory holding the unzipped files, moving the file content one folder up.

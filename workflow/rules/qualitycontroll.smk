@@ -15,7 +15,7 @@ if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
         log:
             "logs/{date}/kraken/{sample}.log",
         conda:
-            "../envs/kraken2.yaml"
+            "../envs/python.yaml"
         shell:
             "(kraken2 --db {input.db} --memory-mapping --threads {params.threads} --paired --use-names --report {output.report} {input.read1} {input.read2}) 2> {log}"
 
@@ -36,7 +36,7 @@ if config["datatype"] == "SampleData[SequencesWithQuality]":
         log:
             "logs/{date}/kraken/{sample}.log",
         conda:
-            "../envs/kraken2.yaml"
+            "../envs/python.yaml"
         shell:
             "(kraken2 --db {input.db} --memory-mapping --threads {params.threads} --use-names --report {output.report} {input.read}) 2> {log}"
 
@@ -52,24 +52,6 @@ rule fastqc:
     threads: 8
     wrapper:
         "v1.3.1/bio/fastqc"
-
-
-rule multiqc:
-    input:
-        expand(
-            "results/{{date}}/out/fastqc/{names}_fastqc.zip",
-            names=get_filenames(),
-        ),
-        expand(
-            "results/{{date}}/out/kraken/{sample}.kreport2",
-            sample=get_reads_for_kraken(),
-        ),
-    output:
-        "results/{date}/out/multiqc.html",
-    log:
-        "logs/{date}/multiqc.log",
-    wrapper:
-        "v1.23.3/bio/multiqc"
 
 
 rule multiqc_report:
