@@ -417,7 +417,7 @@ rule compress_kraken:
 
 rule export_parameters:
     input:
-        "config/config.yaml"
+        "config/config.yaml",
     output:
         report(
             "results/{date}/out/config_parameters.html",
@@ -425,7 +425,7 @@ rule export_parameters:
             category="4. Qualitycontrol",
         ),
     log:
-        "logs/{date}/outputs/config_html.log"
+        "logs/{date}/outputs/config_html.log",
     conda:
         "../envs/python.yaml"
     script:
