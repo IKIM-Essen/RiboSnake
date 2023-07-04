@@ -193,7 +193,7 @@ rule rename_taxonomy:
     log:
         "logs/{date}/visualisation/rename-taxonomy.log",
     conda:
-        "../envs/qiime-taxonomy.yaml"
+        "../envs/python.yaml"
     script:
         "../scripts/rename_taxonomy.py"
 
@@ -208,7 +208,7 @@ rule add_biom_files:
     log:
         "logs/{date}/visualisation/add-biom-files.log",
     conda:
-        "../envs/biom.yaml"
+        "../envs/python.yaml"
     shell:
         """
         biom add-metadata -i {input.biom}/feature-table.biom -o {output.biom} --observation-metadata-fp {input.taxonomy}
@@ -227,7 +227,7 @@ rule add_biom_files_featcount:
     log:
         "logs/{date}/visualisation/add-biom-files.log",
     conda:
-        "../envs/biom.yaml"
+        "../envs/python.yaml"
     shell:
         """
         biom add-metadata -i {input.biom}/feature-table.biom -o {output.biom} --observation-metadata-fp {input.taxonomy}

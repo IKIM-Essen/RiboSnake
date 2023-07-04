@@ -1,7 +1,11 @@
 channels:
-  - bioconda
   - conda-forge
+  - bioconda
+  - anaconda
 dependencies:
   - pandas=1.2.5
   - prettytable
   - oyaml
+  - biom-format
+  - python
+  - kraken2=2.1.2
