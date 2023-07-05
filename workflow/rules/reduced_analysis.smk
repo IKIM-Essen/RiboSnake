@@ -370,21 +370,6 @@ rule report_files:
         "../scripts/extract_reports.py"
 
 
-rule parameter_summary:
-    output:
-        report(
-            "results/{date}/out/parameter-summary.csv",
-            caption="../report/parameter-summary.rst",
-            category="4. Qualitycontrol",
-        ),
-    log:
-        "logs/{date}/outputs/parameter_summary.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/parameter_summary.py"
-
-
 rule snakemake_report:
     input:
         "results/{date}/visual/heatmap_binary.png",
@@ -502,7 +487,6 @@ rule zip_report:
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
-        "results/{date}/out/parameter-summary.csv",
         "results/{date}/visual/sample_frequencys_difference.csv",
         "results/{date}/out/config_parameters.html",
     output:
