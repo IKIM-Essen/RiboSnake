@@ -74,6 +74,7 @@ jobs:
       id: cache-check
       run: |
         ls -la .tests/resources/
+        ls -la data/2022-03-17/
     - name: Download test dataset
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
@@ -115,6 +116,12 @@ jobs:
           data/2022-03-17/*
         key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
     
+    - name: Check cache input
+      id: cache-check
+      run: |
+        ls -la .tests/resources/
+        ls -la data/2022-03-17/
+
     - name: Restore data from cache
       id: restore-cache
       uses: actions/cache@v3
