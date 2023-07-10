@@ -117,7 +117,7 @@ jobs:
         key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
     
     - name: Check cache input
-      id: cache-check
+      id: cache-check-two
       run: |
         ls -la .tests/resources/
         ls -la data/2022-03-17/
