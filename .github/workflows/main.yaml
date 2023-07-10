@@ -74,7 +74,6 @@ jobs:
       id: cache-check
       run: |
         ls -la .tests/resources/
-        ls -la data/2022-03-17/
     - name: Download test dataset
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
