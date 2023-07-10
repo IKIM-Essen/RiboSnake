@@ -116,6 +116,10 @@ jobs:
           .tests/resources/*
           .tests/data/2022-03-17/*
         key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
+        restore-keys: |
+            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
+            ${{ runner.os }}-my-cache-
+            ${{ runner.os }}-
     
     - name: Check cache input
       id: cache-check-two
