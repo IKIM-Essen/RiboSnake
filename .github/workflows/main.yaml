@@ -58,10 +58,10 @@ jobs:
       with:
         path: |
           .tests/resources/*
-          data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+          .tests/data/2022-03-17/*
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
         restore-keys: |
-            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
             ${{ runner.os }}-data-cache-
             ${{ runner.os }}-
       #env:
@@ -114,14 +114,14 @@ jobs:
       with:
         path: |
           .tests/resources/*
-          data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+          .tests/data/2022-03-17/*
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
     
     - name: Check cache input
       id: cache-check-two
       run: |
         ls -la .tests/resources/
-        ls -la data/2022-03-17/
+        ls -la .tests/data/2022-03-17/
 
     - name: Restore data from cache
       id: restore-cache
@@ -130,10 +130,10 @@ jobs:
       with:
         path: |
           .tests/resources/*
-          data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+          .tests/data/2022-03-17/*
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
         restore-keys: |
-            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('data/2022-03-17/*') }}
+            ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
             ${{ runner.os }}-my-cache-
             ${{ runner.os }}-
 
