@@ -9,6 +9,14 @@ on:
       - "*"
 
 jobs:
+  Delete-libraries:
+    runs-on: ubuntu-latest
+    run: |
+      sudo rm -rf /usr/share/dotnet
+      sudo rm -rf /opt/ghc
+      sudo rm -rf "/usr/local/share/boost"
+      sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
   Cancel-previous-jobs:
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/main'
@@ -59,10 +67,10 @@ jobs:
         path: |
           .tests/resources/*
           .tests/data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache  #-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
-        restore-keys: |
-            ${{ runner.os }}-data-cache 
-            ${{ runner.os }}-
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
+        #restore-keys: |
+        #    ${{ runner.os }}-data-cache 
+        #    ${{ runner.os }}-
       #env:
       #    CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
       #run: |
@@ -114,8 +122,11 @@ jobs:
         path: |
           .tests/resources/*
           .tests/data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache   #-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
-    
+        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
+        restore-keys: |
+          ${{ runner.os }}-data-cache 
+          ${{ runner.os }}-
+
     - name: Check cache input
       id: cache-check-two
       run: |
