@@ -14,10 +14,12 @@ jobs:
     steps:
       - name: delete
         run: |
+          df -h
           sudo rm -rf /usr/share/dotnet
           sudo rm -rf /opt/ghc
           sudo rm -rf "/usr/local/share/boost"
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          df -h
 
   Cancel-previous-jobs:
     runs-on: ubuntu-latest
