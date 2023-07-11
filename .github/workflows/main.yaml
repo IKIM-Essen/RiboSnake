@@ -10,10 +10,14 @@ on:
 
 jobs:
   Delete-libraries:
-      sudo rm -rf /usr/share/dotnet
-      sudo rm -rf /opt/ghc
-      sudo rm -rf "/usr/local/share/boost"
-      sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+    runs-on: ubuntu-latest
+    steps:
+      - name: delete
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
   Cancel-previous-jobs:
     runs-on: ubuntu-latest
