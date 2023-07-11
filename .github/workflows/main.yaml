@@ -110,7 +110,7 @@ jobs:
     - name: Cache test_data
       id: cache-test-data
       uses: actions/cache@v3
-      if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
+      #if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       with:
         path: |
           .tests/resources/*
