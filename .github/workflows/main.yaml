@@ -117,6 +117,7 @@ jobs:
         rm BAQ4166.3*
         cd ../../
         ls -la
+        df -h
 
     - name: Cache test_data
       id: cache-test-data
