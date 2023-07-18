@@ -161,7 +161,7 @@ jobs:
       with:
         directory: .tests
         snakefile: workflow/Snakefile
-        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --npr"
+        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --dry-run"
 
     #- name: Get test variable
     #  id: value_generator
