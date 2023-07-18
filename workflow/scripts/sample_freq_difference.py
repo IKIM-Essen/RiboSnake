@@ -20,7 +20,7 @@ for sample in combined.index:
 
 for sample in combined.index:
     difference = combined.at[sample, "whuman"] - combined.at[sample, "wohuman"]
-    combined["difference"] = difference
+    combined.at[sample, "difference"] = difference
 combined.index.name = "Sample"
 combined.rename(
     columns={"whuman": "Features with human", "wohuman": "Features without human"},

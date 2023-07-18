@@ -45,6 +45,6 @@ if len(df) > 40:
 if len(df) > 100:
     plt.xticks(fontsize=4, rotation=45)
 plt.xlabel("Sample name")
-plt.ylabel("Absolute species abundance")
-plt.title("Taxa-bar-plot of absolute species abundance")
+plt.ylabel("Absolute genera abundance")
+plt.title("Taxa-bar-plot of absolute genera abundance")
 plt.savefig(str(snakemake.output), bbox_extra_artists=(lgd,), bbox_inches="tight")
