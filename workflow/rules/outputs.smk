@@ -297,21 +297,6 @@ rule report_ancom:
         "../scripts/extract_beta_corr.py"
 
 
-rule parameter_summary:
-    output:
-        report(
-            "results/{date}/out/parameter-summary.csv",
-            caption="../report/parameter-summary.rst",
-            category="4. Qualitycontrol",
-        ),
-    log:
-        "logs/{date}/outputs/parameter_summary.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/parameter_summary.py"
-
-
 rule snakemake_report:
     input:
         "results/{date}/visual/heatmap_binary.png",
@@ -416,6 +401,23 @@ rule compress_kraken:
         "tar -czvf {output} {params.directory} "
 
 
+rule export_parameters:
+    input:
+        "config/config.yaml",
+    output:
+        report(
+            "results/{date}/out/config_parameters.html",
+            caption="../report/parameter-summary.rst",
+            category="4. Qualitycontrol",
+        ),
+    log:
+        "logs/{date}/outputs/config_html.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/yaml_to_table.py"
+
+
 rule zip_report:
     input:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
@@ -452,6 +454,7 @@ rule zip_report:
         "results/{date}/out/songbird/",
         "results/{date}/out/differentials_taxonomy.tsv",
         "results/{date}/visual/sample_frequencys_difference.csv",
+        "results/{date}/out/config_parameters.html",
     output:
         "results/{date}/16S-report.tar.gz",
     log:
