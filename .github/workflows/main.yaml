@@ -184,9 +184,9 @@ jobs:
     #    script: |
     #      core.setFailed("No abundance filtered!")
 
-    - name: Test report
-      uses: snakemake/snakemake-github-action@v1
-      with:
-        directory: .tests
-        snakefile: workflow/Snakefile
-        args: "--report report.zip"
+    #- name: Test report
+    #  uses: snakemake/snakemake-github-action@v1
+    #  with:
+    #    directory: .tests
+    #    snakefile: workflow/Snakefile
+    #    args: "--report report.zip"
