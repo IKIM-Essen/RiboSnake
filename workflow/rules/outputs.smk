@@ -438,7 +438,6 @@ rule zip_report:
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
         "results/{date}/out/qurro_plot/",
-        "results/{date}/out/parameter-summary.csv",
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
             metric=get_metric("beta"),
