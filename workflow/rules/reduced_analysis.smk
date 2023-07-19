@@ -478,7 +478,7 @@ rule zip_report:
         "results/{date}/out/biom_table/",
         "results/{date}/out/taxonomy_biom/",
         "results/{date}/out/binary_biom/",
-        "results/{date}/out/multiqc.html",
+        "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/heatmap_binary.png",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
