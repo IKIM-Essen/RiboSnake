@@ -295,9 +295,9 @@ rule add_biom_files:
         "../envs/python.yaml"
     shell:
         """
-        biom add-metadata -i {input.biom}/feature-table.biom -o {output.biom} --observation-metadata-fp {input.taxonomy}
+        (biom add-metadata -i {input.biom}/feature-table.biom -o {output.biom} --observation-metadata-fp {input.taxonomy}) > {log} 2>&1
 
-        biom convert -i {output.biom} -o {output.txt} --to-tsv --header-key taxonomy
+        (biom convert -i {output.biom} -o {output.txt} --to-tsv --header-key taxonomy) > {log} 2>&1
         """
 
 
@@ -314,9 +314,9 @@ rule add_biom_files_featcount:
         "../envs/python.yaml"
     shell:
         """
-        biom add-metadata -i {input.biom}/feature-table.biom -o {output.biom} --observation-metadata-fp {input.taxonomy}
+        (biom add-metadata -i {input.biom}/feature-table.biom -o {output.biom} --observation-metadata-fp {input.taxonomy}) > {log} 2>&1
 
-        biom convert -i {output.biom} -o {output.txt} --to-tsv --header-key taxonomy
+        (biom convert -i {output.biom} -o {output.txt} --to-tsv --header-key taxonomy) > {log} 2>&1
         """
 
 
@@ -354,6 +354,82 @@ rule absolute_taxa:
         "../envs/plot.yaml"
     script:
         "../scripts/absolute_taxabarplot.py"
+
+
+rule songbird:
+    input:
+        "results/{date}/out/table.w-taxa-featcount.biom",
+    output:
+        directory("results/{date}/out/songbird/"),
+    params:
+        differential_prior=config["songbird"]["differential_prior"],
+        min_sample_count=config["songbird"]["min_sample_count"],
+        min_feature_count=config["songbird"]["min_feature_count"],
+        summary_interval=config["songbird"]["summary_interval"],
+        formula=config["songbird"]["formula"],
+    log:
+        "logs/{date}/visualisation/songbird.log",
+    conda:
+        "../envs/songbird.yaml"
+    shell:
+        "songbird multinomial "
+        "--input-biom {input} "
+        "--metadata-file config/pep/sample.tsv "
+        "--formula  {params.formula} "
+        "--epochs 10000 "
+        "--differential-prior {params.differential_prior} "
+        "--min-sample-count {params.min_sample_count} "
+        "--min-feature-count {params.min_feature_count} "
+        "--summary-interval {params.summary_interval} "
+        "--summary-dir {output} "
+        "2> {log}"
+
+
+rule feature_biom_songbird:
+    input:
+        direc="results/{date}/out/songbird/",
+        taxa="results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+    output:
+        diff="results/{date}/out/differentials_taxonomy.tsv",
+        feature_meta="results/{date}/out/feature_metadata.tsv",
+    params:
+        "results/{date}/out/songbird/differentials.tsv",
+    log:
+        "logs/{date}/visualisation/songbird_biom.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/featuretable_songbird.py"
+
+
+rule qurro:
+    input:
+        direc="results/{date}/out/songbird/",
+        table="results/{date}/out/table.w-taxa-featcount.biom",
+        feature_metadata="results/{date}/out/feature_metadata.tsv",
+    output:
+        plot=report(
+            directory("results/{date}/out/qurro_plot/"),
+            caption="../report/qurro.rst",
+            htmlindex="index.html",
+            category="3. Analysis",
+            subcategory="Songbird",
+        ),
+    params:
+        differentials="results/{date}/out/songbird/differentials.tsv",
+        metadata_file="config/pep/sample.tsv",
+    log:
+        "logs/{date}/visualisation/qurro.log",
+    conda:
+        "../envs/songbird.yaml"
+    shell:
+        "qurro "
+        "--ranks {params.differentials} "
+        "--table {input.table} "
+        "--sample-metadata {params.metadata_file} "
+        "--feature-metadata {input.feature_metadata} "
+        "--output-dir {output.plot} "
+        "2> {log} "
 
 
 rule ancom:

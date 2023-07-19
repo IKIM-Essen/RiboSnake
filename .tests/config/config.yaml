@@ -191,6 +191,18 @@ dada2-single:
   min-fold-parent-over-abundance: 1.0
   # The number of reads to use when training the errormodel
   n-reads-learn: 1000000
+# Creating rankings for feature impact on specific metadata
+songbird:
+  # Specifies the width of the prior distribution of the differentials
+  differential_prior: 0.5
+  # Number at which sample with a smaller occurance should be filtered out
+  min_sample_count: 0
+  # Number at which features with a smaller occurance should be filtered out
+  min_feature_count: 0
+  # Impacts how often a "measurement" is taken for these plots
+  summary_interval: 1
+  # Formula
+  formula: "toc"
 # Feature classification with ancom
 ancom:
   # Catgorical metadata column to analyse

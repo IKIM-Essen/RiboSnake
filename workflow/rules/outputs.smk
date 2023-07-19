@@ -305,6 +305,7 @@ rule snakemake_report:
         "results/{date}/visual/unzipped",
         "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/absolute-taxabar-plot.png",
+        "results/{date}/out/qurro_plot",
         "results/{date}/visual/report/human-count",
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
@@ -436,6 +437,7 @@ rule zip_report:
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
+        "results/{date}/out/qurro_plot/",
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
             metric=get_metric("beta"),
@@ -448,6 +450,8 @@ rule zip_report:
             metadata_column=get_metadata_columns(),
             diversity="phylogenetic",
         ),
+        "results/{date}/out/songbird/",
+        "results/{date}/out/differentials_taxonomy.tsv",
         "results/{date}/visual/sample_frequencys_difference.csv",
         "results/{date}/out/config_parameters.html",
     output:

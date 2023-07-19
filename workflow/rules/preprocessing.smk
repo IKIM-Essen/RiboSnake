@@ -3,7 +3,7 @@ rule get_database:
         seq="resources/silva-138-99-seqs.qza",
         tax="resources/silva-138-99-tax.qza",
         genomic=temp("resources/GRCh38_latest_genomic.fna.gz"),
-        kraken="resources/minikraken2_v2_8GB_201904.tgz",
+        kraken=temp("resources/minikraken2_v2_8GB_201904.tgz"),
     params:
         seq=str(config["database"]["download-path-seq"]),
         tax=str(config["database"]["download-path-tax"]),
