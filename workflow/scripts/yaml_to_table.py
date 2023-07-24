@@ -3,6 +3,7 @@ from pathlib import Path
 import oyaml as yaml
 from prettytable import PrettyTable
 import argparse
+import os
 
 """
 
@@ -36,7 +37,7 @@ metadata:
 # parser.add_argument('--outpath', dest='outputfile', required=True, help="path to the output file")
 # args = parser.parse_args()
 
-# sys.stderr = open(snakemake.log[0], "w")
+sys.stderr = open(snakemake.log[0], "w")
 
 outputFmt = "html"
 INPUT_YAML = str(snakemake.input)
