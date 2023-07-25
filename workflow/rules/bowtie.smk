@@ -1,5 +1,5 @@
 if config["bowtie"] == True:
-    #rule create_bowtie_db:
+    # rule create_bowtie_db:
     #    input:
     #        "resources/GRCh38_latest_genomic_upper.fna"
     #    output:
@@ -17,9 +17,9 @@ if config["bowtie"] == True:
             read1="data/{date}/{names}_L001_R1_001.fastq.gz",
             read2="data/{date}/{names}_L001_R2_001.fastq.gz",
         output:
-            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam"
+            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam",
         log:
-            "logs/{date}/bowtie/{names}_mapping.log"
+            "logs/{date}/bowtie/{names}_mapping.log",
         conda:
             "../envs/python.yaml"
         shell:
@@ -32,24 +32,24 @@ if config["bowtie"] == True:
 
     rule sam_to_bam:
         input:
-            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam"
+            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam",
         output:
-            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam"
+            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam",
         log:
-            "logs/{date}/bowtie/{names}_sam_to_bam.log"
+            "logs/{date}/bowtie/{names}_sam_to_bam.log",
         conda:
             "../envs/python.yaml"
         shell:
             "samtools view -bS {input} > {output} "
-            "2> {log} " 
+            "2> {log} "
 
     rule filter_unmapped:
         input:
-            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam"
+            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam",
         output:
-            "results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam"
+            "results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam",
         log:
-            "logs/{date}/bowtie/{names}_filter_unmapped.log"
+            "logs/{date}/bowtie/{names}_filter_unmapped.log",
         conda:
             "../envs/python.yaml"
         shell:
@@ -68,13 +68,13 @@ if config["bowtie"] == True:
             read1="results/{date}/bowtie/data/{names}_L001_R1_001.fastq.gz",
             read2="results/{date}/bowtie/data/{names}_L001_R2_001.fastq.gz",
             sorte="results/{date}/bowtie/{names}_bothReadsUnmapped_sorted.bam",
-             #   names=get_reads_for_kraken(),
+            #   names=get_reads_for_kraken(),
             #),
             #dir="results/{date}/bowtie/data/",
-        #params:
+        # params:
         # sorted="results/{date}/bowtie/{names}_bothReadsUnmapped_sorted.bam
         log:
-            "logs/{{date}}/bowtie/{names}_split_paired.log"
+            "logs/{{date}}/bowtie/{names}_split_paired.log",
         conda:
             "../envs/python.yaml"
         shell:
@@ -87,24 +87,23 @@ if config["bowtie"] == True:
 
     rule get_human_reads:
         input:
-            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam"
+            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam",
         output:
-            "results/{date}/out/bowtie/readcount/{names}_aligned_reads_count.txt"
+            "results/{date}/out/bowtie/readcount/{names}_aligned_reads_count.txt",
         log:
-            "logs/{date}/bowtie/{names}_humanreads.log"
+            "logs/{date}/bowtie/{names}_humanreads.log",
         conda:
             "../envs/python.yaml"
         shell:
             "samtools view -F 4 -c {input} > {output} "
             "2> {log} "
 
-
     rule complete_human_count:
         input:
             expand(
                 "results/{{date}}/out/bowtie/readcount/{names}_aligned_reads_count.txt",
                 names=get_reads_for_kraken(),
-            )
+            ),
         output:
             report(
                 "results/{date}/visual/sample_frequencys_difference.csv",
@@ -112,9 +111,8 @@ if config["bowtie"] == True:
                 category="4. Qualitycontrol",
             ),
         log:
-            "logs/{date}/bowtie/humanreads_complete.log"
+            "logs/{date}/bowtie/humanreads_complete.log",
         conda:
             "../envs/python.yaml"
         script:
             "../scripts/bowtie_frequency.py"
-

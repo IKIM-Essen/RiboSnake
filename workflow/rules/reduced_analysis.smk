@@ -431,7 +431,9 @@ rule table_compare_human:
         "--o-visualization {output.visual_woh} "
         "--verbose 2> {log}"
 
+
 if config["bowtie"] == False:
+
     rule hum_filter_difference:
         input:
             "results/{date}/visual/unzipped/",

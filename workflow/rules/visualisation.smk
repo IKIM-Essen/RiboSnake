@@ -456,6 +456,7 @@ rule ancom:
         "--o-visualization {output.ancom_output} "
         "--verbose 2> {log}"
 
+
 if config["bowtie"] == False:
 
     rule hum_filter_difference:
