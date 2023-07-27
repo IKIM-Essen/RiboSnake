@@ -129,9 +129,6 @@ diversity:
     correlation-method: 'spearman'
   # Parameters for beta-diversity analysis
   beta:
-    # Distance matrix to be used for beta-significance. Choose between "weighted_unifrac_distance_matrix.qza"
-    # and "unweighted_unifrac_distance_matrix.qza"
-    distance-matrix: "unweighted_unifrac_distance_matrix.qza"
     # Metric to be computed
     diversity-metric: ["euclidean"]
     # A pseudocount to handle zeros for compositional metrics
