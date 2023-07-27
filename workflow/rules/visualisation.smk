@@ -457,24 +457,26 @@ rule ancom:
         "--verbose 2> {log}"
 
 
-rule hum_filter_difference:
-    input:
-        "results/{date}/visual/unzipped/",
-    output:
-        report(
-            "results/{date}/visual/sample_frequencys_difference.csv",
-            caption="../report/hum_filter_difference.rst",
-            category="4. Qualitycontrol",
-        ),
-    params:
-        visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
-        visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
-    log:
-        "logs/{date}/visualisation/frequency_difference.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/sample_freq_difference.py"
+if config["bowtie"] == False:
+
+    rule hum_filter_difference:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            report(
+                "results/{date}/visual/sample_frequencys_difference.csv",
+                caption="../report/hum_filter_difference.rst",
+                category="4. Qualitycontrol",
+            ),
+        params:
+            visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
+            visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
+        log:
+            "logs/{date}/visualisation/frequency_difference.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/sample_freq_difference.py"
 
 
 rule copy_diversity:

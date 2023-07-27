@@ -11,6 +11,8 @@ include-data-prep: True
 jan-mode: False
 # Shorter analysis for small number of samples or samples without metadata
 reduced-analysis: False
+# Whether to use bowtie2 for excluding human host contamination or not
+bowtie: True
 # Set if environmental or human data is processed
 data-type: human
 # Paths to the directories holding the fastqs
