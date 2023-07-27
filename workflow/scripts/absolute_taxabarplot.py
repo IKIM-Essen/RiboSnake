@@ -9,10 +9,8 @@ import sys
 sys.stderr = open(snakemake.log[0], "w")
 
 df = pd.read_csv(str(snakemake.input), delimiter="\t", header=1, index_col="taxonomy")
-print(df)
 df.drop("#OTU ID", axis=1, inplace=True)
 df_reduced = df.groupby(df.index).sum()
-print(df_reduced)
 species = df_reduced.index.unique()
 for i in df_reduced.index:
     if "Unassigned" not in i:
@@ -21,9 +19,8 @@ df_reduced_second = df_reduced.groupby(df_reduced.index).sum()
 for i in df_reduced_second.index:
     if "Chloroplast" in i:
         df_reduced_second.drop(index=i, inplace=True)
-print(len(df_reduced_second.index))
 df_trans = df_reduced_second.T
-print(df_trans)
+df_trans.replace(-np.inf, 0, inplace=True)
 np.random.seed(100)
 mycolors = np.random.choice(
     list(mpl.colors.XKCD_COLORS.keys()), len(species), replace=False
@@ -38,6 +35,7 @@ lgd = fig.legend(
     borderaxespad=0.0,
     fontsize=8,
 )
+plt.yscale("log")
 if len(df) < 40:
     plt.xticks(fontsize=7, rotation=45)
 if len(df) > 40:
@@ -45,6 +43,6 @@ if len(df) > 40:
 if len(df) > 100:
     plt.xticks(fontsize=4, rotation=45)
 plt.xlabel("Sample name")
-plt.ylabel("Absolute genera abundance")
-plt.title("Taxa-bar-plot of absolute genera abundance")
+plt.ylabel("Log10 abundance")
+plt.title("Taxa-bar-plot of log10(abundance)")
 plt.savefig(str(snakemake.output), bbox_extra_artists=(lgd,), bbox_inches="tight")
