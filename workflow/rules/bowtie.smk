@@ -1,19 +1,24 @@
 if config["bowtie"] == True:
-    # rule create_bowtie_db:
-    #    input:
-    #        "resources/GRCh38_latest_genomic_upper.fna"
-    #    output:
-    #        directory("resources/bowtie_host_DB/")
-    #    log:
-    #        "logs/bowtie_db.log"
-    #    conda:
-    #        "../envs/python.yaml"
-    #    shell:
-    #        "bowtie2-build {input} {output}"
+
+    rule create_bowtie_db:
+        input:
+            "resources/GRCh38_latest_genomic_upper.fna",
+        output:
+            #files="resources/bowtie_host_DB",
+            dirc=directory("resources/bowtie_DB/"),
+        params:
+            filename="bowtie_host_DB",
+        log:
+            "logs/bowtie_db.log",
+        conda:
+            "../envs/python.yaml"
+        shell:
+            "mkdir {output.dirc} \n"
+            "bowtie2-build {input} {output.dirc}/{params.filename}"
 
     rule map_sequences:
         input:
-            db="resources/GRCh38_noalt_as",
+            db="resources/bowtie_DB",
             read1="data/{date}/{names}_L001_R1_001.fastq.gz",
             read2="data/{date}/{names}_L001_R2_001.fastq.gz",
         output:
@@ -23,7 +28,7 @@ if config["bowtie"] == True:
         conda:
             "../envs/python.yaml"
         shell:
-            "bowtie2 -p 8 -x {input.db}/GRCh38_noalt_as "
+            "bowtie2 -p 8 -x {input.db}/bowtie_host_DB "
             "-1 {input.read1} "
             "-2 {input.read2} "
             "--un-conc-gz "
