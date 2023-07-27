@@ -22,7 +22,7 @@ if config["bowtie"] == True:
             read1="data/{date}/{names}_L001_R1_001.fastq.gz",
             read2="data/{date}/{names}_L001_R2_001.fastq.gz",
         output:
-            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam",
+            temp("results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam"),
         log:
             "logs/{date}/bowtie/{names}_mapping.log",
         conda:
@@ -39,7 +39,7 @@ if config["bowtie"] == True:
         input:
             "results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam",
         output:
-            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam",
+            temp("results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam"),
         log:
             "logs/{date}/bowtie/{names}_sam_to_bam.log",
         conda:
@@ -52,7 +52,7 @@ if config["bowtie"] == True:
         input:
             "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam",
         output:
-            "results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam",
+            temp("results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam"),
         log:
             "logs/{date}/bowtie/{names}_filter_unmapped.log",
         conda:
@@ -64,20 +64,11 @@ if config["bowtie"] == True:
 
     rule split_paired:
         input:
-            #expand(
             "results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam",
-            #    names=get_reads_for_kraken(),
-            #),
         output:
-            #expand(
             read1="results/{date}/bowtie/data/{names}_L001_R1_001.fastq.gz",
             read2="results/{date}/bowtie/data/{names}_L001_R2_001.fastq.gz",
             sorte="results/{date}/bowtie/{names}_bothReadsUnmapped_sorted.bam",
-            #   names=get_reads_for_kraken(),
-            #),
-            #dir="results/{date}/bowtie/data/",
-        # params:
-        # sorted="results/{date}/bowtie/{names}_bothReadsUnmapped_sorted.bam
         log:
             "logs/{{date}}/bowtie/{names}_split_paired.log",
         conda:
