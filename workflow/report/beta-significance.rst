@@ -1,1 +1,1 @@
-Beta significance emperor-plot.
+Beta significance boxplot for samples and groups.
