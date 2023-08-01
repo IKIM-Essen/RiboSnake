@@ -138,7 +138,10 @@ if config["bowtie"] == False:
             "2> {log} "
 
 
-if config["bowtie"] == True and config["datatype"] == 'SampleData[PairedEndSequencesWithQuality]':
+if (
+    config["bowtie"] == True
+    and config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
+):
 
     rule read_samples:
         input:
@@ -169,7 +172,11 @@ if config["bowtie"] == True and config["datatype"] == 'SampleData[PairedEndSeque
             "--output-path {output} "
             "2> {log} "
 
-if config["bowtie"] == True and config["datatype"] == 'SampleData[SequencesWithQuality]':
+
+if (
+    config["bowtie"] == True
+    and config["datatype"] == "SampleData[SequencesWithQuality]"
+):
 
     rule read_samples:
         input:
@@ -195,7 +202,6 @@ if config["bowtie"] == True and config["datatype"] == 'SampleData[SequencesWithQ
             "--input-format CasavaOneEightSingleLanePerSampleDirFmt "
             "--output-path {output} "
             "2> {log} "
-
 
 
 if config["jan-mode"] == False:

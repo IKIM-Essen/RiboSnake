@@ -16,7 +16,8 @@ if config["bowtie"] == True:
             "mkdir {output.dirc} \n"
             "bowtie2-build {input} {output.dirc}/{params.filename}"
 
-    if config["datatype"] == 'SampleData[PairedEndSequencesWithQuality]':
+
+    if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
         rule map_sequences:
             input:
@@ -36,7 +37,8 @@ if config["bowtie"] == True:
                 "--un-conc-gz {output} "
                 "2> {log} "
 
-    if config["datatype"] == 'SampleData[SequencesWithQuality]':
+
+    if config["datatype"] == "SampleData[SequencesWithQuality]":
 
         rule map_sequences:
             input:
@@ -66,7 +68,7 @@ if config["bowtie"] == True:
             "2> {log} "
 
 
-    if config["datatype"] == 'SampleData[PairedEndSequencesWithQuality]':
+    if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
         rule filter_unmapped:
             input:
@@ -102,8 +104,8 @@ if config["bowtie"] == True:
                 "2> {log} "
 
 
-    if config["datatype"] == 'SampleData[SequencesWithQuality]':
-        
+    if config["datatype"] == "SampleData[SequencesWithQuality]":
+
         rule filter_unmapped:
             input:
                 "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam",
@@ -117,7 +119,6 @@ if config["bowtie"] == True:
                 "samtools view -b -F 256 "
                 "{input} > {output} "
                 "2> {log} "
-
 
         rule split_paired:
             input:
@@ -133,7 +134,6 @@ if config["bowtie"] == True:
                 "samtools sort -n -m 5G -@ 2 {input} -o {output.sorted} 2> {log} \n"
                 "samtools fastq -0 {output.read1} {output.sorted} "
                 "2> {log} "
-
 
     rule get_human_reads:
         input:
