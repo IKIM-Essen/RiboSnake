@@ -138,7 +138,10 @@ if config["bowtie"] == False:
             "2> {log} "
 
 
-if config["bowtie"] == True:
+if (
+    config["bowtie"] == True
+    and config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
+):
 
     rule read_samples:
         input:
@@ -148,6 +151,37 @@ if config["bowtie"] == True:
             ),
             expand(
                 "results/{{date}}/bowtie/data/{names}_L001_R2_001.fastq.gz",
+                names=get_reads_for_kraken(),
+            ),
+            tsv="config/pep/sample.tsv",
+            info="config/pep/sample_info.txt",
+        output:
+            temp("results/{date}/out/demux-paired-end.qza"),
+        params:
+            dirc="results/{date}/bowtie/data/",
+            datatype=config["datatype"],
+        log:
+            "logs/{date}/preprocessing/read-samples.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime tools import "
+            "--type {params.datatype} "
+            "--input-path {params.dirc} "
+            "--input-format CasavaOneEightSingleLanePerSampleDirFmt "
+            "--output-path {output} "
+            "2> {log} "
+
+
+if (
+    config["bowtie"] == True
+    and config["datatype"] == "SampleData[SequencesWithQuality]"
+):
+
+    rule read_samples:
+        input:
+            expand(
+                "results/{{date}}/bowtie/data/{names}_L001_R1_001.fastq.gz",
                 names=get_reads_for_kraken(),
             ),
             tsv="config/pep/sample.tsv",

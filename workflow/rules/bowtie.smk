@@ -16,24 +16,41 @@ if config["bowtie"] == True:
             "mkdir {output.dirc} \n"
             "bowtie2-build {input} {output.dirc}/{params.filename}"
 
-    rule map_sequences:
-        input:
-            db="resources/bowtie_DB",
-            read1="data/{date}/{names}_L001_R1_001.fastq.gz",
-            read2="data/{date}/{names}_L001_R2_001.fastq.gz",
-        output:
-            temp("results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam"),
-        log:
-            "logs/{date}/bowtie/{names}_mapping.log",
-        conda:
-            "../envs/python.yaml"
-        shell:
-            "bowtie2 -p 8 -x {input.db}/bowtie_host_DB "
-            "-1 {input.read1} "
-            "-2 {input.read2} "
-            "--un-conc-gz "
-            "SAMPLE_host_removed > {output} "
-            "2> {log} "
+    if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+
+        rule map_sequences:
+            input:
+                db="resources/bowtie_DB",
+                read1="data/{date}/{names}_L001_R1_001.fastq.gz",
+                read2="data/{date}/{names}_L001_R2_001.fastq.gz",
+            output:
+                temp("results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam"),
+            log:
+                "logs/{date}/bowtie/{names}_mapping.log",
+            conda:
+                "../envs/python.yaml"
+            shell:
+                "bowtie2 -p 8 -x {input.db}/bowtie_host_DB "
+                "-1 {input.read1} "
+                "-2 {input.read2} "
+                "--un-conc-gz {output} "
+                "2> {log} "
+
+    if config["datatype"] == "SampleData[SequencesWithQuality]":
+
+        rule map_sequences:
+            input:
+                db="resources/bowtie_DB",
+                read1="data/{date}/{names}_L001_R1_001.fastq.gz",
+            output:
+                temp("results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam"),
+            log:
+                "logs/{date}/bowtie/{names}_mapping.log",
+            conda:
+                "../envs/python.yaml"
+            shell:
+                "bowtie2 -x {input.db}/bowtie_host_DB {input.read1} {output} "
+                "2> {log} "
 
     rule sam_to_bam:
         input:
@@ -48,38 +65,71 @@ if config["bowtie"] == True:
             "samtools view -bS {input} > {output} "
             "2> {log} "
 
-    rule filter_unmapped:
-        input:
-            "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam",
-        output:
-            temp("results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam"),
-        log:
-            "logs/{date}/bowtie/{names}_filter_unmapped.log",
-        conda:
-            "../envs/python.yaml"
-        shell:
-            "samtools view -b -f 12 -F 256 "
-            "{input} > {output} "
-            "2> {log} "
+    if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
-    rule split_paired:
-        input:
-            "results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam",
-        output:
-            read1="results/{date}/bowtie/data/{names}_L001_R1_001.fastq.gz",
-            read2="results/{date}/bowtie/data/{names}_L001_R2_001.fastq.gz",
-            sorte="results/{date}/bowtie/{names}_bothReadsUnmapped_sorted.bam",
-        log:
-            "logs/{{date}}/bowtie/{names}_split_paired.log",
-        conda:
-            "../envs/python.yaml"
-        shell:
-            "samtools sort -n -m 5G -@ 2 {input} -o {output.sorte} 2> {log} \n"
-            "samtools fastq -@ 8 {output.sorte} "
-            "-1 {output.read1} "
-            "-2 {output.read2} "
-            "-0 /dev/null -s /dev/null -n "
-            "2> {log} "
+        rule filter_unmapped:
+            input:
+                "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam",
+            output:
+                temp("results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam"),
+            log:
+                "logs/{date}/bowtie/{names}_filter_unmapped.log",
+            conda:
+                "../envs/python.yaml"
+            shell:
+                "samtools view -b -f 12 -F 256 "
+                "{input} > {output} "
+                "2> {log} "
+
+        rule split_paired:
+            input:
+                "results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam",
+            output:
+                read1="results/{date}/bowtie/data/{names}_L001_R1_001.fastq.gz",
+                read2="results/{date}/bowtie/data/{names}_L001_R2_001.fastq.gz",
+                sorted="results/{date}/bowtie/{names}_bothReadsUnmapped_sorted.bam",
+            log:
+                "logs/{date}/bowtie/{names}_split_paired.log",
+            conda:
+                "../envs/python.yaml"
+            shell:
+                "samtools sort -n -m 5G -@ 2 {input} -o {output.sorte} 2> {log} \n"
+                "samtools fastq -@ 8 {output.sorted} "
+                "-1 {output.read1} "
+                "-2 {output.read2} "
+                "-0 /dev/null -s /dev/null -n "
+                "2> {log} "
+
+    if config["datatype"] == "SampleData[SequencesWithQuality]":
+
+        rule filter_unmapped:
+            input:
+                "results/{date}/out/bowtie/{names}_mapped_and_unmapped.bam",
+            output:
+                temp("results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam"),
+            log:
+                "logs/{date}/bowtie/{names}_filter_unmapped.log",
+            conda:
+                "../envs/python.yaml"
+            shell:
+                "samtools view -b -F 256 "
+                "{input} > {output} "
+                "2> {log} "
+
+        rule split_paired:
+            input:
+                "results/{date}/out/bowtie/{names}_bothReadsUnmapped.bam",
+            output:
+                read1="results/{date}/bowtie/data/{names}_L001_R1_001.fastq.gz",
+                sorted="results/{date}/bowtie/{names}_bothReadsUnmapped_sorted.bam",
+            log:
+                "logs/{date}/bowtie/{names}_split_paired.log",
+            conda:
+                "../envs/python.yaml"
+            shell:
+                "samtools sort -n -m 5G -@ 2 {input} -o {output.sorted} 2> {log} \n"
+                "samtools fastq -0 {output.read1} {output.sorted} "
+                "2> {log} "
 
     rule get_human_reads:
         input:
