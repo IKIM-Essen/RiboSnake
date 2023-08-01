@@ -18,7 +18,7 @@ for file in os.listdir(path):
 # concatenate all txt files in a file
 with open(str(snakemake.output), "w") as outfile:
     i = 0
-    outfile.write("Sample: Difference without human")
+    outfile.write("Sample: Difference without human " + "\n")
     while i < len(inputs):
         with open(inputs[i], encoding="utf-8", errors="ignore") as infile:
             path_name = inputs[i].split("_")[0]
