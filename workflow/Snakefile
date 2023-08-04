@@ -47,8 +47,8 @@ rule all:
         expand(
             "".join(
                 (
-                config["output"],
-                "{date}/16S-report.tar.gz",
+                    config["output"],
+                    "{date}/16S-report.tar.gz",
                 )
             ),
             date=get_date(),
