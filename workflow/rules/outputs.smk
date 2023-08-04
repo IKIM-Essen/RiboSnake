@@ -455,9 +455,9 @@ rule zip_report:
         "results/{date}/visual/sample_frequencys_difference.csv",
         "results/{date}/out/config_parameters.html",
     output:
-        joined_path = os.path.join(config["output"],"{date}/16S-report.tar.gz"),
+        joined_path=os.path.join(config["output"], "{date}/16S-report.tar.gz"),
     params:
-        outpath = config["output"],
+        outpath=config["output"],
     log:
         "logs/{date}/outputs/zip-report.log",
     conda:
