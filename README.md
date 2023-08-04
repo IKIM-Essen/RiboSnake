@@ -1,4 +1,4 @@
-# 16S workflow using qiime2 and snakemake
+# RiboSnake: 16S rDNA analysis workflow with qiime2 and snakemake
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.10-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/16S.svg?branch=master)](https://travis-ci.org/snakemake-workflows/16S)
@@ -30,9 +30,11 @@ Configure the workflow according to your needs via editing the files in the `con
 
 Some important parameters you should check and set according to your own fatsq-files in the `config.yaml` are primers for the forward and reverse reads, the `datatype`, that should be used by QIIME2 and the `min-seq-length`. Based on the sequencing, the length of the reads can vary.
 
-The default parameters for filtering and truncation were validated with the help of a mock community and fitted to retrieve all bacteria from that community.
+The default parameters for filtering and truncation were validated with the help of a MOCK community and fitted to retrieve all bacteria from that community.
 
-In addition to that, you need to fit the metadata-parameters to your data. Please change the names of the used metadata-column according to your information.
+In addition to that, you need to fit the metadata-parameters to your data. Please change the names of the used metadata-columns according to your information.
+
+If your metadata is not containing numeric values, please use the "reduced-analysis" option in the config file to run the workflow, as the workflow is currently not able to run only on categorical metadata for the full analysis version. We are going to fix that in the future.
 
 The workflow is able to perform clustering and denoising either with vsearch, leading to OTU creation, or with DADA2, creating ASVs. You can decide which modus to use by setting the variable "jan-mode" to `True` (DADA2 usage) or `False` (vsearch).
 
@@ -74,7 +76,7 @@ using `$N` cores.
 
 After successful execution, the workflow provides you with a compressed folder, holding all interesting results ready to decompress or to download to your local machine.
 The compressed file 16S-report.tar.gz holds several qiime2-artifacts that can be inspected via qiime-view. In the zipped folder report.zip is the snakemake html
-report holding graphics as well as the DAG of the executed jobs and html files leading you directly to the qiime2-results.
+report holding graphics as well as the DAG of the executed jobs and html files leading you directly to the qiime2-results, without the need of using qiime-view.
 
 This report can, e.g., be forwarded to your collaborators.
 
@@ -125,3 +127,6 @@ A list of the tools used in this pipeline:
 | kraken2      | www.doi.org/10.1186/s13059-019-1891-0             |
 | vsearch      | www.github.com/torognes/vsearch                   |
 | DADA2        | www.doi.org/10.1038/nmeth.3869                    |
+| songbird     | www.doi.org/10.1038/s41467-019-10656-5            |
+| bowtie2      | www.doi.org/10.1038/nmeth.1923                    |
+| Ancom        | www.doi.org/10.3402/mehd.v26.27663                |
