@@ -33,7 +33,7 @@ if config["bowtie"] == True:
                 "bowtie2 -p 8 -x {input.db}/bowtie_host_DB "
                 "-1 {input.read1} "
                 "-2 {input.read2} "
-                "--un-conc-gz {output} "
+                "{output} "
                 "2> {log} "
 
     if config["datatype"] == "SampleData[SequencesWithQuality]":

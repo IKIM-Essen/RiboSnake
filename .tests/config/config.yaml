@@ -18,6 +18,7 @@ data-type: environmental
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/
+output: ../report/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
 # Remove columns from analysis
