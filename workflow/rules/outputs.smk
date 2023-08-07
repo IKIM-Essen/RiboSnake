@@ -455,7 +455,7 @@ rule zip_report:
         "results/{date}/visual/sample_frequencys_difference.csv",
         "results/{date}/out/config_parameters.html",
     output:
-        joined_path=os.path.join(config["output"], "{date}/16S-report.tar.gz"),
+        "results/{date}/16S-report.tar.gz",
     params:
         outpath=config["output"],
     log:
@@ -466,6 +466,7 @@ rule zip_report:
         """
         mkdir results/{wildcards.date}/16S-report
         cp -r {input} results/{wildcards.date}/16S-report/
-        tar -czvf {params.outpath}/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
+        tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
+        cp results/{wildcards.date}/16S-report.tar.gz {params.outpath}
         rm -r results/{wildcards.date}/16S-report
         """
