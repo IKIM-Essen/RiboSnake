@@ -1,2 +1,2 @@
-sample-ID	subject	year	month	day	sex	swab-site	run_date
+sample-ID	subject	year	month	day	sex	swab_site	run_date
 NAME	subject	2022	03	01	d	arm	2022-03-01
