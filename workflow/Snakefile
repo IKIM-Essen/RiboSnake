@@ -45,12 +45,7 @@ if config["reduced-analysis"] == False:
 rule all:
     input:
         expand(
-            "".join(
-                (
-                    config["output"],
-                    "{date}/16S-report.tar.gz",
-                )
-            ),
+            "results/{date}/16S-report.tar.gz",
             date=get_date(),
         ),
     output:
