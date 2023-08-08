@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.5.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.4.0...v0.5.0) (2023-08-08)
+
+
+### Features
+
+* added filtering with bowtie ([#93](https://github.com/IKIM-Essen/RiboSnake/issues/93)) ([56a0ab6](https://github.com/IKIM-Essen/RiboSnake/commit/56a0ab6343c129c9199dd77208f5aa20019b2b8e))
+* Bowtie2 for single end ([#95](https://github.com/IKIM-Essen/RiboSnake/issues/95)) ([1268db6](https://github.com/IKIM-Essen/RiboSnake/commit/1268db67022ff74462e7d16efb7454cbea6e425a))
+* heatmap distances ([#88](https://github.com/IKIM-Essen/RiboSnake/issues/88)) ([b437fa9](https://github.com/IKIM-Essen/RiboSnake/commit/b437fa950c9ea916634712632fac22ae22669682))
+* print config params to output html ([#91](https://github.com/IKIM-Essen/RiboSnake/issues/91)) ([4cf85c0](https://github.com/IKIM-Essen/RiboSnake/commit/4cf85c0454f3091a717978055c95f2336fabf51a))
+* rarefaction change ([#83](https://github.com/IKIM-Essen/RiboSnake/issues/83)) ([aad395e](https://github.com/IKIM-Essen/RiboSnake/commit/aad395e3b79d5cc851fceab84eb0d86a487e7ba6))
+* set outpath ([#96](https://github.com/IKIM-Essen/RiboSnake/issues/96)) ([9b9d231](https://github.com/IKIM-Essen/RiboSnake/commit/9b9d23165316e01cf978cfc440cd9336e5a78827))
+* Songbird ([#57](https://github.com/IKIM-Essen/RiboSnake/issues/57)) ([64e6942](https://github.com/IKIM-Essen/RiboSnake/commit/64e6942082e1cde281ca465284b5fd4de7f83638))
+
+
+### Bug Fixes
+
+* caching ([#89](https://github.com/IKIM-Essen/RiboSnake/issues/89)) ([b8ae16e](https://github.com/IKIM-Essen/RiboSnake/commit/b8ae16edf1010fe02730422248bafad570ff990c))
+* changed sample swap for file ([#82](https://github.com/IKIM-Essen/RiboSnake/issues/82)) ([daa67e3](https://github.com/IKIM-Essen/RiboSnake/commit/daa67e3862b365e9443f6eab4aed4089ba855b84))
+* filepath fix ([#92](https://github.com/IKIM-Essen/RiboSnake/issues/92)) ([a53e573](https://github.com/IKIM-Essen/RiboSnake/commit/a53e5730c31d9ff65a635e22fdedf1998218ce84))
+* human count error ([#80](https://github.com/IKIM-Essen/RiboSnake/issues/80)) ([7d42c16](https://github.com/IKIM-Essen/RiboSnake/commit/7d42c161140b8701124af903fd2046d5d2f5bfac))
+* snakefile fix ([#98](https://github.com/IKIM-Essen/RiboSnake/issues/98)) ([01f2d1c](https://github.com/IKIM-Essen/RiboSnake/commit/01f2d1c7359f01a6fb844f5055d0cfdb1e9ee1d7))
+
 ## [0.4.0](https://github.com/IKIM-Essen/16S/compare/v0.3.0...v0.4.0) (2023-03-14)
 
 
