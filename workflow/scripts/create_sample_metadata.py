@@ -44,7 +44,7 @@ files_not_to_copy = [f for f in data_files if f in incoming_files]
 files_to_copy = [f for f in incoming_files if f not in data_files]
 for file in files_to_copy:
     if file.endswith(".fastq.gz") and not "ndetermined" in file:
-        move(IN_PATH + file, DATA_PATH)
+        copy2(IN_PATH + file, DATA_PATH)
 print(files_to_copy)
 
 # Reading the sample names and the metadata from the file-names and the metadata.csv file, that needs to be provided
