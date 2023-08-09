@@ -93,7 +93,7 @@ if config["bowtie"] == True:
             conda:
                 "../envs/python.yaml"
             shell:
-                "samtools sort -n -m 5G -@ 2 {input} -o {output.sorte} 2> {log} \n"
+                "samtools sort -n -m 5G -@ 2 {input} -o {output.sorted} 2> {log} \n"
                 "samtools fastq -@ 8 {output.sorted} "
                 "-1 {output.read1} "
                 "-2 {output.read2} "
