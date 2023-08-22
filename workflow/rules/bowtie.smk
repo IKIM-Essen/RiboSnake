@@ -33,7 +33,7 @@ if config["bowtie"] == True:
                 "bowtie2 -p 8 -x {input.db}/bowtie_host_DB "
                 "-1 {input.read1} "
                 "-2 {input.read2} "
-                "{output} "
+                "-S {output} "
                 "2> {log} "
 
     if config["datatype"] == "SampleData[SequencesWithQuality]":
@@ -49,7 +49,7 @@ if config["bowtie"] == True:
             conda:
                 "../envs/python.yaml"
             shell:
-                "bowtie2 -x {input.db}/bowtie_host_DB {input.read1} {output} "
+                "bowtie2 -x {input.db}/bowtie_host_DB {input.read1} -S {output} "
                 "2> {log} "
 
     rule sam_to_bam:
