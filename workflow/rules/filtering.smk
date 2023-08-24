@@ -1,6 +1,6 @@
 if (
     config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
-    and config["jan-mode"] == False
+    and config["DADA2"] == False
 ):
 
     rule fastq_score:
@@ -31,7 +31,7 @@ if (
 
 if (
     config["datatype"] == "SampleData[SequencesWithQuality]"
-    and config["jan-mode"] == False
+    and config["DADA2"] == False
 ):
 
     rule fastq_score:
@@ -60,7 +60,7 @@ if (
             "--verbose 2> {log}"
 
 
-if config["jan-mode"] == False:
+if config["DADA2"] == False:
 
     rule chimera_filtering:
         input:
@@ -122,7 +122,7 @@ if config["jan-mode"] == False:
 
 if (
     config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
-    and config["jan-mode"] == True
+    and config["DADA2"] == True
 ):
 
     rule dada2:
@@ -174,10 +174,7 @@ if (
             "--verbose 2> {log}"
 
 
-if (
-    config["datatype"] == "SampleData[SequencesWithQuality]"
-    and config["jan-mode"] == True
-):
+if config["datatype"] == "SampleData[SequencesWithQuality]" and config["DADA2"] == True:
 
     rule dada2:
         input:
@@ -269,39 +266,41 @@ rule filter_frequency:
         "--verbose 2> {log} "
 
 
-rule filter_human:
-    input:
-        seq="results/{date}/out/derepl-seq.qza",
-        table="results/{date}/out/derepl-table.qza",
-        ref_seq="resources/GRCh38_latest_genomic_upper.qza",
-    output:
-        seq="results/{date}/out/derep-seq-nonhum.qza",
-        table="results/{date}/out/derep-table-nonhum.qza",
-        human_hit="results/{date}/out/human.qza",
-    params:
-        threads=config["threads"],
-        perc_identity=config["filtering"]["perc-identity"],
-        perc_query_aligned=config["filtering"]["perc-query-aligned"],
-    threads: 50
-    log:
-        "logs/{date}/filtering/filter-human.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime quality-control exclude-seqs "
-        "--i-query-sequences {input.seq} "
-        "--i-reference-sequences {input.ref_seq} "
-        "--p-threads {params.threads} "
-        "--p-perc-identity {params.perc_identity} "
-        "--p-perc-query-aligned {params.perc_query_aligned} "
-        "--o-sequence-hits {output.human_hit} "
-        "--o-sequence-misses {output.seq} "
-        "--verbose 2> {log} \n"
-        "qiime feature-table filter-features "
-        "--i-table {input.table} "
-        "--m-metadata-file {output.seq} "
-        "--o-filtered-table {output.table} "
-        "--verbose 2> {log} "
+if config["DADA2"] == False:
+
+    rule filter_human:
+        input:
+            seq="results/{date}/out/derepl-seq.qza",
+            table="results/{date}/out/derepl-table.qza",
+            ref_seq="resources/GRCh38_latest_genomic_upper.qza",
+        output:
+            seq="results/{date}/out/derep-seq-nonhum.qza",
+            table="results/{date}/out/derep-table-nonhum.qza",
+            human_hit="results/{date}/out/human.qza",
+        params:
+            threads=config["threads"],
+            perc_identity=config["filtering"]["perc-identity"],
+            perc_query_aligned=config["filtering"]["perc-query-aligned"],
+        threads: 50
+        log:
+            "logs/{date}/filtering/filter-human.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime quality-control exclude-seqs "
+            "--i-query-sequences {input.seq} "
+            "--i-reference-sequences {input.ref_seq} "
+            "--p-threads {params.threads} "
+            "--p-perc-identity {params.perc_identity} "
+            "--p-perc-query-aligned {params.perc_query_aligned} "
+            "--o-sequence-hits {output.human_hit} "
+            "--o-sequence-misses {output.seq} "
+            "--verbose 2> {log} \n"
+            "qiime feature-table filter-features "
+            "--i-table {input.table} "
+            "--m-metadata-file {output.seq} "
+            "--o-filtered-table {output.table} "
+            "--verbose 2> {log} "
 
 
 rule taxa_collapse:

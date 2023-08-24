@@ -1,0 +1,1 @@
+File holding DADA2 information about samples and filtering statistics.

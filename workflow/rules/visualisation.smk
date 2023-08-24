@@ -84,7 +84,7 @@ rule demux_stats:
         "--verbose 2> {log}"
 
 
-if config["data-type"] == "human":
+if config["data-type"] == "human" and config["bowtie"] == False:
 
     rule visual_humancount:
         input:
@@ -121,7 +121,7 @@ if config["data-type"] == "human":
             "../scripts/extract_humancount.py"
 
 
-if config["data-type"] == "environmental":
+if config["data-type"] == "environmental" or config["bowtie"] == True:
 
     rule unzip_human_dummy:
         output:
