@@ -174,10 +174,7 @@ if (
             "--verbose 2> {log}"
 
 
-if (
-    config["datatype"] == "SampleData[SequencesWithQuality]"
-    and config["DADA2"] == True
-):
+if config["datatype"] == "SampleData[SequencesWithQuality]" and config["DADA2"] == True:
 
     rule dada2:
         input:
@@ -268,7 +265,9 @@ rule filter_frequency:
         "--o-filtered-data {output.seqs} "
         "--verbose 2> {log} "
 
+
 if config["DADA2"] == False:
+
     rule filter_human:
         input:
             seq="results/{date}/out/derepl-seq.qza",

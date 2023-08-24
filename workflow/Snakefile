@@ -41,10 +41,12 @@ if config["reduced-analysis"] == False and config["DADA2"] == False:
     include: "rules/outputs_vsearch.smk"
     include: "rules/visualisation.smk"
 
+
 if config["DADA2"] == True:
-    
+
     include: "rules/outputs_DADA2.smk"
     include: "rules/visualisation.smk"
+
 
 rule all:
     input:

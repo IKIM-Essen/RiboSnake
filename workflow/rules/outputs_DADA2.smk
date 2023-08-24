@@ -28,9 +28,9 @@ rule biom_file:
 
 rule visualize_dada2_stats:
     input:
-        "results/{date}/out/dada2-stats.qza"
+        "results/{date}/out/dada2-stats.qza",
     output:
-        "results/{date}/visual/dada2-stats-visual.qzv"
+        "results/{date}/visual/dada2-stats-visual.qzv",
     log:
         "logs/{date}/outputs/dada2-stats-visual.log",
     conda:
@@ -180,7 +180,7 @@ rule report_files:
             caption="../report/dada2-stats.rst",
             category="4. Qualitycontrol",
             htmlindex="index.html",
-        )
+        ),
     log:
         "logs/{date}/outputs/report-files.log",
     conda:
