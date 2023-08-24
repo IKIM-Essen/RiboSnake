@@ -8,7 +8,7 @@ testing: False
 # If data-preparation should be enabled
 include-data-prep: True
 # Modus: If true, analysis will be done with DADA2 instead of vsearch
-jan-mode: False
+DADA2: True
 # Shorter analysis for small number of samples or samples without metadata
 reduced-analysis: False
 # Whether to use bowtie2 for excluding human host contamination or not
@@ -137,7 +137,7 @@ diversity:
     phylogeny-metric: ['weighted_normalized_unifrac']
     # Perform variance adjustment based on Chang et al. BMC Bioinformatics 2011
     phylogeny-variance-adjusted: True
-# If jan-mode is set to true, these parameters are used for denoising and clustering paired-end-data with DADA2
+# If DADA2 is set to true, these parameters are used for denoising and clustering paired-end-data with DADA2
 dada2-paired:
   # Position at which forward reads should be truncated at the 3' end due to low quality
   trunc-len-f: 240
@@ -164,7 +164,7 @@ dada2-paired:
   min-fold-parent-over-abundance: 1.0
   # The number of reads to use when training the errormodel
   n-reads-learn: 1000000
-# If jan-mode is set to true, these parameters are used for denoising and clustering single-end-data with DADA2
+# If DADA2 is set to true, these parameters are used for denoising and clustering single-end-data with DADA2
 dada2-single:
   # Position at which reads should be truncated at the 3' end due to low quality
   trunc-len: 240

@@ -204,7 +204,7 @@ if (
             "2> {log} "
 
 
-if config["jan-mode"] == False:
+if config["DADA2"] == False:
 
     rule trim_paired:
         input:
@@ -259,7 +259,7 @@ if config["jan-mode"] == False:
 
 if (
     config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
-    and config["jan-mode"] == False
+    and config["DADA2"] == False
 ):
 
     rule join_ends:

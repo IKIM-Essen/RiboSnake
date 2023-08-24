@@ -1,4 +1,4 @@
-if config["jan-mode"] == False:
+if config["DADA2"] == False:
 
     rule dereplication:
         input:

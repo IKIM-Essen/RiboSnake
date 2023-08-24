@@ -36,7 +36,7 @@ In addition to that, you need to fit the metadata-parameters to your data. Pleas
 
 If your metadata is not containing numeric values, please use the "reduced-analysis" option in the config file to run the workflow, as the workflow is currently not able to run only on categorical metadata for the full analysis version. We are going to fix that in the future.
 
-The workflow is able to perform clustering and denoising either with vsearch, leading to OTU creation, or with DADA2, creating ASVs. You can decide which modus to use by setting the variable "jan-mode" to `True` (DADA2 usage) or `False` (vsearch).
+The workflow is able to perform clustering and denoising either with vsearch, leading to OTU creation, or with DADA2, creating ASVs. You can decide which modus to use by setting the variable "DADA2" to `True` (DADA2 usage) or `False` (vsearch).
 
 Please make sure, that the names of your fastq files are correctly formatted. They should look like this:
 
