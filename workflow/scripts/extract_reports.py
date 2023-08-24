@@ -70,6 +70,6 @@ while b < len(subdir):
         html = datadir
         shutil.copytree(html, snakemake.output.demux_filter_stats)
     if "dada2-stats" in subdir[b]:
-        html=datadir
+        html = datadir
         shutil.copytree(html, snakemake.output.dada2)
     b = b + 1
