@@ -42,7 +42,7 @@ Please make sure, that the names of your FASTQ files are correctly formatted. Th
 
     samplename_SNumber_Lane_R1/R2_001.fastq.gz
 
-In the config file you can also set the input and output directory. You can either create a specific directory for your input data and then put that filepath in the config file, or you can put the path to an existing directory where the data is located. 
+In the config file you can also set the input and output directory. You can either create a specific directory for your input data and then put that filepath in the config file, or you can put the path to an existing directory where the data is located.
 The data will then be copied to the workflow's data directory. The compressed and final file holding the results will be copied to the directory you specified in "output". It will also stay in the local "results" folder together with important intermediate results.
 
 ### Step 3: Install Snakemake
