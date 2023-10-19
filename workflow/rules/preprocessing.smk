@@ -2,7 +2,7 @@ rule get_database:
     output:
         seq="resources/silva-138-99-seqs.qza",
         tax="resources/silva-138-99-tax.qza",
-        genomic=temp("resources/GRCh38_latest_genomic.fna.gz"),
+        genomic=temp("resources/ref-genome.fna.gz"),
         kraken=temp("resources/minikraken2_v2_8GB_201904.tgz"),
     params:
         seq=str(config["database"]["download-path-seq"]),
@@ -15,7 +15,7 @@ rule get_database:
         "../envs/python.yaml"
     shell:
         "cd resources; "
-        "wget {params.genomic}; "
+        "wget -O ref-genome.fna.gz {params.genomic}; "
         "wget {params.kraken}; "
         "wget {params.seq}; "
         "wget {params.tax}; "
@@ -60,9 +60,9 @@ rule get_database:
 
 rule unzip_ref_gen:
     input:
-        "resources/GRCh38_latest_genomic.fna.gz",
+        "resources/ref-genome.fna.gz",
     output:
-        temp("resources/GRCh38_latest_genomic.fna"),
+        temp("resources/ref-genome.fna"),
     log:
         "logs/unzip_ref_gen.log",
     conda:
@@ -73,9 +73,9 @@ rule unzip_ref_gen:
 
 rule lower_to_upper:
     input:
-        "resources/GRCh38_latest_genomic.fna",
+        "resources/ref-genome.fna",
     output:
-        temp("resources/GRCh38_latest_genomic_upper.fna"),
+        temp("resources/ref-genome_upper.fna"),
     log:
         "logs/lower_to_upper_fasta.log",
     conda:
@@ -86,9 +86,9 @@ rule lower_to_upper:
 
 rule import_ref_genome:
     input:
-        "resources/GRCh38_latest_genomic_upper.fna",
+        "resources/ref-genome_upper.fna",
     output:
-        temp("resources/GRCh38_latest_genomic_upper.qza"),
+        temp("resources/ref-genome_upper.qza"),
     log:
         "logs/import_ref_gen.log",
     conda:

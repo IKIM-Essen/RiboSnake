@@ -2,7 +2,7 @@ if config["bowtie"] == True:
 
     rule create_bowtie_db:
         input:
-            "resources/GRCh38_latest_genomic_upper.fna",
+            "resources/ref-genome_upper.fna",
         output:
             #files="resources/bowtie_host_DB",
             dirc=directory("resources/bowtie_DB/"),

@@ -272,7 +272,7 @@ if config["DADA2"] == False:
         input:
             seq="results/{date}/out/derepl-seq.qza",
             table="results/{date}/out/derepl-table.qza",
-            ref_seq="resources/GRCh38_latest_genomic_upper.qza",
+            ref_seq="resources/ref-genome_upper.qza",
         output:
             seq="results/{date}/out/derep-seq-nonhum.qza",
             table="results/{date}/out/derep-table-nonhum.qza",
