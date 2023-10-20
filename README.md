@@ -32,8 +32,8 @@ Some important parameters you should check and set according to your own FASTQ-f
 
 The default parameters for filtering and truncation were validated with the help of a MOCK community and fitted to retrieve all bacteria from that community.
 
-In addition to that, you need to fit the metadata-parameters to your data. Please change the names of the used metadata-columns according to your information. 
-Take special care of the "remove-columns" information. Here you can add the columns you don't want to have analyzed or the workflow can't anlyse. This can happen when 
+In addition to that, you need to fit the metadata-parameters to your data. Please change the names of the used metadata-columns according to your information.
+Take special care of the "remove-columns" information. Here you can add the columns you don't want to have analyzed or the workflow can't anlyse. This can happen when
 all of the values in one column are unique or all the same. You should also look out for the information under "metadata-parameters" and "songbird" as well as "ancom".
 In every case you have to specify the column names based on your own data.
 

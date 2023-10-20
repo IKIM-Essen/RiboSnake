@@ -38,7 +38,7 @@ while z < len(subdir):
 # Iterating through the different subdirectories and copying the important information into the output directory
 b = 0
 path_name = str(snakemake.output)
-#print(path_name)
+# print(path_name)
 plot_name = path_name.split("/")[-1]
 while b < len(subdir):
     datadir = subdir[b] + "data/"

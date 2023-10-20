@@ -33,7 +33,7 @@ for f in listdir(IN_PATH):
         print(f, "not used")
 metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
 date = metadata["run_date"].iloc[1]
-#print(date)
+# print(date)
 # Adding a direcory for the specific date as subdirectory to the DATA_PATH
 DATA_PATH += date
 if not os.path.isdir(DATA_PATH):
@@ -45,11 +45,11 @@ files_to_copy = [f for f in incoming_files if f not in data_files]
 for file in files_to_copy:
     if file.endswith(".fastq.gz") and not "ndetermined" in file:
         copy2(IN_PATH + file, DATA_PATH)
-#print(files_to_copy)
+# print(files_to_copy)
 
 # Reading the sample names and the metadata from the file-names and the metadata.csv file, that needs to be provided
 files = os.listdir(DATA_PATH)
-#print(files)
+# print(files)
 sample_list = []
 for name in files:
     sample = name.split("_")[0]

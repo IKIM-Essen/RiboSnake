@@ -25,11 +25,11 @@ directory = os.listdir(str(snakemake.params.between))
 subdir = os.listdir(str(snakemake.params.between) + "/" + directory[0])
 orig_dir = str(snakemake.params.between) + "/" + directory[0] + "/" + subdir[0]
 new_dir = str(snakemake.params.between) + "/" + directory[0]
-#print(new_dir)
+# print(new_dir)
 dir_name = new_dir.split("/")[-1]
 for f in os.listdir(orig_dir):
     path = orig_dir + "/" + f
-    #print(path)
+    # print(path)
     unzipped_path = str(snakemake.params.between) + "/" + dir_name + "/" + f
     shutil.move(path, unzipped_path)
 os.rmdir(orig_dir)
