@@ -92,33 +92,11 @@ rule phylogenetic_tree:
     shell:
         "qiime phylogeny align-to-tree-mafft-fasttree "
         "--i-sequences {input} "
+        "--p-n-threads auto "
         "--o-alignment {output.alignment} "
         "--o-masked-alignment {output.masked_alignment} "
         "--o-tree {output.tree} "
         "--o-rooted-tree {output.rooted_tree} "
-        "--verbose 2> {log}"
-
-
-rule core_metrics:
-    input:
-        phylogeny="results/{date}/visual/rooted-tree.qza",
-        table="results/{date}/out/table-taxa-filtered.qza",
-        metadata="config/pep/sample.tsv",
-    output:
-        directory("results/{date}/core-metrics-results"),
-    params:
-        depth=config["rarefaction"]["sampling_depth"],
-    log:
-        "logs/{date}/classification/core_metrics.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime diversity core-metrics-phylogenetic "
-        "--i-phylogeny {input.phylogeny} "
-        "--i-table {input.table} "
-        "--p-sampling-depth {params.depth} "
-        "--m-metadata-file {input.metadata} "
-        "--output-dir {output} "
         "--verbose 2> {log}"
 
 
