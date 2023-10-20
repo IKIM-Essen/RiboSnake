@@ -42,6 +42,8 @@ Please make sure, that the names of your fastq files are correctly formatted. Th
 
     samplename_SNumber_Lane_R1/R2_001.fastq.gz
 
+In the config file, you can specify "input", "data" and "output" folders. These folders are not provided in the repository structure. As input- and output-folder you can set what ever path you want also existing ones. The path to the input should be where the fastq files are located and the path for the output, where you want the final results file to be copied to. The "data" folder is the one where the fastq files are copied to, for the workflow to run. So the folder should be created on the same machine the workflow is running on. It would be best if you would create the folder inside the workflows own folder structure.  
+
 ### Step 3: Install Snakemake
 
 Create a snakemake environment using [mamba](https://mamba.readthedocs.io/en/latest/) via:
