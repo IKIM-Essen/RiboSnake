@@ -28,7 +28,7 @@ When you have the folder structure added on your local machine, please add a "da
 
 Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `metadata.txt` to specify your sample setup.
 
-Some important parameters you should check and set according to your own fatsq-files in the `config.yaml` are primers for the forward and reverse reads, the `datatype`, that should be used by QIIME2 and the `min-seq-length`. Based on the sequencing, the length of the reads can vary.
+Some important parameters you should check and set according to your own FASTQ-files in the `config.yaml` are primers for the forward and reverse reads, the `datatype`, that should be used by QIIME2 and the `min-seq-length`. Based on the sequencing, the length of the reads can vary.
 
 The default parameters for filtering and truncation were validated with the help of a MOCK community and fitted to retrieve all bacteria from that community.
 
@@ -38,11 +38,14 @@ If your metadata is not containing numeric values, please use the "reduced-analy
 
 The workflow is able to perform clustering and denoising either with vsearch, leading to OTU creation, or with DADA2, creating ASVs. You can decide which modus to use by setting the variable "DADA2" to `True` (DADA2 usage) or `False` (vsearch).
 
-Please make sure, that the names of your fastq files are correctly formatted. They should look like this:
+Please make sure, that the names of your FASTQ files are correctly formatted. They should look like this:
 
     samplename_SNumber_Lane_R1/R2_001.fastq.gz
 
-In the config file, you can specify "input", "data" and "output" folders. These folders are not provided in the repository structure. As input- and output-folder you can set what ever path you want also existing ones. The path to the input should be where the fastq files are located and the path for the output, where you want the final results file to be copied to. The "data" folder is the one where the fastq files are copied to, for the workflow to run. So the folder should be created on the same machine the workflow is running on. It would be best if you would create the folder inside the workflows own folder structure.  
+In the config file you can also set the input and output directory. You can either create a specific directory for your input data and then put that filepath in the config file, or you can put the path to an existing directory where the data is located.
+The data will then be copied to the workflow's data directory. The compressed and final file holding the results will be copied to the directory you specified in "output". It will also stay in the local "results" folder together with important intermediate results.
+The "data" folder is also not provided by the repository. It is the folder the fastq files are copied to before being used in the workflow. It is best if you create the folder inside the 
+worklfows folder structure. It must definitely be created on the machine, the workflow is running on.
 
 ### Step 3: Install Snakemake
 
