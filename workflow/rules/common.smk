@@ -116,7 +116,6 @@ def get_metadata_categorical_columns():
         for item in remove_list:
             if item in header:
                 namelist.remove(item)
-    print(namelist)
     return namelist
 
 
