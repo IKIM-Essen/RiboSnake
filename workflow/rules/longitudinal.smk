@@ -1,8 +1,8 @@
 rule relative_collapsed_taxa:
     input:
-        "results/{date}/out/taxa_collapsed.qza"
+        "results/{date}/out/taxa_collapsed.qza",
     output:
-        "results/{date}/out/taxa_collapsed_relative.qza"
+        "results/{date}/out/taxa_collapsed_relative.qza",
     log:
         "logs/{date}/outputs/taxa-collapse-relative.log",
     conda:
@@ -12,6 +12,7 @@ rule relative_collapsed_taxa:
         "--i-table {input} "
         "--o-relative-frequency-table {output} "
         "--verbose 2> {log} "
+
 
 rule volatility:
     input:
@@ -25,7 +26,7 @@ rule volatility:
             metric=get_phylogenetic_metric("alpha"),
         ),
     output:
-        "results/{date}/visual/volatility.qzv"
+        "results/{date}/visual/volatility.qzv",
     params:
         metadata="config/pep/sample.tsv",
         state_column=config["longitudinal"]["state_column"],
@@ -44,6 +45,7 @@ rule volatility:
         "--p-individual-id-column {params.individual_id_column} "
         "--o-visualization {output} "
         "--verbose 2> {log} "
+
 
 rule feature_volatility:
     input:
@@ -66,7 +68,7 @@ rule feature_volatility:
         metadata="config/pep/sample.tsv",
         state_column=config["longitudinal"]["state_column"],
         individual_id_column=config["longitudinal"]["individual_id_column"],
-        p_n_jobs=config["threads"]
+        p_n_jobs=config["threads"],
     log:
         "logs/{date}/visualisation/feature_volatility.log",
     conda:
@@ -87,6 +89,7 @@ rule feature_volatility:
         "--o-sample-estimator {output.sample_estimator} "
         "--verbose 2> {log} "
 
+
 rule linear_mixed_effects:
     input:
         table="results/{date}/out/taxa_collapsed_relative.qza",
@@ -99,7 +102,7 @@ rule linear_mixed_effects:
             metric=get_phylogenetic_metric("alpha"),
         ),
     output:
-        "results/{date}/visual/lme.qzv"
+        "results/{date}/visual/lme.qzv",
     params:
         metadata="config/pep/sample.tsv",
         state_column=config["longitudinal"]["state_column"],
@@ -122,6 +125,7 @@ rule linear_mixed_effects:
         "--o-visualization {output} "
         "--verbose 2> {log} "
 
+
 rule unzip_longitudinal:
     input:
         #"results/{date}/visual/lme.qzv",
@@ -136,6 +140,7 @@ rule unzip_longitudinal:
         "../envs/python.yaml"
     script:
         "../scripts/rename_qzv.py"
+
 
 rule report_longitudinal:
     input:
@@ -175,4 +180,3 @@ rule report_longitudinal:
         "../envs/python.yaml"
     script:
         "../scripts/extract_longitudinal.py"
-

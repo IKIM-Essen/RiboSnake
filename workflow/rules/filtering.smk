@@ -278,6 +278,7 @@ rule unzip_frequency:
     script:
         "../scripts/rename_qzv.py"
 
+
 rule frequency_after_abundancefilter:
     input:
         "results/{date}/visual/frequency_unzipped",

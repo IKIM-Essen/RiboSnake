@@ -310,6 +310,7 @@ rule report_ancom:
     script:
         "../scripts/extract_beta_corr.py"
 
+
 if config["longitudinal"] == False:
 
     rule snakemake_report:
@@ -396,6 +397,7 @@ if config["longitudinal"] == False:
             "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
             "{params.for_testing} "
             "> {log} 2>&1"
+
 
 if config["longitudinal"] == True:
 
@@ -486,6 +488,7 @@ if config["longitudinal"] == True:
             "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
             "{params.for_testing} "
             "> {log} 2>&1"
+
 
 rule compress_kraken:
     input:
