@@ -321,6 +321,7 @@ if config["longitudinal"] == False:
             "results/{date}/visual/report/multiqc.html",
             "results/{date}/visual/absolute-taxabar-plot.png",
             "results/{date}/out/qurro_plot",
+            "results/{date}/visual/report/table-cluster-filtered",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_metric("beta"),
@@ -410,6 +411,7 @@ if config["longitudinal"] == True:
             "results/{date}/visual/report/feature",
             "results/{date}/visual/report/accuracy",
             "results/{date}/visual/report/volatility",
+            "results/{date}/visual/report/table-cluster-filtered",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_metric("beta"),
