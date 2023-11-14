@@ -266,6 +266,37 @@ rule filter_frequency:
         "--verbose 2> {log} "
 
 
+rule unzip_frequency:
+    input:
+        "results/{date}/visual/table-cluster-filtered.qzv",
+    output:
+        temp(directory("results/{date}/visual/frequency_unzipped")),
+    log:
+        "logs/{date}/outputs/unzip-frequency.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
+
+
+rule frequency_after_abundancefilter:
+    input:
+        "results/{date}/visual/frequency_unzipped",
+    output:
+        report(
+            directory("results/{date}/visual/report/table-cluster-filtered"),
+            caption="../report/feature-table.rst",
+            category="4. Qualitycontrol",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/filtering/after_abundance-frequency.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_significance.py"
+
+
 if config["DADA2"] == False:
 
     rule filter_human:

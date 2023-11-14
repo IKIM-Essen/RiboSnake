@@ -378,6 +378,7 @@ rule snakemake_report:
         "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/visual/report/human-count",
+        "results/{date}/visual/report/table-cluster-filtered",
     output:
         "results/{date}/out/report.zip",
     params:

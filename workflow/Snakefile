@@ -48,6 +48,11 @@ if config["DADA2"] == True:
     include: "rules/visualisation.smk"
 
 
+if config["longitudinal"]:
+
+    include: "rules/longitudinal.smk"
+
+
 rule all:
     input:
         expand(
