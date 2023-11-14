@@ -47,6 +47,10 @@ if config["DADA2"] == True:
     include: "rules/outputs_DADA2.smk"
     include: "rules/visualisation.smk"
 
+if config["longitudinal"]:
+
+    include: "rules/longitudinal.smk"
+
 
 rule all:
     input:
