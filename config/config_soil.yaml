@@ -65,7 +65,7 @@ filtering:
   # Relative threshold for the abundance filtering
   relative-abundance-filter: 0.0005
   # Minimum length of a sequence to be retained
-  min-seq-length: 180
+  min-seq-length: 140
   # Minimum quality score for sequences to pass filter
   phred-score: 20
   # Maximum number of undetermined base calls ("N")
@@ -197,7 +197,7 @@ songbird:
   # Impacts how often a "measurement" is taken for these plots
   summary_interval: 1
   # Formula
-  formula: "sampling_date+sampling_site"
+  formula: "extract_concen+elevation"
 # Feature classification with ancom
 ancom:
   # Catgorical metadata column to analyse
