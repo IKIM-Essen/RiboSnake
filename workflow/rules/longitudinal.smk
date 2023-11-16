@@ -29,8 +29,8 @@ rule volatility:
         "results/{date}/visual/volatility.qzv",
     params:
         metadata="config/pep/sample.tsv",
-        state_column=config["longitudinal"]["state_column"],
-        individual_id_column=config["longitudinal"]["individual_id_column"],
+        state_column=config["longitudinal-params"]["state_column"],
+        individual_id_column=config["longitudinal-params"]["individual_id_column"],
     log:
         "logs/{date}/visualisation/volatility.log",
     conda:
@@ -66,8 +66,8 @@ rule feature_volatility:
         sample_estimator="results/{date}/visual/estimator.qza",
     params:
         metadata="config/pep/sample.tsv",
-        state_column=config["longitudinal"]["state_column"],
-        individual_id_column=config["longitudinal"]["individual_id_column"],
+        state_column=config["longitudinal-params"]["state_column"],
+        individual_id_column=config["longitudinal-params"]["individual_id_column"],
         p_n_jobs=config["threads"],
     log:
         "logs/{date}/visualisation/feature_volatility.log",
@@ -105,10 +105,10 @@ rule linear_mixed_effects:
         "results/{date}/visual/lme.qzv",
     params:
         metadata="config/pep/sample.tsv",
-        state_column=config["longitudinal"]["state_column"],
-        individual_id_column=config["longitudinal"]["individual_id_column"],
+        state_column=config["longitudinal-params"]["state_column"],
+        individual_id_column=config["longitudinal-params"]["individual_id_column"],
         #formula=config["longitudinal"]["formula"],
-        metric=config["longitudinal"]["metric"],
+        metric=config["longitudinal-params"]["metric"],
     log:
         "logs/{date}/visualisation/linearmixedeff.log",
     conda:

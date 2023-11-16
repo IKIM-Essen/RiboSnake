@@ -210,7 +210,7 @@ ancom:
   # Catgorical metadata column to analyse
   metadata-column: ["extract_group_no"]
 # Parameters for longitudinal analysis, used when longitudinal is set to True
-longitudinal:
+longitudinal-params:
   # Column with continuous data to use primarily
   state_column: "average_soil_temperature"
   # Column to name the samples

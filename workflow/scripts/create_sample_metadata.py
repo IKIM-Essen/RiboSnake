@@ -57,6 +57,16 @@ for name in files:
 sample_list = list(set(sample_list))
 metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
 metadata.columns = metadata.columns.str.lower()
+# Test parameter names for critical characters
+column_headers = metadata.columns.tolist()
+columns_with_characters = [col for col in column_headers if any(char in col for char in ["/",".","-"])]
+if columns_with_characters:
+        print(
+            "There are unprocessable characters in the metadata headers. Please make sure to eliminate dot, slash or hyphen and try again."
+        )
+        raise Exception(
+            "There are unprocessable characters in the metadata headers. Please make sure to eliminate dot, slash or hyphen and try again."
+        )
 # Samples, that are not mentioned in the metadata.csv are excluded from the sample-metadata-sheet
 for name in sample_list:
     if name not in metadata["sample_name"].tolist():
@@ -118,4 +128,5 @@ while i < len(sample_info.index):
         else:
             continue
     i = i + 1
-sample_info.to_csv(snakemake.output.sample_info, sep=",", mode="a")
+if not os.path.exists(str(snakemake.output.sample_info)):
+    sample_info.to_csv(snakemake.output.sample_info, sep=",", mode="w")
