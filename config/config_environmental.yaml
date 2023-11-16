@@ -17,7 +17,7 @@ reduced-analysis: False
 # Whether to use bowtie2 for excluding human host contamination or not
 bowtie: True
 # Set if environmental or human data is processed
-data-type: environment
+data-type: environmental
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/
@@ -104,7 +104,7 @@ clustering:
 # Parameters set for alpha- and beta-rarefaction
 rarefaction:
   # The maximum rarefaction depth. Must be greater than min-depth
-  max-depth: 500 #400
+  max-depth: 400
   # The total frequency that each sample should be rarefied to prior to computing the diversity metric
   sampling_depth: 100
   # How often rarefaction should be repeated
@@ -197,13 +197,13 @@ songbird:
   # Impacts how often a "measurement" is taken for these plots
   summary_interval: 1
   # Formula
-  formula: "sex+age"
+  formula: "sampling_date+sampling_site"
 # Feature classification with ancom
 ancom:
   # Catgorical metadata column to analyse
   metadata-column: ["extract-group-no"]
 # Parameters for longitudinal analysis, used when longitudinal is set to True
-longitudinal:
+longitudinal-params:
   # Column with continuous data to use primarily
   state_column: "temperature"
   # Column to name the samples
