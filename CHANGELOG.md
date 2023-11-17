@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.6.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.5.0...v0.6.0) (2023-11-16)
+
+
+### Features
+
+* longitudinal analysis ([#109](https://github.com/IKIM-Essen/RiboSnake/issues/109)) ([7c6e7f7](https://github.com/IKIM-Essen/RiboSnake/commit/7c6e7f742bc21e447a3983177ffbdaf3baebcb86))
+
+
+### Bug Fixes
+
+* bowtie code fix ([#103](https://github.com/IKIM-Essen/RiboSnake/issues/103)) ([1fa01fd](https://github.com/IKIM-Essen/RiboSnake/commit/1fa01fd83429dd1cd94ee0da141eb02581635653))
+* codefix ([#100](https://github.com/IKIM-Essen/RiboSnake/issues/100)) ([6d87af8](https://github.com/IKIM-Essen/RiboSnake/commit/6d87af815b89a8d3c304536448aba3ac995ab70f))
+* errors fixed ([#110](https://github.com/IKIM-Essen/RiboSnake/issues/110)) ([f5340a4](https://github.com/IKIM-Essen/RiboSnake/commit/f5340a46677e6a5bfb48060993beec8317ee2d6d))
+* fixed DADA2 usage ([#104](https://github.com/IKIM-Essen/RiboSnake/issues/104)) ([4213aa0](https://github.com/IKIM-Essen/RiboSnake/commit/4213aa0143601877a6360ecb0c974c97269c08ee))
+
 ## [0.5.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.4.0...v0.5.0) (2023-08-08)
 
 
