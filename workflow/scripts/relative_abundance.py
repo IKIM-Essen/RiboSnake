@@ -22,7 +22,7 @@ with zipfile.ZipFile(filename, "r") as zip_ref:
     name = filename.split("/")[-1]
     dir_name = os.path.dirname(str(snakemake.input))
     new_dir = dir_name + "/" + name
-    if os.path.exists(new_dir):
+    if os.path.isdir(new_dir) and os.path.exists(new_dir):
         shutil.rmtree(new_dir)
     zip_ref.extractall(os.path.splitext(new_dir)[0] + "/")
 name = name.split(".")[0]
