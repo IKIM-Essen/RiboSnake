@@ -278,6 +278,7 @@ rule unzip_frequency:
     script:
         "../scripts/rename_qzv.py"
 
+
 if config["reduced-analysis"] == True:
 
     rule visualise_afterab:
