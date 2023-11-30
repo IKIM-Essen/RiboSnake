@@ -94,7 +94,11 @@ def get_metadata_columns():
     if len(remove_list) != 0:
         for item in remove_list:
             if item in header:
-                header.remove(item)
+                try:
+                    header.remove(item)
+                except:
+                    continue
+    header = [item.lower() for item in header]
     return header
 
 
@@ -119,6 +123,7 @@ def get_metadata_categorical_columns():
                     namelist.remove(item)
                 except:
                     continue
+    namelist = [item.lower() for item in namelist]
     return namelist
 
 
