@@ -278,21 +278,22 @@ rule unzip_frequency:
     script:
         "../scripts/rename_qzv.py"
 
+if config["reduced-analysis"] == True:
 
-rule visualise_afterab:
-    input:
-        "results/{date}/out/table-cluster-filtered.qza",
-    output:
-        "results/{date}/visual/table-cluster-filtered.qzv",
-    log:
-        "logs/{date}/visualisation/visualise-table.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime feature-table summarize "
-        "--i-table {input} "
-        "--o-visualization {output} "
-        "--verbose 2> {log} "
+    rule visualise_afterab:
+        input:
+            "results/{date}/out/table-cluster-filtered.qza",
+        output:
+            "results/{date}/visual/table-cluster-filtered.qzv",
+        log:
+            "logs/{date}/visualisation/visualise-table.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table summarize "
+            "--i-table {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log} "
 
 
 rule frequency_after_abundancefilter:
