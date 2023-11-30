@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/IKIM-Essen/RiboSnake/compare/v0.6.0...v0.6.1) (2023-11-30)
+
+
+### Bug Fixes
+
+* metadata fix ([#113](https://github.com/IKIM-Essen/RiboSnake/issues/113)) ([ffe4dd2](https://github.com/IKIM-Essen/RiboSnake/commit/ffe4dd2fb9fa42b141167dcd5e936fcad9fcd04e))
+* quick fix ([#111](https://github.com/IKIM-Essen/RiboSnake/issues/111)) ([da9fca1](https://github.com/IKIM-Essen/RiboSnake/commit/da9fca1810eb61a01598f5844f25be446826785f))
+
 ## [0.6.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.5.0...v0.6.0) (2023-11-16)
 
 
