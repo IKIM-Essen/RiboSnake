@@ -1,1 +1,1 @@
-Read length distributions as well as distributions of Q scores.
+Read length distributions as well as distributions of Q-scores.

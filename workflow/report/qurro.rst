@@ -1,1 +1,1 @@
-Visualisation of differentials created with songbird and visualised with QURRO.
+Visualization of differentials created with songbird and visualized with QURRO.
