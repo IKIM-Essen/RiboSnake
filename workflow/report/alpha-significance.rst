@@ -1,1 +1,2 @@
-Plot if the output of the alpha-significance pipeline of QIIME2.
+Plot of the output of the alpha-significance pipeline of QIIME2. The plot shows the value for the chosen diversity metrics on the y-axis and the chosen metadata column on the x-axis.
+Additionally statistical analysis values from Kruskal-Wallis analysis are computed. These values state, whether diversity changes between different metadata columns are significant.

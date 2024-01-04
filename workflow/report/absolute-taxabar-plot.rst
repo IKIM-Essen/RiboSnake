@@ -1,1 +1,1 @@
-Addition to the taxa-bar-plot showing the relative abundance of the microbacteria in the samples. Here the absolute abundance is depicted.
+Bar plot showing the absolute abundance of bacterial genera in the samples on a logarithmic scale.

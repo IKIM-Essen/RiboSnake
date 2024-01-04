@@ -25,6 +25,8 @@ while z < len(zipped_files):
     with zipfile.ZipFile(zipped_files[z], "r") as zip_ref:
         name = zipped_files[z].split("/")[-1]
         new_dir = str(snakemake.output) + "/" + name
+        if os.path.exists(new_dir):
+            shutil.rmtree(new_dir)
         zip_ref.extractall(os.path.splitext(new_dir)[0] + "/")
         os.remove(zipped_files[z])
     z = z + 1

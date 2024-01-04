@@ -1,2 +1,2 @@
 Heatmap depicting the simple presence or absence of a feature in a sample. It does not include any information about the frequency of the different 
-bacterial species. A good first overview if concerning the differences between the analysed samples.
+bacterial genera. A good first overview, concerning the differences between the analyzed samples.

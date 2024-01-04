@@ -33,6 +33,9 @@ Some important parameters you should check and set according to your own FASTQ-f
 The default parameters for filtering and truncation were validated with the help of a MOCK community and fitted to retrieve all bacteria from that community.
 
 In addition to that, you need to fit the metadata-parameters to your data. Please change the names of the used metadata-columns according to your information.
+Take special care of the "remove-columns" information. Here you can add the columns you don't want to have analyzed or the workflow can't anlyse. This can happen when
+all of the values in one column are unique or all the same. You should also look out for the information under "metadata-parameters" and "songbird" as well as "ancom".
+In every case you have to specify the column names based on your own data.
 
 If your metadata is not containing numeric values, please use the "reduced-analysis" option in the config file to run the workflow, as the workflow is currently not able to run only on categorical metadata for the full analysis version. We are going to fix that in the future.
 
@@ -44,6 +47,7 @@ Please make sure, that the names of your FASTQ files are correctly formatted. Th
 
 In the config file you can also set the input and output directory. You can either create a specific directory for your input data and then put that filepath in the config file, or you can put the path to an existing directory where the data is located.
 The data will then be copied to the workflow's data directory. The compressed and final file holding the results will be copied to the directory you specified in "output". It will also stay in the local "results" folder together with important intermediate results.
+The "data" folder is also not provided by the repository. It is the folder the fastq files are copied to before being used in the workflow. It is best if you create the folder inside the workflows folder structure. It must definitely be created on the machine, the workflow is running on.
 
 ### Step 3: Install Snakemake
 

@@ -1,1 +1,1 @@
-MultiQC report showing general statistics and summarizes the fastQC reports.
+MultiQC report showing general statistics and summarizes the FastQC reports as well as the Kraken2 analysis results.

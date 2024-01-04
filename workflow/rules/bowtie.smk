@@ -7,13 +7,14 @@ if config["bowtie"] == True:
             dirc=directory("resources/bowtie_DB/"),
         params:
             filename="bowtie_host_DB",
+            threads=config["threads"],
         log:
             "logs/bowtie_db.log",
         conda:
             "../envs/python.yaml"
         shell:
             "mkdir {output.dirc} \n"
-            "bowtie2-build {input} {output.dirc}/{params.filename}"
+            "bowtie2-build {input} {output.dirc}/{params.filename} -p {params.threads}"
 
     if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
@@ -24,6 +25,8 @@ if config["bowtie"] == True:
                 read2="data/{date}/{names}_L001_R2_001.fastq.gz",
             output:
                 temp("results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam"),
+            params:
+                threads=config["threads"],
             log:
                 "logs/{date}/bowtie/{names}_mapping.log",
             conda:
@@ -32,6 +35,7 @@ if config["bowtie"] == True:
                 "bowtie2 -p 8 -x {input.db}/bowtie_host_DB "
                 "-1 {input.read1} "
                 "-2 {input.read2} "
+                "-p {params.threads} "
                 "-S {output} "
                 "2> {log} "
 
@@ -43,12 +47,14 @@ if config["bowtie"] == True:
                 read1="data/{date}/{names}_L001_R1_001.fastq.gz",
             output:
                 temp("results/{date}/out/bowtie/{names}_mapped_and_unmapped.sam"),
+            params:
+                threads=config["threads"],
             log:
                 "logs/{date}/bowtie/{names}_mapping.log",
             conda:
                 "../envs/python.yaml"
             shell:
-                "bowtie2 -x {input.db}/bowtie_host_DB {input.read1} -S {output} "
+                "bowtie2 -x {input.db}/bowtie_host_DB {input.read1} -p {params.threads}  -S {output} "
                 "2> {log} "
 
     rule sam_to_bam:
