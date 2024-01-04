@@ -1,12 +1,12 @@
 rule get_database:
     output:
-        seq="resources/silva-138-99-seqs.qza",
-        tax="resources/silva-138-99-tax.qza",
+        #seq="resources/silva-138-99-seqs.qza",
+        #tax="resources/silva-138-99-tax.qza",
         genomic=temp("resources/ref-genome.fna.gz"),
-        kraken=temp("resources/minikraken2_v2_8GB_201904.tgz"),
+        kraken=temp("resources/filtering-database.tgz"),
     params:
-        seq=str(config["database"]["download-path-seq"]),
-        tax=str(config["database"]["download-path-tax"]),
+        #seq=str(config["database"]["download-path-seq"]),
+        #tax=str(config["database"]["download-path-tax"]),
         genomic=str(config["database"]["ref-genome"]),
         kraken=str(config["database"]["kraken-db"]),
     log:
@@ -16,9 +16,67 @@ rule get_database:
     shell:
         "cd resources; "
         "wget -O ref-genome.fna.gz {params.genomic}; "
-        "wget {params.kraken}; "
-        "wget {params.seq}; "
-        "wget {params.tax}; "
+        "wget -O filtering-database.tgz {params.kraken}; "
+        #"wget {params.seq}; "
+        #"wget {params.tax}; "
+
+
+if config["SILVA"] == True:
+    
+    rule get_SILVA:
+        output:
+            seq="resources/ref-seqs.qza",
+            tax="resources/ref-taxa.qza",
+        params:
+            seq=str(config["database"]["download-path-seq"]),
+            tax=str(config["database"]["download-path-tax"]),
+        log:
+            "logs/prep_SILVA.log",
+        conda:
+            "../envs/python.yaml"
+        shell:
+            "cd resources; "
+            "wget -O ref-seqs.qza {params.seq}; "
+            "wget -O ref-taxa.qza {params.tax}; "
+
+
+if config["Greengenese"] == True:
+
+    rule get_greengenes:
+        output:
+            seq="resources/ref-seqs.qza",
+            tax="resources/ref-taxa.qza",
+        params:
+            seq=str(config["database"]["gg2-seq"]),
+            tax=str(config["database"]["gg2-tax"]),
+        log:
+            "logs/prep_Greengenes.log",
+        conda:
+            "../envs/python.yaml"
+        shell:
+            "cd resources; "
+            "wget -O ref-seqs.qza {params.seq}; "
+            "wget -O ref-taxa.qza {params.tax}; "
+
+
+if config["NCBI"] == True:
+
+    rule get_NCBI_ref:
+        output:
+            seq="resources/ref-seqs.qza",
+            tax="resources/ref-taxa.qza",
+        params:
+            query=config["database"]["NCBI-query"]
+        log:
+            "logs/prep_NCBI.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime rescript get-ncbi-data "
+            "--p-query {params.query} "
+            "--o-sequences {output.seq} "
+            "--o-taxonomy {output.tax} "
+            "--verbose 2> {log} "
 
 
 # rule get_SILVA:
@@ -103,9 +161,9 @@ rule import_ref_genome:
 
 rule unzip_kraken:
     input:
-        "resources/minikraken2_v2_8GB_201904.tgz",
+        "resources/filtering-database.tgz",
     output:
-        temp(directory("resources/minikraken2_v2_8GB_201904_UPDATE")),
+        temp(directory("resources/filtering-database")),
     log:
         "logs/unzip_kraken_db.log",
     conda:

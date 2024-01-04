@@ -4,7 +4,6 @@ if config["bowtie"] == True:
         input:
             "resources/ref-genome_upper.fna",
         output:
-            #files="resources/bowtie_host_DB",
             dirc=directory("resources/bowtie_DB/"),
         params:
             filename="bowtie_host_DB",
