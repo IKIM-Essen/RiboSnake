@@ -1,20 +1,21 @@
 # This file should contain everything to configure the workflow on a global scale.
 # In case of sample based data, it should be complemented by a samples.tsv file that contains
 # one row per sample. It can be parsed easily via pandas.
+# This file contains the default parameters specified for environmental samples like wastewater.
 pepfile: config/pep/config.yaml
 
 # If testing set true
-testing: True
+testing: False
 # If data-preparation should be enabled
-include-data-prep: False
+include-data-prep: True
 # Modus: If true, analysis will be done with DADA2 instead of vsearch
-DADA2: False
+DADA2: True
 # Longitudinal analysis, for further parameters look at line 204 of this document
 longitudinal: False
 # Shorter analysis for small number of samples or samples without metadata
 reduced-analysis: False
 # Whether to use bowtie2 for excluding human host contamination or not
-bowtie: False
+bowtie: True
 # Set if environmental or human data is processed
 data-type: environmental
 # Paths to the directories holding the fastqs
@@ -24,11 +25,11 @@ output: ../report/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
 # Remove columns from analysis
-remove-columns: ["site_name"]
+remove-columns: ["site-name"]
 # Paths to the databases used for classification and taxonomy
 database:
-  download-path-seq: resources/silva-138-99-seqs.qza
-  download-path-tax: resources/silva-138-99-tax.qza
+  download-path-seq: https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
+  download-path-tax: https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza
   kraken-db: ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/old/minikraken2_v2_8GB_201904.tgz
   ref-genome: https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
 # Forward and reverse adapters used for sequencing
@@ -43,36 +44,28 @@ primertrimming:
   # Maximum allowed error rate
   error_rate: 0.1
   # Remove multiple occurrences of an adapter if it is repeated, up to `times` times
-  rep_times: 1
+  rep_times: 2
   # Require at least `overlap` bases of overlap between read and adapter for an adapter to be found
-  overlap: 3
+  overlap: 5
   # Discard reads shorter than specified value
-  min_length: 6
+  min_length: 8
 sequence_joining:
   # Minimum overlap length of forward and reverse reads for joining.
   seq_join_length: 30
   # Sequences shorter than minlen after truncation are discarded. 
   minlen: 1
-  # Maximum number of mismatches in the forward/reverse read overlap for joining. 
+  # Maximum number of mismatches in the forward/reverse read overlap for joining. Increase it, if you want reads to be merged that are small/won't match in the first place.
   maxdiffs: 10
-  # The minimum allowed quality score in the input.
-  qmin: 0
-  # The minimum allowed quality score to use in output.
-  qminout: 0
-  # The maximum allowed quality score in the input.
-  qmax: 41
-  # The maximum allowed quality score to use in output.
-  qmaxout: 41
   # Number of threads to use
-  threads: 1
+  threads: 4
 # Threads to be used by the different methods
-threads: 1
+threads: 15
 # Parameters necessary for filtering
 filtering:
   # Relative threshold for the abundance filtering
-  relative-abundance-filter: 0.001
+  relative-abundance-filter: 0.0005
   # Minimum length of a sequence to be retained
-  min-seq-length: 200
+  min-seq-length: 140
   # Minimum quality score for sequences to pass filter
   phred-score: 20
   # Maximum number of undetermined base calls ("N")
@@ -87,9 +80,9 @@ filtering:
   perc-query-aligned: 0.93
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: extract_group_no
-  beta-metadata-column: extract_group_no
-  gneiss-metadata-column: site_name
+  taxa-heatmap-column: extract-group-no
+  beta-metadata-column: extract-group-no
+  gneiss-metadata-column: site-name
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification
@@ -128,7 +121,7 @@ diversity:
     diversity-metric: ["pielou_e"]
     # Metric to be computed
     phylogeny-metric: ["faith_pd"]
-    # Alpha-correlation method
+    # Alpha-correlation method: spearman or pearson
     correlation-method: 'spearman'
   # Parameters for beta-diversity analysis
   beta:
@@ -137,7 +130,7 @@ diversity:
     # A pseudocount to handle zeros for compositional metrics
     diversity-pseudocount: 1
     # The number of concurrent jobs to use in performing this calculation
-    diversity-n-jobs: 1
+    diversity-n-jobs: 3
     # Correlation test to be applied ('spearman', 'pearson')
     correlation-method: 'spearman'
     # The number of permutations to be run when computing p-values
@@ -154,9 +147,9 @@ dada2-paired:
   # Position at which reverse reads should be truncated at the 3' end due to low quality
   trunc-len-r: 240
   # Position at which forward reads should be truncated at the 5' end due to low quality
-  trim-left-f: 0
+  trim-left-f: 10
   # Position at which reverse reads should be truncated at the 5' end due to low quality
-  trim-left-r: 0
+  trim-left-r: 10
   # Forward reads with number of expected errors higher than this value will be discarded
   max-ee-f: 2.0
   # Reverse reads with number of expected errors higher than this value will be discarded.
@@ -204,16 +197,16 @@ songbird:
   # Impacts how often a "measurement" is taken for these plots
   summary_interval: 1
   # Formula
-  formula: "toc"
+  formula: "extract_concen+elevation"
 # Feature classification with ancom
 ancom:
   # Catgorical metadata column to analyse
-  metadata-column: ["extract_group_no"]
+  metadata-column: ["extract-group-no"]
 # Parameters for longitudinal analysis, used when longitudinal is set to True
 longitudinal-params:
   # Column with continuous data to use primarily
-  state_column: "average_soil_temperature"
+  state_column: "temperature"
   # Column to name the samples
-  individual_id_column: "sample_name"
+  individual_id_column: "name_abbreviation"
   # Formula for linear-mixed-effect analysis
-  metric: extraction_date
+  formula: "faith-pd~temperature"

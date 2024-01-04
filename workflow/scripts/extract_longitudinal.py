@@ -10,6 +10,7 @@ import sys
 
 
 sys.stderr = open(snakemake.log[0], "w")
+
 # Function to extract results from the qiime2 artifacts, already saved in a zip file
 
 """print("results/2022-02-24/visual/unzipped/")
@@ -37,12 +38,28 @@ while z < len(subdir):
         z = 1 + z"""
 # Iterating through the different subdirectories and copying the important information into the output directory
 b = 0
-path_name = str(snakemake.output)
-# print(path_name)
-plot_name = path_name.split("/")[-1]
+print(len(subdir))
 while b < len(subdir):
     datadir = subdir[b] + "data/"
-    if plot_name == subdir[b].split("/")[-2]:
+    if "feature" in subdir[b]:
+        print(subdir[b])
+        print("feature")
         html = datadir
-        shutil.copytree(html, str(snakemake.output))
+        shutil.copytree(html, snakemake.output.feature)
+    if "accuracy" in subdir[b]:
+        print(subdir[b])
+        print("acc")
+        html = datadir
+        shutil.copytree(html, snakemake.output.accuracy)
+    if "volatility" in subdir[b]:
+        print(subdir[b])
+        print("gen")
+        html = datadir
+        shutil.copytree(html, snakemake.output.general)
+    if "lme" in subdir[b]:
+        print(subdir[b])
+        print("lme")
+        html = datadir
+        shutil.copytree(html, snakemake.output.lme)
     b = b + 1
+    print(b)

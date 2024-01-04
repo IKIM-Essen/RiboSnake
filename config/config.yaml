@@ -8,7 +8,9 @@ testing: False
 # If data-preparation should be enabled
 include-data-prep: True
 # Modus: If true, analysis will be done with DADA2 instead of vsearch
-DADA2: True
+DADA2: False
+# Longitudinal analysis, for further parameters look at line 204 of this document
+longitudinal: False
 # Shorter analysis for small number of samples or samples without metadata
 reduced-analysis: False
 # Whether to use bowtie2 for excluding human host contamination or not
@@ -22,7 +24,7 @@ output: ../report/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
 # Remove columns from analysis
-remove-columns: ["site-name"]
+remove-columns: ["site_name"]
 # Paths to the databases used for classification and taxonomy
 database:
   download-path-seq: https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
@@ -77,9 +79,9 @@ filtering:
   perc-query-aligned: 0.93
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: extract-group-no
-  beta-metadata-column: extract-group-no
-  gneiss-metadata-column: site-name
+  taxa-heatmap-column: extract_group_no
+  beta-metadata-column: extract_group_no
+  gneiss-metadata-column: site_name
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification
@@ -198,4 +200,13 @@ songbird:
 # Feature classification with ancom
 ancom:
   # Catgorical metadata column to analyse
-  metadata-column: ["extract-group-no"]
+  metadata-column: ["extract_group_no"]
+# Parameters for longitudinal analysis, used when longitudinal is set to True
+longitudinal-params:
+  # Column with continuous data to use primarily
+  state_column: "temperature"
+  # Column to name the samples
+  individual_id_column: "name_abbreviation"
+  # Formula for linear-mixed-effect analysis
+  #formula: faith-pd~temperature
+  metric: extraction_date
