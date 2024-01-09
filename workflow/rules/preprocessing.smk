@@ -40,7 +40,7 @@ if config["SILVA"] == True:
             "wget -O ref-taxa.qza {params.tax}; "
 
 
-if config["Greengenese"] == True:
+if config["Greengenes"] == True:
 
     rule get_greengenes:
         output:
