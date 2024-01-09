@@ -63,7 +63,7 @@ if (
 
 if (
     config["NCBI"] == True
-    config["NCBI"] == False
+    config["SILVA"] == False
     config["Greengenes"] == False
 ):
 
