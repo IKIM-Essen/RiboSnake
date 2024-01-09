@@ -15,7 +15,11 @@ rule get_database:
         "wget -O filtering-database.tgz {params.kraken}; "
 
 
-if config["SILVA"] == True and config["Greengenes"] == False and config["NCBI"] == False:
+if (
+    config["SILVA"] == True
+    config["Greengenes"] == False
+    config["NCBI"] == False
+):
 
     rule get_SILVA:
         output:
@@ -34,7 +38,11 @@ if config["SILVA"] == True and config["Greengenes"] == False and config["NCBI"] 
             "wget -O ref-taxa.qza {params.tax}; "
 
 
-if config["Greengenes"] == True and config["SILVA"] == False and config["NCBI"] == False:
+if (
+    config["Greengenes"] == True
+    config["SILVA"] == False
+    config["NCBI"] == False
+):
 
     rule get_greengenes:
         output:
@@ -53,7 +61,11 @@ if config["Greengenes"] == True and config["SILVA"] == False and config["NCBI"] 
             "wget -O ref-taxa.qza {params.tax}; "
 
 
-if config["NCBI"] == True and config["NCBI"] == False and config["Greengenes"] == False:
+if (
+    config["NCBI"] == True
+    config["NCBI"] == False
+    config["Greengenes"] == False
+):
 
     rule get_NCBI_ref:
         output:
