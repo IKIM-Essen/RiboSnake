@@ -22,7 +22,7 @@ rule get_database:
 
 
 if config["SILVA"] == True:
-    
+
     rule get_SILVA:
         output:
             seq="resources/ref-seqs.qza",
@@ -66,7 +66,7 @@ if config["NCBI"] == True:
             seq="resources/ref-seqs.qza",
             tax="resources/ref-taxa.qza",
         params:
-            query=config["database"]["NCBI-query"]
+            query=config["database"]["NCBI-query"],
         log:
             "logs/prep_NCBI.log",
         conda:
