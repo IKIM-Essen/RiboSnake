@@ -1,2 +1,2 @@
 QIIME2 report holding basic information concerning the number of features found in the samples, sampling depth and sample frequency.
-These statistics are calculated after filtering steps without abundance filtering.
+These statistics are calculated after all filtering steps including abundance filtering.
