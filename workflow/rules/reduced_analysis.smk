@@ -272,32 +272,34 @@ rule absolute_taxa:
         "../scripts/absolute_taxabarplot.py"
 
 
-rule biom_file:
-    input:
-        table="results/{date}/out/table-cluster-filtered.qza",
-        taxonomy="results/{date}/out/taxonomy.qza",
-    output:
-        table_binary="results/{date}/out/table_binary.qza",
-        table_biom=directory("results/{date}/out/biom_table/"),
-        taxa_biom=directory("results/{date}/out/taxonomy_biom/"),
-        binary_biom=directory("results/{date}/out/binary_biom/"),
-    log:
-        "logs/{date}/outputs/biom-file.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime tools export "
-        "--input-path {input.table} "
-        "--output-path {output.table_biom} \n"
-        "qiime tools export "
-        "--input-path {input.taxonomy} "
-        "--output-path {output.taxa_biom} \n"
-        "qiime feature-table presence-absence "
-        "--i-table {input.table} "
-        "--o-presence-absence-table {output.table_binary} \n"
-        "qiime tools export "
-        "--input-path {output.table_binary} "
-        "--output-path {output.binary_biom}"
+if config["DADA2"] == False:
+
+    rule biom_file:
+        input:
+            table="results/{date}/out/table-cluster-filtered.qza",
+            taxonomy="results/{date}/out/taxonomy.qza",
+        output:
+            table_binary="results/{date}/out/table_binary.qza",
+            table_biom=directory("results/{date}/out/biom_table/"),
+            taxa_biom=directory("results/{date}/out/taxonomy_biom/"),
+            binary_biom=directory("results/{date}/out/binary_biom/"),
+        log:
+            "logs/{date}/outputs/biom-file.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime tools export "
+            "--input-path {input.table} "
+            "--output-path {output.table_biom} \n"
+            "qiime tools export "
+            "--input-path {input.taxonomy} "
+            "--output-path {output.taxa_biom} \n"
+            "qiime feature-table presence-absence "
+            "--i-table {input.table} "
+            "--o-presence-absence-table {output.table_binary} \n"
+            "qiime tools export "
+            "--input-path {output.table_binary} "
+            "--output-path {output.binary_biom}"
 
 
 rule unzip_reports:
