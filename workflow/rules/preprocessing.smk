@@ -16,9 +16,9 @@ rule get_database:
 
 
 if (
-    config["SILVA"] == True
-    config["Greengenes"] == False
-    config["NCBI"] == False
+    config["database"]["Silva"] == True,
+    config["database"]["Greengenes"] == False,
+    config["database"]["NCBI"] == False,
 ):
 
     rule get_SILVA:
@@ -39,9 +39,9 @@ if (
 
 
 if (
-    config["Greengenes"] == True
-    config["SILVA"] == False
-    config["NCBI"] == False
+    config["database"]["Greengenes"] == True,
+    config["database"]["Silva"] == False,
+    config["database"]["NCBI"] == False,
 ):
 
     rule get_greengenes:
@@ -62,9 +62,9 @@ if (
 
 
 if (
-    config["NCBI"] == True
-    config["SILVA"] == False
-    config["Greengenes"] == False
+    config["database"]["NCBI"] == True,
+    config["database"]["Silva"] == False,
+    config["database"]["Greengenes"] == False,
 ):
 
     rule get_NCBI_ref:
