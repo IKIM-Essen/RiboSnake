@@ -1,12 +1,8 @@
 rule get_database:
     output:
-        #seq="resources/silva-138-99-seqs.qza",
-        #tax="resources/silva-138-99-tax.qza",
         genomic=temp("resources/ref-genome.fna.gz"),
         kraken=temp("resources/filtering-database.tgz"),
     params:
-        #seq=str(config["database"]["download-path-seq"]),
-        #tax=str(config["database"]["download-path-tax"]),
         genomic=str(config["database"]["ref-genome"]),
         kraken=str(config["database"]["kraken-db"]),
     log:
@@ -17,8 +13,6 @@ rule get_database:
         "cd resources; "
         "wget -O ref-genome.fna.gz {params.genomic}; "
         "wget -O filtering-database.tgz {params.kraken}; "
-        #"wget {params.seq}; "
-        #"wget {params.tax}; "
 
 
 if config["SILVA"] == True:

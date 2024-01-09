@@ -200,11 +200,11 @@ if config["datatype"] == "SampleData[SequencesWithQuality]" and config["DADA2"] 
         conda:
             "../envs/qiime-only-env.yaml"
         shell:
-            "qiime dada2 denoise-paired "
+            "qiime dada2 denoise-single "
             "--i-demultiplexed-seqs {input} "
-            "--p-trunc-len {params.trunc_len_f} "
-            "--p-trim-left {params.trim_left_f} "
-            "--p-max-ee {params.max_ee_f} "
+            "--p-trunc-len {params.trunc_len} "
+            "--p-trim-left {params.trim_left} "
+            "--p-max-ee {params.max_ee} "
             "--p-trunc-q {params.trunc_q} "
             "--p-pooling-method {params.pooling_method} "
             "--p-chimera-method {params.chimera_method} "
@@ -303,7 +303,7 @@ rule frequency_after_abundancefilter:
     output:
         report(
             directory("results/{date}/visual/report/table-cluster-filtered"),
-            caption="../report/feature-table.rst",
+            caption="../report/feature-table-afterabundance.rst",
             category="4. Qualitycontrol",
             htmlindex="index.html",
         ),
