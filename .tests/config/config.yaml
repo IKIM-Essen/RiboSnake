@@ -27,7 +27,7 @@ metadata: config/pep/metadata.txt
 remove-columns: ["site_name"]
 # Paths to the databases used for classification and taxonomy
 database:
-  SILVA: True 
+  Silva: True 
   download-path-seq: resources/silva-138-99-seqs.qza
   download-path-tax: resources/silva-138-99-tax.qza
   kraken-db: ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/old/minikraken2_v2_8GB_201904.tgz
