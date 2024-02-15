@@ -14,7 +14,6 @@ rule get_database:
         "wget -O ref-genome.fna.gz {params.genomic}; "
         "wget -O filtering-database.tgz {params.kraken}; "
 
-
 """
 if (
     config["database"]["Silva"] == True,
@@ -121,8 +120,6 @@ if (
 #       "--i-rna-sequences {input} "
 #       "--o-dna-sequences {output} "
 #       "2> {log}"
-
-
 rule unzip_ref_gen:
     input:
         "resources/ref-genome.fna.gz",
