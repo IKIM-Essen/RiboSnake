@@ -14,7 +14,7 @@ rule get_database:
         "wget -O ref-genome.fna.gz {params.genomic}; "
         "wget -O filtering-database.tgz {params.kraken}; "
 
-
+"""
 if (
     config["database"]["Silva"] == True,
     config["database"]["Greengenes"] == False,
@@ -84,7 +84,7 @@ if (
             "--o-taxonomy {output.tax} "
             "--verbose 2> {log} "
 
-
+"""
 # rule get_SILVA:
 #    output:
 #        seq_rna=temp("resources/silva-138.1-ssu-nr99-rna-seqs.qza"),
