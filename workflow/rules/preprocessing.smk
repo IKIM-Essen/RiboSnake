@@ -14,6 +14,7 @@ rule get_database:
         "wget -O ref-genome.fna.gz {params.genomic}; "
         "wget -O filtering-database.tgz {params.kraken}; "
 
+
 """
 if (
     config["database"]["Silva"] == True,
