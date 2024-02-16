@@ -26,8 +26,8 @@ rule chimera_only:
 rule chimera_taxonomy:
     input:
         query="results/{date}/out/rep-seqs-chimeras.qza",
-        reference_reads="resources/silva-138-99-seqs.qza",
-        reference_taxonomy="resources/silva-138-99-tax.qza",
+        reference_reads="resources/ref-seqs.qza",
+        reference_taxonomy="resources/ref-taxa.qza",
     output:
         "results/{date}/out/chimera_taxonomy.qza",
     params:

@@ -45,8 +45,8 @@ if config["DADA2"] == False:
 rule classification:
     input:
         query="results/{date}/out/seq-cluster-filtered.qza",
-        reference_reads="resources/silva-138-99-seqs.qza",
-        reference_taxonomy="resources/silva-138-99-tax.qza",
+        reference_reads="resources/ref-seqs.qza",
+        reference_taxonomy="resources/ref-taxa.qza",
     output:
         tax="results/{date}/out/taxonomy.qza",
         search="results/{date}/out/blast-search-results.qza",

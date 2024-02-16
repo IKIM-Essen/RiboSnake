@@ -1,12 +1,8 @@
 rule get_database:
     output:
-        seq="resources/silva-138-99-seqs.qza",
-        tax="resources/silva-138-99-tax.qza",
-        genomic="resources/GRCh38_latest_genomic.fna.gz",
-        kraken="resources/minikraken2_v2_8GB_201904.tgz",
+        genomic=temp("resources/ref-genome.fna.gz"),
+        kraken=temp("resources/filtering-database.tgz"),
     params:
-        seq=str(config["database"]["download-path-seq"]),
-        tax=str(config["database"]["download-path-tax"]),
         genomic=str(config["database"]["ref-genome"]),
         kraken=str(config["database"]["kraken-db"]),
     log:
@@ -15,31 +11,8 @@ rule get_database:
         "../envs/python.yaml"
     shell:
         "cd resources; "
-        "wget {params.genomic}; "
-        "wget {params.kraken}; "
-        "wget {params.seq}; "
-        "wget {params.tax}; "
-
-
-# rule get_SILVA:
-#    output:
-#        seq_rna=temp("resources/silva-138.1-ssu-nr99-rna-seqs.qza"),
-#        tax=temp("resources/silva-138-99-tax.qza"),
-#    params:
-#        version="138.1",
-#        target="SSURef_NR99",
-#    log:
-#        "logs/prerp_SILVA.log",
-#    conda:
-#        "../envs/qiime-only-env.yaml"
-#    shell:
-#        "qiime rescript get-silva-data "
-#        "--p-version {params.version} "
-#        "--p-target {params.target} "
-#        "--p-include-species-labels "
-#        "--o-silva-sequences {output.seq_rna} "
-#        "--o-silva-taxonomy {output.tax} "
-#        "2> {log}"
+        "wget -O ref-genome.fna.gz {params.genomic}; "
+        "wget -O filtering-database.tgz {params.kraken}; "
 
 
 # rule rna_to_dna_SILVA:
@@ -56,13 +29,11 @@ rule get_database:
 #       "--i-rna-sequences {input} "
 #       "--o-dna-sequences {output} "
 #       "2> {log}"
-
-
 rule unzip_ref_gen:
     input:
-        "resources/GRCh38_latest_genomic.fna.gz",
+        "resources/ref-genome.fna.gz",
     output:
-        temp("resources/GRCh38_latest_genomic.fna"),
+        temp("resources/ref-genome.fna"),
     log:
         "logs/unzip_ref_gen.log",
     conda:
@@ -73,9 +44,9 @@ rule unzip_ref_gen:
 
 rule lower_to_upper:
     input:
-        "resources/GRCh38_latest_genomic.fna",
+        "resources/ref-genome.fna",
     output:
-        temp("resources/GRCh38_latest_genomic_upper.fna"),
+        temp("resources/ref-genome_upper.fna"),
     log:
         "logs/lower_to_upper_fasta.log",
     conda:
@@ -86,9 +57,9 @@ rule lower_to_upper:
 
 rule import_ref_genome:
     input:
-        "resources/GRCh38_latest_genomic_upper.fna",
+        "resources/ref-genome_upper.fna",
     output:
-        temp("resources/GRCh38_latest_genomic_upper.qza"),
+        temp("resources/ref-genome_upper.qza"),
     log:
         "logs/import_ref_gen.log",
     conda:
@@ -103,15 +74,22 @@ rule import_ref_genome:
 
 rule unzip_kraken:
     input:
-        "resources/minikraken2_v2_8GB_201904.tgz",
+        "resources/filtering-database.tgz",
     output:
-        temp(directory("resources/minikraken2_v2_8GB_201904_UPDATE")),
+        temp(directory("resources/filtering-database")),
     log:
         "logs/unzip_kraken_db.log",
     conda:
         "../envs/python.yaml"
     shell:
-        "tar -zxvf {input} -C resources;"
+        "cd resources; "
+        "mkdir filtering-database; "
+        "cd ..;"
+        "tar -zxvf {input} --directory resources/filtering-database;"
+        "cd resources/filtering-database;"
+        "cp */* .;"
+        "cd ..;"
+        "rm -rf filtering-database/*/;"
 
 
 if config["bowtie"] == False:
