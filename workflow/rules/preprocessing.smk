@@ -14,97 +14,6 @@ rule get_database:
         "wget -O ref-genome.fna.gz {params.genomic}; "
         "wget -O filtering-database.tgz {params.kraken}; "
 
-"""
-if (
-    config["database"]["Silva"] == True,
-    config["database"]["Greengenes"] == False,
-    config["database"]["NCBI"] == False,
-):
-
-    rule get_SILVA:
-        output:
-            seq="resources/ref-seqs.qza",
-            tax="resources/ref-taxa.qza",
-        params:
-            seq=str(config["database"]["download-path-seq"]),
-            tax=str(config["database"]["download-path-tax"]),
-        log:
-            "logs/prep_SILVA.log",
-        conda:
-            "../envs/python.yaml"
-        shell:
-            "cd resources; "
-            "wget -O ref-seqs.qza {params.seq}; "
-            "wget -O ref-taxa.qza {params.tax}; "
-
-
-if (
-    config["database"]["Greengenes"] == True,
-    config["database"]["Silva"] == False,
-    config["database"]["NCBI"] == False,
-):
-
-    rule get_greengenes:
-        output:
-            seq="resources/ref-seqs.qza",
-            tax="resources/ref-taxa.qza",
-        params:
-            seq=str(config["database"]["gg2-seq"]),
-            tax=str(config["database"]["gg2-tax"]),
-        log:
-            "logs/prep_Greengenes.log",
-        conda:
-            "../envs/python.yaml"
-        shell:
-            "cd resources; "
-            "wget -O ref-seqs.qza {params.seq}; "
-            "wget -O ref-taxa.qza {params.tax}; "
-
-
-if (
-    config["database"]["NCBI"] == True,
-    config["database"]["Silva"] == False,
-    config["database"]["Greengenes"] == False,
-):
-
-    rule get_NCBI_ref:
-        output:
-            seq="resources/ref-seqs.qza",
-            tax="resources/ref-taxa.qza",
-        params:
-            query=config["database"]["NCBI-query"],
-        log:
-            "logs/prep_NCBI.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        shell:
-            "qiime rescript get-ncbi-data "
-            "--p-query {params.query} "
-            "--o-sequences {output.seq} "
-            "--o-taxonomy {output.tax} "
-            "--verbose 2> {log} "
-
-"""
-# rule get_SILVA:
-#    output:
-#        seq_rna=temp("resources/silva-138.1-ssu-nr99-rna-seqs.qza"),
-#        tax=temp("resources/silva-138-99-tax.qza"),
-#    params:
-#        version="138.1",
-#        target="SSURef_NR99",
-#    log:
-#        "logs/prerp_SILVA.log",
-#    conda:
-#        "../envs/qiime-only-env.yaml"
-#    shell:
-#        "qiime rescript get-silva-data "
-#        "--p-version {params.version} "
-#        "--p-target {params.target} "
-#        "--p-include-species-labels "
-#        "--o-silva-sequences {output.seq_rna} "
-#        "--o-silva-taxonomy {output.tax} "
-#        "2> {log}"
-
 
 # rule rna_to_dna_SILVA:
 #    input:
@@ -173,7 +82,14 @@ rule unzip_kraken:
     conda:
         "../envs/python.yaml"
     shell:
-        "tar -zxvf {input} -C resources;"
+        "cd resources; "
+        "mkdir filtering-database; "
+        "cd ..;"
+        "tar -zxvf {input} --directory resources/filtering-database;"
+        "cd resources/filtering-database;"
+        "cp */* .;"
+        "cd ..;"
+        "rm -rf filtering-database/*/;"
 
 
 if config["bowtie"] == False:
