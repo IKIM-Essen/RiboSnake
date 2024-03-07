@@ -2,7 +2,7 @@ if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
     rule kraken_analysis:
         input:
-            db="resources/minikraken2_v2_8GB_201904_UPDATE/",
+            db="resources/filtering-database/",
             read1="data/{date}/{sample}_L001_R1_001.fastq.gz",
             read2="data/{date}/{sample}_L001_R2_001.fastq.gz",
         output:
@@ -24,7 +24,7 @@ if config["datatype"] == "SampleData[SequencesWithQuality]":
 
     rule kraken_analysis:
         input:
-            db="resources/minikraken2_v2_8GB_201904_UPDATE/",
+            db="resources/filtering-database/",
             read="data/{date}/{sample}_L001_R1_001.fastq.gz",
         output:
             report="results/{date}/out/kraken/{sample}.kreport2",
@@ -74,4 +74,4 @@ rule multiqc_report:
     log:
         "logs/{date}/multiqc.log",
     wrapper:
-        "v1.23.3/bio/multiqc"
+        "v3.3.3/bio/multiqc"

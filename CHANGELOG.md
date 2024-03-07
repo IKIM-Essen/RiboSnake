@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.7.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.6.1...v0.7.0) (2024-02-16)
+
+
+### Features
+
+* visual update ([#115](https://github.com/IKIM-Essen/RiboSnake/issues/115)) ([1f2d2bf](https://github.com/IKIM-Essen/RiboSnake/commit/1f2d2bfc6bc1ecbc46f9d1900b362ddc1ff232a1))
+
+
+### Bug Fixes
+
+* multiqc version ([#117](https://github.com/IKIM-Essen/RiboSnake/issues/117)) ([1a15959](https://github.com/IKIM-Essen/RiboSnake/commit/1a159592769e39a0faecfaf6134614f45d988db4))
+
 ## [0.6.1](https://github.com/IKIM-Essen/RiboSnake/compare/v0.6.0...v0.6.1) (2023-11-30)
 
 
