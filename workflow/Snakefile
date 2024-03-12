@@ -53,6 +53,21 @@ if config["longitudinal"]:
     include: "rules/longitudinal.smk"
 
 
+if config["database"]["Silva"]:
+
+    include: "rules/get_SILVA_DB.smk"
+
+
+if config["database"]["Greengenes"]:
+
+    include: "rules/get_Greengenes_DB.smk"
+
+
+if config["database"]["NCBI"]:
+
+    include: "rules/get_NCBI_DB.smk"
+
+
 rule all:
     input:
         expand(
