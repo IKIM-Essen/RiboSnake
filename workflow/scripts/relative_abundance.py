@@ -40,8 +40,8 @@ while b < len(subdir):
 # Read the specific csv holding the information, creating a dataframe, adding up all feature frequencies
 datadir = str(snakemake.output.feature_table) + "/"
 csv = datadir + "sample-frequency-detail.csv"
-frequency = pd.read_csv(csv, header = None, delimiter=",")
-frequency.columns = ["Sample","Abundance"]
+frequency = pd.read_csv(csv, header=None, delimiter=",")
+frequency.columns = ["Sample", "Abundance"]
 number = frequency["Abundance"].sum()
 # Creating the abundance threshold and storing it in an output file
 abundance = float(str(snakemake.params))
