@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.8.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.7.0...v0.8.0) (2024-03-18)
+
+
+### Features
+
+* Rescript db qiime update ([#122](https://github.com/IKIM-Essen/RiboSnake/issues/122)) ([22b5519](https://github.com/IKIM-Essen/RiboSnake/commit/22b55193d7e5633a90c35acd2fb60758481f7e85))
+
+
+### Bug Fixes
+
+* added databases to snakefile ([#119](https://github.com/IKIM-Essen/RiboSnake/issues/119)) ([70e8b12](https://github.com/IKIM-Essen/RiboSnake/commit/70e8b12c151212ab0950d278623e766aa2c437bb))
+* Rescript fix ([#121](https://github.com/IKIM-Essen/RiboSnake/issues/121)) ([9542bd2](https://github.com/IKIM-Essen/RiboSnake/commit/9542bd26935ca52ed9c12d2f0eac04b56bf66323))
+
 ## [0.7.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.6.1...v0.7.0) (2024-02-16)
 
 
