@@ -5,11 +5,11 @@ sys.stderr = open(snakemake.log[0], "w")
 whuman = str(snakemake.params.visual_wh)
 wohuman = str(snakemake.params.visual_woh)
 
-whuman_df = pd.read_csv(whuman, sep=",", header=0, index_col=0)
-wohuman_df = pd.read_csv(wohuman, sep=",", header=0, index_col=0)
+whuman_df = pd.read_csv(whuman, sep=",", header=None, index_col=0)
+wohuman_df = pd.read_csv(wohuman, sep=",", header=None, index_col=0)
 
-whuman_df.rename(columns={"0": "whuman"}, inplace=True)
-wohuman_df.rename(columns={"0": "wohuman"}, inplace=True)
+whuman_df.columns = ["whuman"]
+wohuman_df.columns = ["wohuman"]
 
 combined = pd.concat([whuman_df, wohuman_df], axis=1)
 
