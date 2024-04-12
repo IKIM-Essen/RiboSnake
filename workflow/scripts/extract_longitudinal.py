@@ -38,28 +38,18 @@ while z < len(subdir):
         z = 1 + z"""
 # Iterating through the different subdirectories and copying the important information into the output directory
 b = 0
-print(len(subdir))
 while b < len(subdir):
     datadir = subdir[b] + "data/"
     if "feature" in subdir[b]:
-        print(subdir[b])
-        print("feature")
         html = datadir
         shutil.copytree(html, snakemake.output.feature)
     if "accuracy" in subdir[b]:
-        print(subdir[b])
-        print("acc")
         html = datadir
         shutil.copytree(html, snakemake.output.accuracy)
     if "volatility" in subdir[b]:
-        print(subdir[b])
-        print("gen")
         html = datadir
         shutil.copytree(html, snakemake.output.general)
     if "lme" in subdir[b]:
-        print(subdir[b])
-        print("lme")
         html = datadir
         shutil.copytree(html, snakemake.output.lme)
     b = b + 1
-    print(b)
