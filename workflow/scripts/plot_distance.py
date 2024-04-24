@@ -5,6 +5,7 @@ import pandas as pd
 import seaborn as sb
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 sys.stderr = open(snakemake.log[0], "w")
 
@@ -25,12 +26,30 @@ while i < len(directories):
             header=0,
             index_col=0,
         )
-        matrix = np.triu(df)
-        fig, ax = plt.subplots(figsize=(20, 15))
-        heatmap = sb.heatmap(
-            df, mask=matrix, cbar_kws={"label": "Distance"}, annot=True, fmt=".1f"
+        # Set the diagonal and lower triangle to NaN
+        df.values[np.tril_indices_from(df)] = np.nan
+
+        # Create a triangular matrix plot for the lower triangle
+        fig = go.Figure(data=go.Heatmap(
+            z=df.values,
+            x=df.columns,
+            y=df.index,
+            colorscale='Viridis',  # Choose a colorscale
+            zmin=0,  # Minimum value for color scale
+            zmax=df.max().max(),  # Maximum value for color scale
+            hoverongaps=False,  # Do not show hover information for NaN values
+            colorbar=dict(
+                title='Distance',  # Add a title to the colorbar
+            )
+        ))
+
+        # Update the layout
+        fig.update_layout(
+            title='Beta diversity distance matrix',
+            xaxis_title='Sample Names',
+            yaxis_title='Sample Names'
         )
-        heatmap.set(xlabel="Samplename", ylabel="Samplename")
-        figure = heatmap.get_figure()
-        figure.savefig(str(snakemake.output), dpi=400)
+
+        # Save the plot as an HTML file
+        fig.write_html(str(snakemake.output))
     i = i + 1
