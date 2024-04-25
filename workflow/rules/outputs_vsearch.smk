@@ -301,12 +301,12 @@ if config["longitudinal"] == False:
 
     rule snakemake_report:
         input:
-            "results/{date}/visual/heatmap_binary.png",
+            "results/{date}/visual/heatmap_binary.html",
             "results/{date}/visual/report/beta-rarefaction.svg",
             "results/{date}/visual/report/heatmap.svg",
             "results/{date}/visual/unzipped",
             "results/{date}/visual/report/multiqc.html",
-            "results/{date}/visual/absolute-taxabar-plot.png",
+            "results/{date}/visual/absolute-taxabar-plot.html",
             "results/{date}/out/qurro_plot",
             "results/{date}/visual/report/human-count",
             "results/{date}/visual/report/table-cluster-filtered",
@@ -369,7 +369,7 @@ if config["longitudinal"] == False:
                 metadata_column=get_ancom_columns(),
             ),
             expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.png",
+                "results/{{date}}/visual/beta-diversity-{metric}.html",
                 metric=get_complete_beta_metric(),
             ),
         output:
@@ -390,19 +390,27 @@ if config["longitudinal"]:
 
     rule snakemake_report:
         input:
-            "results/{date}/visual/heatmap_binary.png",
+            "results/{date}/visual/heatmap_binary.html",
             "results/{date}/visual/report/beta-rarefaction.svg",
             "results/{date}/visual/report/heatmap.svg",
             "results/{date}/visual/unzipped",
             "results/{date}/visual/longitudinal_unzipped",
             "results/{date}/visual/report/multiqc.html",
-            "results/{date}/visual/absolute-taxabar-plot.png",
+            "results/{date}/visual/absolute-taxabar-plot.html",
             "results/{date}/out/qurro_plot",
             "results/{date}/visual/report/human-count",
             "results/{date}/visual/report/table-cluster-filtered",
             "results/{date}/visual/report/feature",
             "results/{date}/visual/report/accuracy",
             "results/{date}/visual/report/volatility",
+            expand(
+                "results/{{date}}/visual/beta-diversity-{metric}.html",
+                metric=get_metric("beta"),
+            ),
+            expand(
+                "results/{{date}}/visual/beta-diversity-{metric}.html",
+                metric=get_phylogenetic_metric("beta"),
+            ),
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_metric("beta"),
@@ -462,7 +470,7 @@ if config["longitudinal"]:
                 metadata_column=get_ancom_columns(),
             ),
             expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.png",
+                "results/{{date}}/visual/beta-diversity-{metric}.html",
                 metric=get_complete_beta_metric(),
             ),
         output:
@@ -524,16 +532,24 @@ rule zip_report:
         "results/{date}/out/taxonomy_biom/",
         "results/{date}/out/binary_biom/",
         "results/{date}/visual/report/multiqc.html",
-        "results/{date}/visual/heatmap_binary.png",
+        "results/{date}/visual/heatmap_binary.html",
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
         "results/{date}/out/report.zip",
         #"results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
-        "results/{date}/visual/absolute-taxabar-plot.png",
+        "results/{date}/visual/absolute-taxabar-plot.html",
         "results/{date}/out/kraken.tar.gz",
         "results/{date}/out/qurro_plot/",
+        expand(
+            "results/{{date}}/visual/beta-diversity-{metric}.html",
+            metric=get_metric("beta"),
+        ),
+        expand(
+            "results/{{date}}/visual/beta-diversity-{metric}.html",
+            metric=get_phylogenetic_metric("beta"),
+        ),
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
             metric=get_metric("beta"),

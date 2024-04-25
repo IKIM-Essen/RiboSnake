@@ -341,7 +341,7 @@ rule binary_heatmap:
         "results/{date}/out/table.from_biom_w_taxonomy.txt",
     output:
         report(
-            "results/{date}/visual/heatmap_binary.png",
+            "results/{date}/visual/heatmap_binary.html",
             caption="../report/binary-heatmap.rst",
             category="1. Heatmap",
             subcategory="Presence/absence heatmap",
@@ -359,7 +359,7 @@ rule absolute_taxa:
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
     output:
         report(
-            "results/{date}/visual/absolute-taxabar-plot.png",
+            "results/{date}/visual/absolute-taxabar-plot.html",
             caption="../report/absolute-taxabar-plot.rst",
             category="2. Taxonomy",
             subcategory="Taxa Barplot",
@@ -520,7 +520,7 @@ rule create_heatmap:
         "results/{date}/out/distance_matrices/",
     output:
         report(
-            "results/{date}/visual/beta-diversity-{metric}.png",
+            "results/{date}/visual/beta-diversity-{metric}.html",
             caption="../report/distance-matrices.rst",
             category="3. Analysis",
             subcategory="Beta",
