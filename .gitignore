@@ -16,3 +16,4 @@
 !.gitignore
 !.github
 !.github/**
+!contributions
