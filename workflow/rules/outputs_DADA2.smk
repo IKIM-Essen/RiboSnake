@@ -324,14 +324,6 @@ if config["longitudinal"] == False:
             "results/{date}/out/qurro_plot",
             "results/{date}/visual/report/table-cluster-filtered",
             expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.html",
-                metric=get_metric("beta"),
-            ),
-            expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.html",
-                metric=get_metric("beta"),
-            ),
-            expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_phylogenetic_metric("beta"),
                 metadata_column=get_metadata_columns(),
@@ -390,7 +382,7 @@ if config["longitudinal"] == False:
                 metadata_column=get_ancom_columns(),
             ),
             expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.png",
+                "results/{{date}}/visual/beta-diversity-{metric}.html",
                 metric=get_complete_beta_metric(),
             ),
         output:
@@ -423,14 +415,6 @@ if config["longitudinal"] == True:
             "results/{date}/visual/report/volatility",
             "results/{date}/visual/report/table-cluster-filtered",
             expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.html",
-                metric=get_metric("beta"),
-            ),
-            expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.html",
-                metric=get_phylogenetic_metric("beta"),
-            ),
-            expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_metric("beta"),
                 metadata_column=get_metadata_columns(),
@@ -489,7 +473,7 @@ if config["longitudinal"] == True:
                 metadata_column=get_ancom_columns(),
             ),
             expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.png",
+                "results/{{date}}/visual/beta-diversity-{metric}.html",
                 metric=get_complete_beta_metric(),
             ),
         output:
