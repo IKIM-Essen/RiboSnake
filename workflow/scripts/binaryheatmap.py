@@ -16,14 +16,12 @@ df = pd.read_csv(str(snakemake.input), delimiter="\t", header=1, index_col="taxo
 del df["#OTU ID"]
 
 # Create color scheme
-colorscale = [[0, 'blue'], [1, 'red']]
+colorscale = [[0, "blue"], [1, "red"]]
 
 # Create the heatmap figure
-fig = go.Figure(data=go.Heatmap(
-    z=df.values,
-    x=df.columns,
-    y=df.index,
-    colorscale=colorscale))
+fig = go.Figure(
+    data=go.Heatmap(z=df.values, x=df.columns, y=df.index, colorscale=colorscale)
+)
 
 # Update layout
 fig.update_layout(
@@ -36,4 +34,4 @@ fig.update_layout(
 
 # Save the figure as an HTML file
 fig.write_html(str(snakemake.output))
-#figure.savefig(str(snakemake.output), dpi=400)
+# figure.savefig(str(snakemake.output), dpi=400)

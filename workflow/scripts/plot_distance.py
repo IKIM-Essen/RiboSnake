@@ -30,24 +30,26 @@ while i < len(directories):
         df.values[np.tril_indices_from(df)] = np.nan
 
         # Create a triangular matrix plot for the lower triangle
-        fig = go.Figure(data=go.Heatmap(
-            z=df.values,
-            x=df.columns,
-            y=df.index,
-            colorscale='Viridis',  # Choose a colorscale
-            zmin=0,  # Minimum value for color scale
-            zmax=df.max().max(),  # Maximum value for color scale
-            hoverongaps=False,  # Do not show hover information for NaN values
-            colorbar=dict(
-                title='Distance',  # Add a title to the colorbar
+        fig = go.Figure(
+            data=go.Heatmap(
+                z=df.values,
+                x=df.columns,
+                y=df.index,
+                colorscale="Viridis",  # Choose a colorscale
+                zmin=0,  # Minimum value for color scale
+                zmax=df.max().max(),  # Maximum value for color scale
+                hoverongaps=False,  # Do not show hover information for NaN values
+                colorbar=dict(
+                    title="Distance",  # Add a title to the colorbar
+                ),
             )
-        ))
+        )
 
         # Update the layout
         fig.update_layout(
-            title='Beta diversity distance matrix',
-            xaxis_title='Sample Names',
-            yaxis_title='Sample Names'
+            title="Beta diversity distance matrix",
+            xaxis_title="Sample Names",
+            yaxis_title="Sample Names",
         )
 
         # Save the plot as an HTML file
