@@ -531,3 +531,20 @@ rule create_heatmap:
         "../envs/plot.yaml"
     script:
         "../scripts/plot_distance.py"
+
+
+rule rank_abundance:
+    input:
+        "results/{date}/out/taxa_collapsed_relative.qza",
+    output:
+        report(
+            "results/{date}/visual/rank-abundance.html",
+            caption="../report/rank-abundance.rst",
+            category="3. Analysis",
+        ),
+    log:
+        "logs/{date}/visualisation/rank-abundance.log",
+    conda:
+        "../envs/plot.yaml"
+    script:
+        "../scripts/rank-abundance.py"
