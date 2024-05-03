@@ -30,6 +30,35 @@ rule visualise_table:
         "--verbose 2> {log}"
 
 
+rule unzip_frequency_length:
+    input:
+        "results/{date}/visual/table-cluster-lengthfilter.qzv",
+    output:
+        temp(directory("results/{date}/visual/lengthfilter_unzip")),
+    log:
+        "logs/{date}/outputs/unzip-length.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
+
+
+rule visualise_beforeChimera:
+    input:
+        "results/{date}/out/table-nonchimeric-wo-borderline.qza",
+    output:
+        "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-chimera.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table summarize "
+        "--i-table {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
 rule visualise_afterab:
     input:
         "results/{date}/out/table-cluster-filtered.qza",
@@ -537,14 +566,37 @@ rule rank_abundance:
     input:
         "results/{date}/out/taxa_collapsed_relative.qza",
     output:
-        report(
-            "results/{date}/visual/rank-abundance.html",
+        folder=report(
+            directory("results/{date}/visual/report/rank-abundance/plots/"),
             caption="../report/rank-abundance.rst",
+            htmlindex = "rank-abundance.html",
             category="3. Analysis",
+            subcategory="Rank abundance",
         ),
+        file="results/{date}/visual/report/rank-abundance/plots/rank-abundance.html",
+    params:
+        "results/{date}/visual/report/rank-abundance/",
     log:
         "logs/{date}/visualisation/rank-abundance.log",
     conda:
         "../envs/plot.yaml"
     script:
         "../scripts/rank-abundance.py"
+
+
+rule all_filter:
+    input:
+        first="results/{date}/visual/report/demux-joined-filter-stats/",
+        human="results/{date}/visual/sample_frequencys_difference.csv",
+        wo_chimera="results/{date}/visual/chimera_unzipped/table-nonchimeric-wo-borderline/",
+        length="results/{date}/visual/lengthfilter_unzip/table-cluster-lengthfilter/",
+        before_abundance="results/2024-04-10/visual/table-cluster-lengthfilter/",
+        final="results/{date}/visual/report/table-cluster-filtered/",
+    output:
+        "results/{date}/visual/allfilter.html"
+    log:
+        "logs/{date}/visualisation/rank-abundance.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/complete_filter.py"

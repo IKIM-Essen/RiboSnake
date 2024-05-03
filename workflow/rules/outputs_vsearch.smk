@@ -310,6 +310,7 @@ if config["longitudinal"] == False:
             "results/{date}/out/qurro_plot",
             "results/{date}/visual/report/human-count",
             "results/{date}/visual/report/table-cluster-filtered",
+            "results/{date}/visual/report/rank-abundance/plots/",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_metric("beta"),
@@ -403,6 +404,7 @@ if config["longitudinal"]:
             "results/{date}/visual/report/feature",
             "results/{date}/visual/report/accuracy",
             "results/{date}/visual/report/volatility",
+            "results/{date}/visual/report/rank-abundance/plots/",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_metric("beta"),
@@ -534,6 +536,7 @@ rule zip_report:
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/out/kraken.tar.gz",
         "results/{date}/out/qurro_plot/",
+        "results/{date}/visual/report/rank-abundance/plots/",
         expand(
             "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
             metric=get_metric("beta"),

@@ -494,6 +494,7 @@ rule zip_report:
         "results/{date}/out/kraken.tar.gz",
         "results/{date}/visual/sample_frequencys_difference.csv",
         "results/{date}/out/config_parameters.html",
+        "results/{date}/visual/report/rank-abundance/plots",
     output:
         "results/{date}/16S-report.tar.gz",
     params:
