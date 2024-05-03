@@ -381,6 +381,7 @@ rule snakemake_report:
         "results/{date}/visual/absolute-taxabar-plot.png",
         "results/{date}/visual/report/human-count",
         "results/{date}/visual/report/table-cluster-filtered",
+        "results/{date}/visual/allfilter.html",
     output:
         "results/{date}/out/report.zip",
     params:
@@ -495,6 +496,7 @@ rule zip_report:
         "results/{date}/visual/sample_frequencys_difference.csv",
         "results/{date}/out/config_parameters.html",
         "results/{date}/visual/report/rank-abundance/plots",
+        "results/{date}/visual/allfilter.html",
     output:
         "results/{date}/16S-report.tar.gz",
     params:

@@ -593,7 +593,11 @@ rule all_filter:
         before_abundance="results/2024-04-10/visual/table-cluster-lengthfilter/",
         final="results/{date}/visual/report/table-cluster-filtered/",
     output:
-        "results/{date}/visual/allfilter.html"
+        report(
+            "results/{date}/visual/allfilter.html",
+            caption="../report/rank-abundance.rst",
+            category="4. Qualitycontrol",
+        ),
     log:
         "logs/{date}/visualisation/rank-abundance.log",
     conda:
