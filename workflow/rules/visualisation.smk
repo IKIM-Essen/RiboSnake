@@ -569,7 +569,7 @@ rule rank_abundance:
         folder=report(
             directory("results/{date}/visual/report/rank-abundance/plots/"),
             caption="../report/rank-abundance.rst",
-            htmlindex = "rank-abundance.html",
+            htmlindex="rank-abundance.html",
             category="3. Analysis",
             subcategory="Rank abundance",
         ),
@@ -588,7 +588,9 @@ rule all_filter:
     input:
         first="results/{date}/visual/report/demux-joined-filter-stats/",
         human="results/{date}/visual/sample_frequencys_difference.csv",
-        wo_chimera="results/{date}/visual/chimera_unzipped/table-nonchimeric-wo-borderline/",
+        wo_chimera=(
+            "results/{date}/visual/chimera_unzipped/table-nonchimeric-wo-borderline/"
+        ),
         length="results/{date}/visual/lengthfilter_unzip/table-cluster-lengthfilter/",
         before_abundance="results/2024-04-10/visual/table-cluster-lengthfilter/",
         final="results/{date}/visual/report/table-cluster-filtered/",
