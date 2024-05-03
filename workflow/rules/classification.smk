@@ -120,6 +120,7 @@ rule repeat_rarefaction:
         "--o-rarefied-table {output.table} "
         "--verbose 2> {log}"
 
+
 rule relative_collapsed_taxa:
     input:
         "results/{date}/out/taxa_collapsed.qza",
