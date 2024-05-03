@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import shutil
+import zipfile
 from os.path import isfile, join
 from os import path, getcwd, listdir
 from os import mkdir
@@ -9,6 +10,7 @@ from datetime import date, datetime
 import sys
 import plotly.io as pio
 from biom import load_table
+import plotly.express as px
 
 sys.stderr = open(snakemake.log[0], "w")
 
@@ -19,16 +21,26 @@ zipped_file = name + ".zip"
 
 with zipfile.ZipFile(zipped_file, "r") as zip_ref:
     name = zipped_file.split("/")[-1]
-    new_dir = str(snakemake.params.between) + "/" + name
+    new_dir = str(snakemake.params) + name
     zip_ref.extractall(os.path.splitext(new_dir)[0] + "/")
 
-datadir = new_dir + "data/"
+print(new_dir)
+direc = new_dir.split(".")[0]
+directory_contents = os.listdir(direc)
+print(directory_contents)
 
+datadir = new_dir.split(".")[0] + "/" + directory_contents[0] + "/data/"
+print(datadir)
 # Load the biom table
-table = load_table(datadir+"table.biom")
+table = load_table(datadir+"feature-table.biom")
 
+print(table.matrix_data.toarray())
+print(table.ids(axis='observation'))
+print(table.ids(axis='sample'))
 # Convert biom table to pandas DataFrame
-df = pd.DataFrame(table.matrix_data.toarray(), index_col=0)
+df = pd.DataFrame(table.matrix_data.toarray(), columns = table.ids(axis='sample'), index = table.ids(axis='observation'))
+df = df.T
+print(df)
 
 # Function to create an interactive plot for each bacterial species
 def create_interactive_plot(index):
@@ -58,10 +70,10 @@ all_figures = {index: create_interactive_plot(index) for index in df.index}
 
 # Save all the figures to HTML files
 for index, fig in all_figures.items():
-    pio.write_html(fig, f'plot_{index}.html')
+    pio.write_html(fig, str(snakemake.output.folder)+f'/plot_{index}.html')
 
 # Create the HTML file with the dropdown selector and plot
-with open(str(snakemake.output), 'w') as f:
+with open(str(snakemake.output.file), 'w') as f:
     f.write('<html>\n<head>\n</head>\n<body>\n')
     f.write('<select id="plot_selector" name="plot_selector" onchange="update_plot()">\n')
     for index in df.index:
