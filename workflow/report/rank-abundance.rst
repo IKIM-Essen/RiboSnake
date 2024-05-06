@@ -1,0 +1,1 @@
+Rank abundance plots of the relative abundance of bacterial genera in each sample. 

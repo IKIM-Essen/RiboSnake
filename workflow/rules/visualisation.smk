@@ -30,6 +30,35 @@ rule visualise_table:
         "--verbose 2> {log}"
 
 
+rule unzip_frequency_length:
+    input:
+        "results/{date}/visual/table-cluster-lengthfilter.qzv",
+    output:
+        temp(directory("results/{date}/visual/lengthfilter_unzip")),
+    log:
+        "logs/{date}/outputs/unzip-length.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
+
+
+rule visualise_beforeChimera:
+    input:
+        "results/{date}/out/table-nonchimeric-wo-borderline.qza",
+    output:
+        "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-chimera.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table summarize "
+        "--i-table {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
 rule visualise_afterab:
     input:
         "results/{date}/out/table-cluster-filtered.qza",
@@ -341,7 +370,7 @@ rule binary_heatmap:
         "results/{date}/out/table.from_biom_w_taxonomy.txt",
     output:
         report(
-            "results/{date}/visual/heatmap_binary.png",
+            "results/{date}/visual/heatmap_binary.html",
             caption="../report/binary-heatmap.rst",
             category="1. Heatmap",
             subcategory="Presence/absence heatmap",
@@ -359,7 +388,7 @@ rule absolute_taxa:
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
     output:
         report(
-            "results/{date}/visual/absolute-taxabar-plot.png",
+            "results/{date}/visual/absolute-taxabar-plot.html",
             caption="../report/absolute-taxabar-plot.rst",
             category="2. Taxonomy",
             subcategory="Taxa Barplot",
@@ -520,7 +549,7 @@ rule create_heatmap:
         "results/{date}/out/distance_matrices/",
     output:
         report(
-            "results/{date}/visual/beta-diversity-{metric}.png",
+            "results/{date}/visual/beta-diversity-{metric}.html",
             caption="../report/distance-matrices.rst",
             category="3. Analysis",
             subcategory="Beta",
@@ -531,3 +560,47 @@ rule create_heatmap:
         "../envs/plot.yaml"
     script:
         "../scripts/plot_distance.py"
+
+
+rule rank_abundance:
+    input:
+        "results/{date}/out/taxa_collapsed_relative.qza",
+    output:
+        folder=report(
+            directory("results/{date}/visual/report/rank-abundance/plots/"),
+            caption="../report/rank-abundance.rst",
+            htmlindex="rank-abundance.html",
+            category="3. Analysis",
+            subcategory="Rank abundance",
+        ),
+        file="results/{date}/visual/report/rank-abundance/plots/rank-abundance.html",
+    params:
+        "results/{date}/visual/report/rank-abundance/",
+    log:
+        "logs/{date}/visualisation/rank-abundance.log",
+    conda:
+        "../envs/plot.yaml"
+    script:
+        "../scripts/rank-abundance.py"
+
+
+rule all_filter:
+    input:
+        first="results/{date}/visual/report/demux-joined-filter-stats/",
+        human="results/{date}/visual/sample_frequencys_difference.csv",
+        wo_chimera="results/{date}/visual/chimera_unzipped/",
+        length="results/{date}/visual/lengthfilter_unzip/",
+        before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
+        final="results/{date}/visual/report/table-cluster-filtered/",
+    output:
+        report(
+            "results/{date}/visual/allfilter.html",
+            caption="../report/rank-abundance.rst",
+            category="4. Qualitycontrol",
+        ),
+    log:
+        "logs/{date}/visualisation/rank-abundance.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/complete_filter.py"

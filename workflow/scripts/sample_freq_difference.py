@@ -23,7 +23,7 @@ for sample in combined.index:
     combined.at[sample, "difference"] = difference
 combined.index.name = "Sample"
 combined.rename(
-    columns={"whuman": "Features with human", "wohuman": "Features without human"},
+    columns={"whuman": "Reads with human", "wohuman": "Reads without human"},
     inplace=True,
 )
 combined.to_csv(str(snakemake.output))

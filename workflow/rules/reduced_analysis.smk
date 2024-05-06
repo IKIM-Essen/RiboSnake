@@ -241,7 +241,7 @@ rule binary_heatmap:
         "results/{date}/out/table.from_biom_w_taxonomy.txt",
     output:
         report(
-            "results/{date}/visual/heatmap_binary.png",
+            "results/{date}/visual/heatmap_binary.html",
             caption="../report/binary-heatmap.rst",
             category="1. Heatmap",
             subcategory="Presence/absence heatmap",
@@ -259,7 +259,7 @@ rule absolute_taxa:
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
     output:
         report(
-            "results/{date}/visual/absolute-taxabar-plot.png",
+            "results/{date}/visual/absolute-taxabar-plot.html",
             caption="../report/absolute-taxabar-plot.rst",
             category="2. Taxonomy",
             subcategory="Taxa Barplot",
@@ -374,13 +374,12 @@ rule report_files:
 
 rule snakemake_report:
     input:
-        "results/{date}/visual/heatmap_binary.png",
+        "results/{date}/visual/heatmap_binary.html",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/unzipped",
         "results/{date}/visual/report/multiqc.html",
-        "results/{date}/visual/absolute-taxabar-plot.png",
-        "results/{date}/visual/report/human-count",
-        "results/{date}/visual/report/table-cluster-filtered",
+        "results/{date}/visual/absolute-taxabar-plot.html",
+        "results/{date}/visual/allfilter.html",
     output:
         "results/{date}/out/report.zip",
     params:
@@ -484,16 +483,17 @@ rule zip_report:
         "results/{date}/out/taxonomy_biom/",
         "results/{date}/out/binary_biom/",
         "results/{date}/visual/report/multiqc.html",
-        "results/{date}/visual/heatmap_binary.png",
+        "results/{date}/visual/heatmap_binary.html",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
         "results/{date}/out/report.zip",
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
-        "results/{date}/visual/absolute-taxabar-plot.png",
+        "results/{date}/visual/absolute-taxabar-plot.html",
         "results/{date}/out/kraken.tar.gz",
-        "results/{date}/visual/sample_frequencys_difference.csv",
         "results/{date}/out/config_parameters.html",
+        "results/{date}/visual/report/rank-abundance/plots",
+        "results/{date}/visual/allfilter.html",
     output:
         "results/{date}/16S-report.tar.gz",
     params:
