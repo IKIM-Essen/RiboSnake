@@ -379,8 +379,7 @@ rule snakemake_report:
         "results/{date}/visual/unzipped",
         "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/absolute-taxabar-plot.html",
-        "results/{date}/visual/report/human-count",
-        "results/{date}/visual/report/table-cluster-filtered",
+        "results/{date}/visual/allfilter.html",
     output:
         "results/{date}/out/report.zip",
     params:
@@ -492,8 +491,9 @@ rule zip_report:
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.html",
         "results/{date}/out/kraken.tar.gz",
-        "results/{date}/visual/sample_frequencys_difference.csv",
         "results/{date}/out/config_parameters.html",
+        "results/{date}/visual/report/rank-abundance/plots",
+        "results/{date}/visual/allfilter.html",
     output:
         "results/{date}/16S-report.tar.gz",
     params:

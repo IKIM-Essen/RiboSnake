@@ -322,7 +322,8 @@ if config["longitudinal"] == False:
             "results/{date}/visual/report/multiqc.html",
             "results/{date}/visual/absolute-taxabar-plot.html",
             "results/{date}/out/qurro_plot",
-            "results/{date}/visual/report/table-cluster-filtered",
+            "results/{date}/visual/report/rank-abundance/plots",
+            "results/{date}/visual/allfilter.html",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_phylogenetic_metric("beta"),
@@ -413,7 +414,8 @@ if config["longitudinal"] == True:
             "results/{date}/visual/report/feature",
             "results/{date}/visual/report/accuracy",
             "results/{date}/visual/report/volatility",
-            "results/{date}/visual/report/table-cluster-filtered",
+            "results/{date}/visual/report/rank-abundance/plots",
+            "results/{date}/visual/allfilter.html",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_metric("beta"),
@@ -544,6 +546,8 @@ rule zip_report:
         "results/{date}/visual/absolute-taxabar-plot.html",
         "results/{date}/out/kraken.tar.gz",
         "results/{date}/out/qurro_plot/",
+        "results/{date}/visual/report/rank-abundance/plots",
+        "results/{date}/visual/allfilter.html",
         expand(
             "results/{{date}}/visual/beta-diversity-{metric}.html",
             metric=get_metric("beta"),
@@ -566,7 +570,6 @@ rule zip_report:
         ),
         "results/{date}/out/songbird/",
         "results/{date}/out/differentials_taxonomy.tsv",
-        "results/{date}/visual/sample_frequencys_difference.csv",
         "results/{date}/out/config_parameters.html",
     output:
         "results/{date}/16S-report.tar.gz",

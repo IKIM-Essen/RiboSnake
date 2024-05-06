@@ -119,3 +119,19 @@ rule repeat_rarefaction:
         "--p-repeat-times {params.repeats} "
         "--o-rarefied-table {output.table} "
         "--verbose 2> {log}"
+
+
+rule relative_collapsed_taxa:
+    input:
+        "results/{date}/out/taxa_collapsed.qza",
+    output:
+        "results/{date}/out/taxa_collapsed_relative.qza",
+    log:
+        "logs/{date}/outputs/taxa-collapse-relative.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table relative-frequency "
+        "--i-table {input} "
+        "--o-relative-frequency-table {output} "
+        "--verbose 2> {log} "
