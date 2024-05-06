@@ -595,7 +595,7 @@ rule all_filter:
     output:
         report(
             "results/{date}/visual/allfilter.html",
-            caption="../report/rank-abundance.rst",
+            caption="../report/all-filter.rst",
             category="4. Qualitycontrol",
         ),
     log:
