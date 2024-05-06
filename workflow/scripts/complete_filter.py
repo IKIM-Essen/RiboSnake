@@ -35,7 +35,7 @@ length = pd.read_csv(
 )
 length.rename(columns={"0": "Reads after length filter"}, inplace=True)
 before_abundance = pd.read_csv(
-    str(snakemake.input.before_abundance) + "/data/sample-frequency-detail.csv",
+    str(snakemake.input.before_abundance) + "/sample-frequency-detail.csv",
     sep=",",
     header=0,
     index_col=0,
