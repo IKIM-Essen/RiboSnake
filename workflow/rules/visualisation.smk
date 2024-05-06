@@ -590,7 +590,7 @@ rule all_filter:
         human="results/{date}/visual/sample_frequencys_difference.csv",
         wo_chimera=("results/{date}/visual/chimera_unzipped/"),
         length="results/{date}/visual/lengthfilter_unzip/",
-        before_abundance="results{date}/visual/table-cluster-lengthfilter/",
+        before_abundance="results/{date}/visual/table-cluster-lengthfilter/",
         final="results/{date}/visual/report/table-cluster-filtered/",
     output:
         report(
