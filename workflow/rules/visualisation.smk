@@ -589,10 +589,10 @@ rule all_filter:
         first="results/{date}/visual/report/demux-joined-filter-stats/",
         human="results/{date}/visual/sample_frequencys_difference.csv",
         wo_chimera=(
-            "results/{date}/visual/chimera_unzipped/table-nonchimeric-wo-borderline/"
+            "results/{date}/visual/chimera_unzipped/"
         ),
-        length="results/{date}/visual/lengthfilter_unzip/table-cluster-lengthfilter/",
-        before_abundance="results/2024-04-10/visual/table-cluster-lengthfilter/",
+        length="results/{date}/visual/lengthfilter_unzip/",
+        before_abundance="results{date}/visual/table-cluster-lengthfilter/",
         final="results/{date}/visual/report/table-cluster-filtered/",
     output:
         report(
