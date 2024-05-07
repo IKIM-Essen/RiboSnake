@@ -222,12 +222,7 @@ rule abundance_frequency:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
     output:
         abundance="results/{date}/out/abundance.txt",
-        feature_table=report(
-            directory("results/{date}/visual/table-cluster-lengthfilter/data"),
-            caption="../report/feature-table.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
+        feature_table=directory("results/{date}/visual/table-cluster-lengthfilter/data"),
     params:
         relative_abundance=config["filtering"]["relative-abundance-filter"],
     log:
@@ -314,12 +309,7 @@ rule frequency_after_abundancefilter:
     input:
         "results/{date}/visual/frequency_unzipped",
     output:
-        report(
-            directory("results/{date}/visual/report/table-cluster-filtered"),
-            caption="../report/feature-table-afterabundance.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
+        directory("results/{date}/visual/report/table-cluster-filtered"),
     log:
         "logs/{date}/filtering/after_abundance-frequency.log",
     conda:
