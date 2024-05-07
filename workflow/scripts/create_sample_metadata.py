@@ -17,7 +17,6 @@ config = snakemake.config
 
 DATA_PATH = str(config["data"])
 IN_PATH = str(config["input"])
-# today = date.today().strftime("%Y-%m-%d")
 incoming_files = []
 # Running through all files in the IN_PATH and checking them
 # Adding the files to a list, when they meet the requirements
@@ -34,7 +33,9 @@ for f in listdir(IN_PATH):
 metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
 date = metadata["run_date"].iloc[1]
 # print(date)
-# Adding a direcory for the specific date as subdirectory to the DATA_PATH
+# Adding a directory for the specific date as subdirectory to the DATA_PATH
+if not os.path.isdir(DATA_PATH):
+    mkdir(DATA_PATH)
 DATA_PATH += date
 if not os.path.isdir(DATA_PATH):
     mkdir(DATA_PATH)

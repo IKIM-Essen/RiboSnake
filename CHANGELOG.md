@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.9.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.8.0...v0.9.0) (2024-05-06)
+
+
+### Features
+
+* html visualizations ([#124](https://github.com/IKIM-Essen/RiboSnake/issues/124)) ([9f77e54](https://github.com/IKIM-Essen/RiboSnake/commit/9f77e54e1b7ae11bc1fb5492a4d3033346f3fecf))
+* rank abundance and complete filter information ([#127](https://github.com/IKIM-Essen/RiboSnake/issues/127)) ([408e433](https://github.com/IKIM-Essen/RiboSnake/commit/408e43349109768ca85a0c87af175185abb337af))
+
+
+### Bug Fixes
+
+* all filter quick fix ([#128](https://github.com/IKIM-Essen/RiboSnake/issues/128)) ([294854c](https://github.com/IKIM-Essen/RiboSnake/commit/294854c72d6a4a7fb613a77ce0cb787739c9c9ad))
+* folder additions ([#129](https://github.com/IKIM-Essen/RiboSnake/issues/129)) ([8fcb406](https://github.com/IKIM-Essen/RiboSnake/commit/8fcb406d4887c19a570125db310e6649f38e2213))
+
 ## [0.8.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.7.0...v0.8.0) (2024-03-18)
 
 
