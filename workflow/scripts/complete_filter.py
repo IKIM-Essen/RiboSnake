@@ -53,7 +53,8 @@ merged_df = pd.concat(
     [first, human, wo_chimera, length, before_abundance, complete], axis=1
 )
 
-print(merged_df)
+# Convert all numbers to integers
+merged_df = merged_df.astype(int)
 
 # Generate HTML table
 html_table = merged_df.to_html(index=True, classes="qiime2-table")
