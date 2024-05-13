@@ -222,7 +222,9 @@ rule abundance_frequency:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
     output:
         abundance="results/{date}/out/abundance.txt",
-        feature_table=directory("results/{date}/visual/table-cluster-lengthfilter/data"),
+        feature_table=directory(
+            "results/{date}/visual/table-cluster-lengthfilter/data"
+        ),
     params:
         relative_abundance=config["filtering"]["relative-abundance-filter"],
     log:
@@ -274,17 +276,19 @@ rule unzip_frequency:
         "../scripts/rename_qzv.py"
 
 
-rule unzip_frequency_chimera:
-    input:
-        "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
-    output:
-        temp(directory("results/{date}/visual/chimera_unzipped")),
-    log:
-        "logs/{date}/outputs/unzip-chimera.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/rename_qzv.py"
+if config["DADA2"] == False:
+
+    rule unzip_frequency_chimera:
+        input:
+            "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
+        output:
+            temp(directory("results/{date}/visual/chimera_unzipped")),
+        log:
+            "logs/{date}/outputs/unzip-chimera.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/rename_qzv.py"
 
 
 if config["reduced-analysis"] == True:
