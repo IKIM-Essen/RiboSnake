@@ -43,20 +43,22 @@ rule unzip_frequency_length:
         "../scripts/rename_qzv.py"
 
 
-rule visualise_beforeChimera:
-    input:
-        "results/{date}/out/table-nonchimeric-wo-borderline.qza",
-    output:
-        "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
-    log:
-        "logs/{date}/visualisation/visualise-chimera.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime feature-table summarize "
-        "--i-table {input} "
-        "--o-visualization {output} "
-        "--verbose 2> {log}"
+if config["DADA2"] == False:
+
+    rule visualise_beforeChimera:
+        input:
+            "results/{date}/out/table-nonchimeric-wo-borderline.qza",
+        output:
+            "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
+        log:
+            "logs/{date}/visualisation/visualise-chimera.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table summarize "
+            "--i-table {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
 
 
 rule visualise_afterab:
@@ -502,7 +504,7 @@ rule ancom:
         "--verbose 2> {log}"
 
 
-if config["bowtie"] == False:
+if config["bowtie"] == False and config["DADA2"] == False:
 
     rule hum_filter_difference:
         input:
@@ -580,23 +582,47 @@ rule rank_abundance:
         "../scripts/rank-abundance.py"
 
 
-rule all_filter:
-    input:
-        first="results/{date}/visual/report/demux-joined-filter-stats/",
-        human="results/{date}/visual/sample_frequencys_difference.csv",
-        wo_chimera="results/{date}/visual/chimera_unzipped/",
-        length="results/{date}/visual/lengthfilter_unzip/",
-        before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
-        final="results/{date}/visual/report/table-cluster-filtered/",
-    output:
-        report(
-            "results/{date}/visual/allfilter.html",
-            caption="../report/all-filter.rst",
-            category="4. Qualitycontrol",
-        ),
-    log:
-        "logs/{date}/visualisation/rank-abundance.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/complete_filter.py"
+if config["DADA2"] == False:
+
+    rule all_filter:
+        input:
+            first="results/{date}/visual/report/demux-joined-filter-stats/",
+            human="results/{date}/visual/sample_frequencys_difference.csv",
+            wo_chimera="results/{date}/visual/chimera_unzipped/",
+            length="results/{date}/visual/lengthfilter_unzip/",
+            before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
+            final="results/{date}/visual/report/table-cluster-filtered/",
+        output:
+            report(
+                "results/{date}/visual/allfilter.html",
+                caption="../report/all-filter.rst",
+                category="4. Qualitycontrol",
+            ),
+        log:
+            "logs/{date}/visualisation/rank-abundance.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/complete_filter.py"
+
+
+if config["DADA2"] == True:
+
+    rule all_filter:
+        input:
+            dada2="results/{date}/visual/unzipped/",
+            length="results/{date}/visual/lengthfilter_unzip/",
+            before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
+            final="results/{date}/visual/report/table-cluster-filtered/",
+        output:
+            report(
+                "results/{date}/visual/allfilter.html",
+                caption="../report/all-filter.rst",
+                category="4. Qualitycontrol",
+            ),
+        log:
+            "logs/{date}/visualisation/rank-abundance.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/complete_filter_DADA2.py"

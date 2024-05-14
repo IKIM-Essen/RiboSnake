@@ -50,7 +50,7 @@ for bacterium_name, row in df_reduced_second.iterrows():
 fig.update_layout(
     title="Barplot logarithmic absolute bacterial abundances",
     xaxis_title="Sample",
-    yaxis_title="Bacterial genera",
+    yaxis_title="Logarithmic absolute bacterial abundance",
     barmode="stack",  # Stacked bar mode
     legend_title="Bacterial names",  # Legend title
     legend=dict(
