@@ -91,8 +91,9 @@ rule linear_mixed_effects:
         metadata="config/pep/sample.tsv",
         state_column=config["longitudinal-params"]["state_column"],
         individual_id_column=config["longitudinal-params"]["individual_id_column"],
-        #formula=config["longitudinal"]["formula"],
         metric=config["longitudinal-params"]["metric"],
+        groups=config["longitudinal-params"]["group"],
+        random=config["longitudinal-params"]["random-effects"],
     log:
         "logs/{date}/visualisation/linearmixedeff.log",
     conda:
@@ -106,13 +107,15 @@ rule linear_mixed_effects:
         "--p-state-column {params.state_column} "
         "--p-individual-id-column {params.individual_id_column} "
         "--p-metric {params.metric} "
+        "--p-group-columns {params.groups} "
+        "--p-random-effects {params.random} "
         "--o-visualization {output} "
         "--verbose 2> {log} "
 
 
 rule unzip_longitudinal:
     input:
-        #"results/{date}/visual/lme.qzv",
+        "results/{date}/visual/lme.qzv",
         "results/{date}/visual/volatility.qzv",
         "results/{date}/visual/feature.qzv",
         "results/{date}/visual/accuracy.qzv",
@@ -151,13 +154,13 @@ rule report_longitudinal:
             subcategory="Longitudinal",
             htmlindex="index.html",
         ),
-        #lme=report(
-        #    "results/{date}/visual/report/lme",
-        #    caption="../report/lme.rst",
-        #    category="3. Analysis",
-        #    subcategory="Longitudinal",
-        #    htmlindex="index.html",
-        #),
+        lme=report(
+            directory("results/{date}/visual/report/lme"),
+            caption="../report/lme.rst",
+            category="3. Analysis",
+            subcategory="Longitudinal",
+            htmlindex="index.html",
+        ),
     log:
         "logs/{date}/outputs/report-longitudinal.log",
     conda:

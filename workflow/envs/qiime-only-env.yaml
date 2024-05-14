@@ -2,7 +2,6 @@ channels:
   - conda-forge
   - qiime2/label/r2022.11
   - bioconda
-  - defaults
 dependencies:
   - _libgcc_mutex=0.1
   - _openmp_mutex=4.5
@@ -248,7 +247,7 @@ dependencies:
   - lxml=4.9.2
   - lz4=4.2.0
   - lz4-c=1.9.3
-  - mafft=7.508
+  - mafft
   - make=4.3
   - markupsafe=2.1.1
   - matplotlib=3.6.0
