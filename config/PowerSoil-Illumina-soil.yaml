@@ -211,4 +211,10 @@ longitudinal-params:
   # Column to name the samples
   individual_id_column: "name_abbreviation"
   # Formula for linear-mixed-effect analysis
-  formula: "faith-pd~temperature"
+  metric: weight_after
+  # Comma-separated list to use as independent covariates to
+  # determine mean structure of "metric"
+  group: "weight_before,bmi_before,waist_before"
+  # Comma-separated list to use as independent covariates to
+  # determine variance and covariance of "metric"
+  random-effects: "blood_before,blood_after"

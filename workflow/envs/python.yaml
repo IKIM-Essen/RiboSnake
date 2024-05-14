@@ -1,7 +1,6 @@
 channels:
   - conda-forge
   - bioconda
-  - anaconda
 dependencies:
   - pandas=1.2.5
   - prettytable

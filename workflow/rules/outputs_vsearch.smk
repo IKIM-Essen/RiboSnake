@@ -401,6 +401,7 @@ if config["longitudinal"]:
             "results/{date}/visual/report/feature",
             "results/{date}/visual/report/accuracy",
             "results/{date}/visual/report/volatility",
+            "results/{date}/visual/report/lme",
             "results/{date}/visual/report/rank-abundance/plots/",
             "results/{date}/visual/allfilter.html",
             expand(
