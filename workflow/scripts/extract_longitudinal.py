@@ -52,4 +52,10 @@ while b < len(subdir):
     if "lme" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.lme)
+    if "distance" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.distance)
+    if "difference" in subdir[b]:
+        html = datadir
+        shutil.copytree(html, snakemake.output.difference)
     b = b + 1
