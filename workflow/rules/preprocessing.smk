@@ -199,6 +199,7 @@ if config["DADA2"] == False:
             rep_times=config["primertrimming"]["rep_times"],
             overlap=config["primertrimming"]["overlap"],
             min_length=config["primertrimming"]["min_length"],
+            threads=config["threads"]
         log:
             "logs/{date}/preprocessing/trim-paired.log",
         conda:
@@ -209,6 +210,7 @@ if config["DADA2"] == False:
             then 
                 qiime cutadapt trim-paired \
                 --i-demultiplexed-sequences {input} \
+                --p-cores {params.threads} \
                 --p-adapter-f {params.adapter1} \
                 --p-front-f {params.primer1} \
                 --p-front-r {params.primer2} \
@@ -222,7 +224,7 @@ if config["DADA2"] == False:
             else 
                 qiime cutadapt trim-single \
                 --i-demultiplexed-sequences {input} \
-                --p-cores 10 \
+                --p-cores {params.threads} \
                 --p-adapter {params.primer1} \
                 --p-front {params.primer2} \
                 --p-error-rate {params.error_rate} \
