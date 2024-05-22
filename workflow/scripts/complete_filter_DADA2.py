@@ -53,6 +53,8 @@ complete.rename(columns={"0": "Reads after abundance filter"}, inplace=True)
 
 merged_df = pd.concat([dada2, length, before_abundance, complete], axis=1)
 
+merged_df = merged_df.fillna(0)
+
 # Convert all numbers to integers
 merged_df = merged_df.astype(int)
 

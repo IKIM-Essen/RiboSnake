@@ -1,21 +1,3 @@
-if config["bowtie"] == False:
-
-    rule hum_filter_difference:
-        input:
-            "results/{date}/visual/unzipped/",
-        output:
-            "results/{date}/visual/sample_frequencys_difference.csv",
-        params:
-            visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
-            visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
-        log:
-            "logs/{date}/visualisation/frequency_difference.log",
-        conda:
-            "../envs/python.yaml"
-        script:
-            "../scripts/sample_freq_difference.py"
-
-
 rule rank_abundance:
     input:
         "results/{date}/out/taxa_collapsed_relative.qza",
@@ -65,27 +47,6 @@ rule visualise_beforeChimera:
         "--i-table {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
-
-rule all_filter:
-    input:
-        first="results/{date}/visual/report/demux-joined-filter-stats/",
-        human="results/{date}/visual/sample_frequencys_difference.csv",
-        wo_chimera="results/{date}/visual/chimera_unzipped/",
-        length="results/{date}/visual/lengthfilter_unzip/",
-        before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
-        final="results/{date}/visual/report/table-cluster-filtered/",
-    output:
-        report(
-            "results/{date}/visual/allfilter.html",
-            caption="../report/all-filter.rst",
-            category="4. Qualitycontrol",
-        ),
-    log:
-        "logs/{date}/visualisation/all-filter.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/complete_filter.py"
 
 
 rule visualise_samples:
@@ -522,6 +483,46 @@ rule table_compare_human:
         "--i-table {input.table_woh} "
         "--o-visualization {output.visual_woh} "
         "--verbose 2> {log}"
+
+
+if config["bowtie"] == False:
+
+    rule hum_filter_difference:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            "results/{date}/visual/sample_frequencys_difference.csv",
+        params:
+            visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
+            visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
+        log:
+            "logs/{date}/visualisation/frequency_difference.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/sample_freq_difference.py"
+
+
+rule all_filter:
+    input:
+        first="results/{date}/visual/report/demux-joined-filter-stats/",
+        human="results/{date}/visual/sample_frequencys_difference.csv",
+        wo_chimera="results/{date}/visual/chimera_unzipped/",
+        length="results/{date}/visual/lengthfilter_unzip/",
+        before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
+        final="results/{date}/visual/report/table-cluster-filtered/",
+    output:
+        report(
+            "results/{date}/visual/allfilter.html",
+            caption="../report/all-filter.rst",
+            category="4. Qualitycontrol",
+        ),
+    log:
+        "logs/{date}/visualisation/all-filter.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/complete_filter.py"
 
 
 rule export_parameters:
