@@ -323,7 +323,8 @@ rule absolute_taxa:
         "../scripts/absolute_taxabarplot.py"
 
 
-#if config["DADA2"] == False:
+# if config["DADA2"] == False:
+
 
 rule biom_file:
     input:
@@ -370,7 +371,6 @@ if config["DADA2"] == True:
             "--o-visualization {output} "
             "--verbose 2> {log}"
 
-
     rule unzip_reports:
         input:
             "results/{date}/visual/heatmap.qzv",
@@ -389,7 +389,6 @@ if config["DADA2"] == True:
         script:
             "../scripts/rename_qzv.py"
 
-    
     rule report_files:
         input:
             "results/{date}/visual/unzipped/",
@@ -456,7 +455,6 @@ if config["DADA2"] == True:
             "../envs/python.yaml"
         script:
             "../scripts/complete_filter_DADA2.py"
-
     
     rule snakemake_report:
         input:
@@ -519,7 +517,6 @@ if config["DADA2"] == True:
 
 if config["DADA2"] == False:
 
-
     rule table_compare_human:
         input:
             table_wh="results/{date}/out/derepl-table.qza",
@@ -560,7 +557,6 @@ if config["DADA2"] == False:
             "../envs/python.yaml"
         script:
             "../scripts/rename_qzv.py"
-
 
     rule report_files:
         input:
@@ -610,7 +606,6 @@ if config["DADA2"] == False:
         script:
             "../scripts/extract_reports.py"
 
-
     rule snakemake_report:
         input:
             "results/{date}/visual/heatmap_binary.html",
@@ -632,7 +627,6 @@ if config["DADA2"] == False:
             "{params.for_testing} "
             "> {log} 2>&1"
 
-
     rule all_filter:
         input:
             first="results/{date}/visual/report/demux-joined-filter-stats/",
@@ -653,7 +647,6 @@ if config["DADA2"] == False:
             "../envs/python.yaml"
         script:
             "../scripts/complete_filter.py"
-
 
     rule zip_report:
         input:

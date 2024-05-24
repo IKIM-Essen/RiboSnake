@@ -199,7 +199,7 @@ if config["DADA2"] == False:
             rep_times=config["primertrimming"]["rep_times"],
             overlap=config["primertrimming"]["overlap"],
             min_length=config["primertrimming"]["min_length"],
-            threads=config["threads"]
+            threads=config["threads"],
         log:
             "logs/{date}/preprocessing/trim-paired.log",
         conda:

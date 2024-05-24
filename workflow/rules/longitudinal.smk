@@ -10,14 +10,14 @@ rule longitudinal_first_difference:
             metric=get_phylogenetic_metric("alpha"),
         ),
     output:
-        "results/{date}/out/first-difference.qza"
+        "results/{date}/out/first-difference.qza",
     params:
         metadata="config/pep/sample.tsv",
         state_column=config["longitudinal-params"]["state_column"],
         individual_id_column=config["longitudinal-params"]["individual_id_column"],
         metric=config["longitudinal-params"]["metric"],
     log:
-        "logs/{date}/visualisation/first-difference.log"
+        "logs/{date}/visualisation/first-difference.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
@@ -45,7 +45,7 @@ rule longitudinal_first_distance:
             metric=get_phylogenetic_metric("alpha"),
         ),
     output:
-        "results/{date}/out/first-distances.qza"
+        "results/{date}/out/first-distances.qza",
     params:
         metadata="config/pep/sample.tsv",
         state_column=config["longitudinal-params"]["state_column"],
@@ -70,7 +70,7 @@ rule longitudinal_first_distance:
 rule visualise_pairwise:
     input:
         distance="results/{date}/out/first-distances.qza",
-        difference="results/{date}/out/first-difference.qza"
+        difference="results/{date}/out/first-difference.qza",
     output:
         distance="results/{date}/out/first-distances.qzv",
         difference="results/{date}/out/first-difference.qzv",
