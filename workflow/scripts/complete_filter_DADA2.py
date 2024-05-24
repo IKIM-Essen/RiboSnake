@@ -19,15 +19,26 @@ dada2 = pd.read_csv(
     index_col=0,
 )
 dada2.drop(["#q2:types"], axis=0, inplace=True)
-dada2.drop(
-    [
-        "percentage of input passed filter",
-        "percentage of input merged",
-        "percentage of input non-chimeric",
-    ],
-    axis=1,
-    inplace=True,
-)
+
+if "percentage of input merged" in dada2.columns:
+    dada2.drop(
+        [
+            "percentage of input passed filter",
+            "percentage of input merged",
+            "percentage of input non-chimeric",
+        ],
+        axis=1,
+        inplace=True,
+    )
+else:
+    dada2.drop(
+        [
+            "percentage of input passed filter",
+            "percentage of input non-chimeric",
+        ],
+        axis=1,
+        inplace=True,
+    )
 length = pd.read_csv(
     str(snakemake.input.length)
     + "/table-cluster-lengthfilter/data/sample-frequency-detail.csv",
