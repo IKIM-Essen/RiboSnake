@@ -455,7 +455,7 @@ if config["DADA2"] == True:
             "../envs/python.yaml"
         script:
             "../scripts/complete_filter_DADA2.py"
-    
+
     rule snakemake_report:
         input:
             "results/{date}/visual/heatmap_binary.html",
