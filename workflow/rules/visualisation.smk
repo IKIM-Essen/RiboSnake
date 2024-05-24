@@ -599,7 +599,7 @@ if config["DADA2"] == False:
                 category="4. Qualitycontrol",
             ),
         log:
-            "logs/{date}/visualisation/rank-abundance.log",
+            "logs/{date}/visualisation/all-filter.log",
         conda:
             "../envs/python.yaml"
         script:
@@ -621,7 +621,7 @@ if config["DADA2"] == True:
                 category="4. Qualitycontrol",
             ),
         log:
-            "logs/{date}/visualisation/rank-abundance.log",
+            "logs/{date}/visualisation/all-filter.log",
         conda:
             "../envs/python.yaml"
         script:
