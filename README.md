@@ -7,8 +7,7 @@ Qiime2 workflow for 16S analysis created with snakemake.
 
 ## Authors
 
-* Ann-Kathrin Brüggemann (@AKBrueggemann)
-* Thomas Battenfeld (@thomasbtf)
+* Ann-Kathrin Dörr (@AKBrueggemann)
 
 ## Usage
 
