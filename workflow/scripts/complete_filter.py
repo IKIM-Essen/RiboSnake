@@ -26,7 +26,10 @@ first.drop(
     inplace=True,
 )
 human = pd.read_csv(str(snakemake.input.human), sep=",", header=0, index_col=0)
-human.drop(["difference"], axis=1, inplace=True)
+
+if "difference" in human.columns:
+    human.drop(["difference"], axis=1, inplace=True)
+
 wo_chimera = pd.read_csv(
     str(snakemake.input.wo_chimera)
     + "/table-nonchimeric-wo-borderline/data/sample-frequency-detail.csv",
@@ -63,7 +66,7 @@ merged_df = pd.concat(
 )
 
 # Convert all numbers to integers
-merged_df = merged_df.astype(int)
+merged_df = merged_df.apply(pd.to_numeric, errors='ignore', downcast='integer')
 
 # Generate HTML table
 html_table = merged_df.to_html(index=True, classes="qiime2-table")
