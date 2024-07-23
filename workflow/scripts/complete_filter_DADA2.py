@@ -19,15 +19,26 @@ dada2 = pd.read_csv(
     index_col=0,
 )
 dada2.drop(["#q2:types"], axis=0, inplace=True)
-dada2.drop(
-    [
-        "percentage of input passed filter",
-        "percentage of input merged",
-        "percentage of input non-chimeric",
-    ],
-    axis=1,
-    inplace=True,
-)
+
+if "percentage of input merged" in dada2.columns:
+    dada2.drop(
+        [
+            "percentage of input passed filter",
+            "percentage of input merged",
+            "percentage of input non-chimeric",
+        ],
+        axis=1,
+        inplace=True,
+    )
+else:
+    dada2.drop(
+        [
+            "percentage of input passed filter",
+            "percentage of input non-chimeric",
+        ],
+        axis=1,
+        inplace=True,
+    )
 length = pd.read_csv(
     str(snakemake.input.length)
     + "/table-cluster-lengthfilter/data/sample-frequency-detail.csv",
@@ -52,6 +63,8 @@ complete = pd.read_csv(
 complete.rename(columns={"0": "Reads after abundance filter"}, inplace=True)
 
 merged_df = pd.concat([dada2, length, before_abundance, complete], axis=1)
+
+merged_df = merged_df.fillna(0)
 
 # Convert all numbers to integers
 merged_df = merged_df.apply(pd.to_numeric, errors="ignore", downcast="integer")

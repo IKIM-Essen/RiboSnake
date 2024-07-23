@@ -65,6 +65,8 @@ merged_df = pd.concat(
     [first, human, wo_chimera, length, before_abundance, complete], axis=1
 )
 
+merged_df = merged_df.fillna(0)
+
 # Convert all numbers to integers
 merged_df = merged_df.apply(pd.to_numeric, errors="ignore", downcast="integer")
 
