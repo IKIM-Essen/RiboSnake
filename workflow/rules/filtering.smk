@@ -335,7 +335,7 @@ if config["DADA2"] == False:
             threads=config["threads"],
             perc_identity=config["filtering"]["perc-identity"],
             perc_query_aligned=config["filtering"]["perc-query-aligned"],
-        threads: 50
+        threads: config["threads"]
         log:
             "logs/{date}/filtering/filter-human.log",
         conda:

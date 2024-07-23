@@ -14,7 +14,7 @@ if config["bowtie"] == True:
             "../envs/python.yaml"
         shell:
             "mkdir {output.dirc} \n"
-            "bowtie2-build {input} {output.dirc}/{params.filename} -p {params.threads}"
+            "bowtie2-build {input} {output.dirc}/{params.filename} --threads {params.threads}"
 
     if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
