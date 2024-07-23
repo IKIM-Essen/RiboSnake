@@ -78,6 +78,16 @@ Executing the workflow takes two steps:
 
 using `$N` cores.
 
+When running on snakemake > 8.0 we recommend setting the --shared-fs-usage none as well as setting the environment variable TEMP to a local directory to prevent problems with the usage of the fs-storage system.
+The environment variable can be set like this:
+
+    conda activate your_environment_name
+    export TEMP=/path/to/local/tmp
+
+Then run the snakemake command like above with the addition of the storage flag:
+
+    snakemake --cores $N --use-conda --shared-fs-usage none
+
 ### Step 5: Investigate results
 
 After successful execution, the workflow provides you with a compressed folder, holding all interesting results ready to decompress or to download to your local machine.
