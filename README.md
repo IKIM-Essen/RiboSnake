@@ -127,7 +127,7 @@ In case you have also changed or added steps, please consider contributing them 
 ## Testing
 
 Test cases are in the subfolder `.test`. They are automatically executed via continuous integration with [Github Actions](https://github.com/features/actions).
-If you want to test the RiboSnake functions yourself, you can use the same data used for the CI/CD tests. The used fastq files can be downloaded here: (https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip). They have been published by Neilson et al., mSystems, 2017. 
+If you want to test the RiboSnake functions yourself, you can use the same data used for the CI/CD tests. The used fastq files can be downloaded [here](https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip). They have been published by Neilson et al., mSystems, 2017.
 
 ## Tools
 
