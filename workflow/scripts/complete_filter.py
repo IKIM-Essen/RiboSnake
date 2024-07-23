@@ -66,7 +66,7 @@ merged_df = pd.concat(
 )
 
 # Convert all numbers to integers
-merged_df = merged_df.apply(pd.to_numeric, errors='ignore', downcast='integer')
+merged_df = merged_df.apply(pd.to_numeric, errors="ignore", downcast="integer")
 
 # Generate HTML table
 html_table = merged_df.to_html(index=True, classes="qiime2-table")
