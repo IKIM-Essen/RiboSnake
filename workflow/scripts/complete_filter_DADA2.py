@@ -67,7 +67,7 @@ merged_df = pd.concat([dada2, length, before_abundance, complete], axis=1)
 merged_df = merged_df.fillna(0)
 
 # Convert all numbers to integers
-merged_df = merged_df.astype(int)
+merged_df = merged_df.apply(pd.to_numeric, errors="ignore", downcast="integer")
 
 # Generate HTML table
 html_table = merged_df.to_html(index=True, classes="qiime2-table")

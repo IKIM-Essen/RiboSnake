@@ -7,8 +7,7 @@ Qiime2 workflow for 16S analysis created with snakemake.
 
 ## Authors
 
-* Ann-Kathrin Brüggemann (@AKBrueggemann)
-* Thomas Battenfeld (@thomasbtf)
+* Ann-Kathrin Dörr (@AKBrueggemann)
 
 ## Usage
 
@@ -65,19 +64,28 @@ Activate the conda environment:
 
 Fill up the `metadata.txt` with the information of your samples:
 
-    Please be careful to not include spaces between the commas. If there is a column, that you don't have any information about, please leave it empty and simply 
-    go on with the next column.
+    Please be careful to not include spaces between the commas. If there is a column, that you don't have any information about, please leave it empty and simply go on with the next column.
 
 Test your configuration by performing a dry-run via
 
     snakemake --use-conda -n
 
 Executing the workflow takes two steps:
-  
+
     Data preparation: snakemake --cores $N --use-conda data_prep
     Workflow execution: snakemake --cores $N --use-conda
 
 using `$N` cores.
+
+When running on snakemake > 8.0 we recommend setting the --shared-fs-usage none as well as setting the environment variable TEMP to a local directory to prevent problems with the usage of the fs-storage system.
+The environment variable can be set like this:
+
+    conda activate your_environment_name
+    export TEMP=/path/to/local/tmp
+
+Then run the snakemake command like above with the addition of the storage flag:
+
+    snakemake --cores $N --use-conda --shared-fs-usage none
 
 ### Step 5: Investigate results
 
@@ -119,6 +127,7 @@ In case you have also changed or added steps, please consider contributing them 
 ## Testing
 
 Test cases are in the subfolder `.test`. They are automatically executed via continuous integration with [Github Actions](https://github.com/features/actions).
+If you want to test the RiboSnake functions yourself, you can use the same data used for the CI/CD tests. The used fastq files can be downloaded [here](https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip). They have been published by Neilson et al., mSystems, 2017.
 
 ## Tools
 
