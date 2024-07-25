@@ -133,7 +133,7 @@ If you want to test the RiboSnake functions yourself, you can use the same data 
 1. First clone teh repository to your local machine as described above.
 2. Download a dataset of your liking, or the data used for testing the pipeline. The FASTQ files can be downloaded with:
     curl -sL \
-          https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip
+          "https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip"
 3. Unzip the data into a folder of your liking, it can be called "incoming" but it does not have to be.
 If you name your folder differently, please change the "input" path in the config file.
 4. If you don't want to use the whole dataset for testing, remove some of the FASTQ files from the folder:
@@ -144,7 +144,6 @@ If you name your folder differently, please change the "input" path in the confi
 5. Use the information that can be found in [this](https://data.qiime2.org/2024.5/tutorials/atacama-soils/sample_metadata.tsv) file from the Qiime2 tutorial, to fill out your metadata.txt file for the samples starting with "BAQ".
 6. The default-parameters to be used in the config file can be found in the provided file "PowerSoil-Illumina-soil.yaml" in the config folder.
 7. With these parameters and the previous steps, you should be able to execute the workflow.
-   
 
 ## Tools
 
