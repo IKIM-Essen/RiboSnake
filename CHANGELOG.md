@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.10.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.9.0...v0.10.0) (2024-08-07)
+
+
+### Features
+
+* add all-filter for reduced analysis ([#134](https://github.com/IKIM-Essen/RiboSnake/issues/134)) ([c8e2b56](https://github.com/IKIM-Essen/RiboSnake/commit/c8e2b567558b25af88d972ec10625855a3d601c2))
+* all filter fit for DADA2 ([#132](https://github.com/IKIM-Essen/RiboSnake/issues/132)) ([4cd0418](https://github.com/IKIM-Essen/RiboSnake/commit/4cd041801547e6ed2fd15c2ded1676687a6d8ff6))
+* longitudinal with LME and environment fix ([#133](https://github.com/IKIM-Essen/RiboSnake/issues/133)) ([6169fd8](https://github.com/IKIM-Essen/RiboSnake/commit/6169fd848d3ca0a28f74f41976e04da8c11d59d8))
+
+
+### Bug Fixes
+
+* all filter ([#130](https://github.com/IKIM-Essen/RiboSnake/issues/130)) ([6f75ef9](https://github.com/IKIM-Essen/RiboSnake/commit/6f75ef9d73ac5708f4df22fc4c5339a11e50fa95))
+* quick again ([#136](https://github.com/IKIM-Essen/RiboSnake/issues/136)) ([6b28c85](https://github.com/IKIM-Essen/RiboSnake/commit/6b28c854585764d160235da4b948947d8c03e942))
+
 ## [0.9.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.8.0...v0.9.0) (2024-05-06)
 
 
