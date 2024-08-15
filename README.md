@@ -146,3 +146,9 @@ A list of the tools used in this pipeline:
 | songbird     | www.doi.org/10.1038/s41467-019-10656-5            |
 | bowtie2      | www.doi.org/10.1038/nmeth.1923                    |
 | Ancom        | www.doi.org/10.3402/mehd.v26.27663                |
+
+## Citation
+
+If you use RiboSnake in your work, please cite the paper:
+
+Dörr A, Welling J, Dörr A, Gosch J, Möhlen H, Schmithausen R, Kehrmann J, Meyer F, Kraiselburd I. RiboSnake – a user-friendly, robust, reproducible, multipurpose and documentation-extensive pipeline for 16S rRNA gene microbiome analysis. bioRxiv 2024.08.06.606757; doi: https://doi.org/10.1101/2024.08.06.606757

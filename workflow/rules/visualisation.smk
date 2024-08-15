@@ -626,3 +626,26 @@ if config["DADA2"] == True:
             "../envs/python.yaml"
         script:
             "../scripts/complete_filter_DADA2.py"
+
+
+rule empress_tree:
+    input:
+        tree="results/{date}/visual/rooted-tree.qza",
+        table="results/{date}/out/table-cluster-filtered.qza",
+    output:
+        "results/{date}/visual/empress-community.qzv"
+    log:
+        "logs/{date}/visualisation/empress-treeviewer.log",
+    params:
+        metadata="config/pep/sample.tsv",
+        taxonomy="results/{date}/out/taxonomy.qza",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime empress community-plot "
+        "--i-tree {input.tree} "
+        "--i-feature-table {input.table} "
+        "--m-sample-metadata-file {params.metadata} "
+        "--m-feature-metadata-file {params.taxonomy} "
+        "--p-filter-extra-samples "
+        "--o-visualization {output} "
