@@ -1,4 +1,4 @@
-# RiboSnake: 16S rDNA analysis workflow with qiime2 and snakemake
+# RiboSnake: 16S rRNA analysis workflow with QIIME2 and Snakemake
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.10-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/16S.svg?branch=master)](https://travis-ci.org/snakemake-workflows/16S)
@@ -15,11 +15,9 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 ### Step 1: Obtain a copy of this workflow
 
-If you want to add your own changes to the workflow, create a GitHub repository of your own, then clone this one.
-1. Create a new github repository using this workflow [as a template](https://help.github.com/en/articles/creating-a-repository-from-a-template).
-2. [Clone](https://help.github.com/en/articles/cloning-a-repository) the newly created repository to your local system, into the place where you want to perform the data analysis.
-
-If you just want to use this workflow locally, then simply clone it or download it as zip-file.
+If you want to use the workflow, please obtain a copy of it by either:
+[Cloning](https://help.github.com/en/articles/cloning-a-repository) the repository to your local system, into the place where you want to perform the data analysis or
+Downloading a zip-file of the repository to your local machine.
 
 When you have the folder structure added on your local machine, please add a "data" folder manually.
 
@@ -95,14 +93,7 @@ report holding graphics as well as the DAG of the executed jobs and html files l
 
 This report can, e.g., be forwarded to your collaborators.
 
-### Step 6: Commit changes
-
-Whenever you change something, don't forget to commit the changes back to your github copy of the repository:
-
-    git commit -a
-    git push
-
-### Step 7: Obtain updates from upstream
+### Step 6: Obtain updates from upstream
 
 Whenever you want to synchronize your workflow copy with new developments from upstream, do the following.
 
@@ -113,21 +104,46 @@ Whenever you want to synchronize your workflow copy with new developments from u
 5. Apply the modified diff via: `git apply upstream-changes.diff`.
 6. Carefully check whether you need to update the config files: `git diff HEAD upstream/master config`. If so, do it manually, and only where necessary, since you would otherwise likely overwrite your settings and samples.
 
-
-### Step 8: Contribute back
+## Contribute back
 
 In case you have also changed or added steps, please consider contributing them back to the original repository:
 
-1. [Fork](https://help.github.com/en/articles/fork-a-repo) the original repo to a personal or lab account.
-2. [Clone](https://help.github.com/en/articles/cloning-a-repository) the fork to your local system, to a different place than where you ran your analysis.
-3. Copy the modified files from your analysis to the clone of your fork, e.g., `cp -r workflow path/to/fork`. Make sure to **not** accidentally copy config file contents or sample sheets. Instead, manually update the example config files if necessary.
-4. Commit and push your changes to your fork.
-5. Create a [pull request](https://help.github.com/en/articles/creating-a-pull-request) against the original repository.
+### Step 1: Forking the repository
+
+[Fork](https://help.github.com/en/articles/fork-a-repo) the original repo to a personal or lab account.
+
+### Step 2: Cloning
+
+[Clone](https://help.github.com/en/articles/cloning-a-repository) the fork to your local system, to a different place than where you ran your analysis.
+
+### Step 3: Add changes
+
+1. Copy the modified files from your analysis to the clone of your fork, e.g., `cp -r workflow path/to/fork`. Make sure to **not** accidentally copy config file contents or sample sheets. Instead, manually update the example config files if necessary.
+2. Commit and push your changes to your fork.
+3. Create a [pull request](https://help.github.com/en/articles/creating-a-pull-request) against the original repository.
+4. If you want to add your config file and the parameters as a new default parameter sets, please do this by opening a pull request adding the file to the "contributions" folder.
 
 ## Testing
 
 Test cases are in the subfolder `.test`. They are automatically executed via continuous integration with [Github Actions](https://github.com/features/actions).
 If you want to test the RiboSnake functions yourself, you can use the same data used for the CI/CD tests. The used fastq files can be downloaded [here](https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip). They have been published by Neilson et al., mSystems, 2017.
+
+### Example
+
+1. First clone teh repository to your local machine as described above.
+2. Download a dataset of your liking, or the data used for testing the pipeline. The FASTQ files can be downloaded with:
+    curl -sL \
+          "https://data.qiime2.org/2022.2/tutorials/importing/casava-18-paired-end-demultiplexed.zip"
+3. Unzip the data into a folder of your liking, it can be called "incoming" but it does not have to be.
+If you name your folder differently, please change the "input" path in the config file.
+4. If you don't want to use the whole dataset for testing, remove some of the FASTQ files from the folder:
+    rm PAP*
+    rm YUN*
+    rm Rep*
+    rm blank*
+5. Use the information that can be found in [this](https://data.qiime2.org/2024.5/tutorials/atacama-soils/sample_metadata.tsv) file from the Qiime2 tutorial, to fill out your metadata.txt file for the samples starting with "BAQ".
+6. The default-parameters to be used in the config file can be found in the provided file "PowerSoil-Illumina-soil.yaml" in the config folder.
+7. With these parameters and the previous steps, you should be able to execute the workflow.
 
 ## Tools
 
@@ -146,6 +162,11 @@ A list of the tools used in this pipeline:
 | songbird     | www.doi.org/10.1038/s41467-019-10656-5            |
 | bowtie2      | www.doi.org/10.1038/nmeth.1923                    |
 | Ancom        | www.doi.org/10.3402/mehd.v26.27663                |
+| cutadapt     | www.doi.org/10.14806/ej.17.1.200                  |
+| BLAST        | www.doi.org/10.1016/S0022-2836(05)80360-2         |
+| gneiss       | www.doi.org/10.1128/mSystems.00162-16             |
+| qurro        | www.doi.org/10.1093/nargab/lqaa023                |
+| Rescript     | www.doi.org/10.1371/journal.pcbi.1009581          |
 
 ## Citation
 
