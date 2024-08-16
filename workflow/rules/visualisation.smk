@@ -395,6 +395,9 @@ rule absolute_taxa:
             category="2. Taxonomy",
             subcategory="Taxa Barplot",
         ),
+    params:
+        samplename = config["metadata-parameters"]["absolute-taxa-name"],
+        metadata = "config/pep/sample.tsv",
     log:
         "logs/{date}/visualisation/absolute_taxabarplot.log",
     conda:
@@ -649,3 +652,20 @@ rule empress_tree:
         "--m-feature-metadata-file {params.taxonomy} "
         "--p-filter-extra-samples "
         "--o-visualization {output} "
+
+
+rule include_metadata:
+    input:
+        "config/pep/sample.tsv"
+    output:
+        report(
+                "results/{date}/visual/report/sample.tsv",
+                caption="../report/metadata.rst",
+                category="4. Qualitycontrol",
+            ),
+    log:
+        "logs/{date}/visualisation/metadata.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "cp {input} {output}"

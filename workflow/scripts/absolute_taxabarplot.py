@@ -24,6 +24,14 @@ for i in df_reduced_second.index:
 df_reduced_second.replace(-np.inf, 0, inplace=True)
 df_log10 = np.log10(df_reduced_second)
 
+metadata = pd.read_csv(str(snakemake.params.metadata), delimiter="\t", header=0, index_col = "sample-ID")
+metadata.drop("#q2:types", axis=0, inplace=True)
+
+old_name_df = df_reduced_second.columns
+new_names = metadata.loc[old_name_df,str(snakemake.params.samplename)]
+
+df_reduced_second.columns = new_names
+
 # Initialize the figure
 fig = go.Figure()
 

@@ -285,7 +285,7 @@ rule report_empress:
     output:
         report(
             directory("results/{date}/visual/report/empress-community"),
-            caption="../report/jaccard-emperor.rst",
+            caption="../report/empress.rst",
             category="2. Taxonomy",
             subcategory="Phylogenetic Tree",
             htmlindex="index.html",
@@ -331,6 +331,7 @@ if config["longitudinal"] == False:
             "results/{date}/out/qurro_plot",
             "results/{date}/visual/report/rank-abundance/plots/",
             "results/{date}/visual/allfilter.html",
+            "results/{date}/visual/report/sample.tsv",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_metric("beta"),
@@ -426,6 +427,7 @@ if config["longitudinal"]:
             "results/{date}/visual/report/lme",
             "results/{date}/visual/report/rank-abundance/plots/",
             "results/{date}/visual/allfilter.html",
+            "results/{date}/visual/report/sample.tsv",
             expand(
                 "results/{{date}}/visual/beta-diversity-{metric}.html",
                 metric=get_metric("beta"),

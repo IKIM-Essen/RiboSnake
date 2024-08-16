@@ -396,7 +396,7 @@ if config["DADA2"] == True:
     output:
         report(
             directory("results/{date}/visual/report/empress-community"),
-            caption="../report/jaccard-emperor.rst",
+            caption="../report/empress.rst",
             category="2. Taxonomy",
             subcategory="Phylogenetic Tree",
             htmlindex="index.html",
@@ -485,6 +485,7 @@ if config["DADA2"] == True:
             "results/{date}/visual/report/multiqc.html",
             "results/{date}/visual/absolute-taxabar-plot.html",
             "results/{date}/visual/allfilter.html",
+            "results/{date}/visual/report/sample.tsv",
         output:
             "results/{date}/out/report.zip",
         params:
@@ -636,6 +637,7 @@ if config["DADA2"] == False:
             "results/{date}/visual/absolute-taxabar-plot.html",
             "results/{date}/visual/allfilter.html",
             "results/{date}/visual/report/empress-community",
+            "results/{date}/visual/report/sample.tsv",
         output:
             "results/{date}/out/report.zip",
         params:
