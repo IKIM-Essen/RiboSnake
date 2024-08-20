@@ -32,10 +32,7 @@ if "percentage of input merged" in dada2.columns:
     )
 else:
     dada2.drop(
-        [
-            "percentage of input passed filter",
-            "percentage of input non-chimeric",
-        ],
+        ["percentage of input passed filter", "percentage of input non-chimeric",],
         axis=1,
         inplace=True,
     )

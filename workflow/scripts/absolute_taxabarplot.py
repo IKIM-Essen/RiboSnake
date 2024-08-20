@@ -24,15 +24,19 @@ for i in df_reduced_second.index:
 df_reduced_second.replace(-np.inf, 0, inplace=True)
 df_log10 = np.log10(df_reduced_second)
 
-metadata = pd.read_csv(str(snakemake.params.metadata), delimiter="\t", header=0, index_col = "sample-ID")
+metadata = pd.read_csv(
+    str(snakemake.params.metadata), delimiter="\t", header=0, index_col="sample-ID"
+)
 metadata.drop("#q2:types", axis=0, inplace=True)
 
 dropdown_options = [{"label": col, "value": col} for col in metadata.columns]
 initial_x = metadata.columns[0]  # Set initial x-axis label
 
 # Generate initial x-axis labels
-x_labels = [f"{sample_id}: {metadata.at[sample_id, initial_x]}" 
-            for sample_id in df_reduced_second.columns]
+x_labels = [
+    f"{sample_id}: {metadata.at[sample_id, initial_x]}"
+    for sample_id in df_reduced_second.columns
+]
 
 # Initialize the figure
 fig = go.Figure()
@@ -40,6 +44,7 @@ fig = go.Figure()
 color_map = {}
 for i, bacterium_name in enumerate(df_reduced_second.index):
     color_map[bacterium_name] = f"rgb({i * 30 % 256}, {i * 50 % 256}, {i * 70 % 256})"
+
 
 def add_traces(fig, x_labels):
     fig.data = []  # Clear existing traces
@@ -53,6 +58,7 @@ def add_traces(fig, x_labels):
                 marker=dict(line=dict(width=0)),  # Remove the bar outline
             )
         )
+
 
 # Add initial traces
 add_traces(fig, x_labels)
@@ -80,23 +86,34 @@ fig.update_layout(
     yaxis_title="Logarithmic absolute bacterial abundance",
     barmode="stack",  # Stacked bar mode
     legend_title="Bacterial names",  # Legend title
-    updatemenus=[{
-        "buttons": [
-            {
-                "args": [{"x": [[f"{sample_id}: {metadata.at[sample_id, col]}" 
-                                 for sample_id in df_reduced_second.columns]]}],
-                "label": col,
-                "method": "restyle"
-            } for col in metadata.columns
-        ],
-        "direction": "down",
-        "showactive": True,
-        "x": 1.15,
-        "xanchor": "left",
-        "y": 1.2,
-        "yanchor": "top",
-        "type": "dropdown"
-    }],
+    updatemenus=[
+        {
+            "buttons": [
+                {
+                    "args": [
+                        {
+                            "x": [
+                                [
+                                    f"{sample_id}: {metadata.at[sample_id, col]}"
+                                    for sample_id in df_reduced_second.columns
+                                ]
+                            ]
+                        }
+                    ],
+                    "label": col,
+                    "method": "restyle",
+                }
+                for col in metadata.columns
+            ],
+            "direction": "down",
+            "showactive": True,
+            "x": 1.15,
+            "xanchor": "left",
+            "y": 1.2,
+            "yanchor": "top",
+            "type": "dropdown",
+        }
+    ],
     legend=dict(
         orientation="v",
         yanchor="top",
@@ -111,7 +128,7 @@ fig.update_layout(
     yaxis=dict(
         type="log",  # Set y-axis to logarithmic scale
         tickvals=[
-            10**i for i in range(2, 15)
+            10 ** i for i in range(2, 15)
         ],  # Set tick values to 10^2, 10^3, and so on
         ticktext=[
             f"10^{i}" for i in range(2, 15)
