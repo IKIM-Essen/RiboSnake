@@ -39,7 +39,9 @@ while i < len(directories):
                 zmin=0,  # Minimum value for color scale
                 zmax=df.max().max(),  # Maximum value for color scale
                 hoverongaps=False,  # Do not show hover information for NaN values
-                colorbar=dict(title="Distance",),  # Add a title to the colorbar
+                colorbar=dict(
+                    title="Distance",
+                ),  # Add a title to the colorbar
             )
         )
 
