@@ -408,7 +408,6 @@ if config["DADA2"] == True:
         script:
             "../scripts/extract_significance.py"
 
-
     rule report_files:
         input:
             "results/{date}/visual/unzipped/",
@@ -450,7 +449,6 @@ if config["DADA2"] == True:
                 category="4. Qualitycontrol",
                 htmlindex="index.html",
             ),
-
         log:
             "logs/{date}/outputs/report-files.log",
         conda:

@@ -167,6 +167,8 @@ A list of the tools used in this pipeline:
 | gneiss       | www.doi.org/10.1128/mSystems.00162-16             |
 | qurro        | www.doi.org/10.1093/nargab/lqaa023                |
 | Rescript     | www.doi.org/10.1371/journal.pcbi.1009581          |
+| EMPeror      | www.doi.org/10.1186/2047-217X-2-16                |
+| EMPress      | www.doi.org/10.1128/msystems.01216-20             |
 
 ## Citation
 
