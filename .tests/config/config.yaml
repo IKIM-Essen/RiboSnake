@@ -96,6 +96,7 @@ metadata-parameters:
   taxa-heatmap-column: extract_group_no
   beta-metadata-column: extract_group_no
   gneiss-metadata-column: site_name
+  absolute-taxa-name: extract_group_no
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification

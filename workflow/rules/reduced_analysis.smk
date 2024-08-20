@@ -380,6 +380,7 @@ if config["DADA2"] == True:
             "results/{date}/visual/paired-seqs.qzv",
             "results/{date}/visual/fastq_stats.qzv",
             "results/{date}/visual/dada2-stats-visual.qzv",
+            "results/{date}/visual/empress-community.qzv",
         output:
             directory("results/{date}/visual/unzipped"),
         log:
@@ -388,6 +389,24 @@ if config["DADA2"] == True:
             "../envs/python.yaml"
         script:
             "../scripts/rename_qzv.py"
+
+    rule report_empress:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            report(
+                directory("results/{date}/visual/report/empress-community"),
+                caption="../report/empress.rst",
+                category="2. Taxonomy",
+                subcategory="Phylogenetic Tree",
+                htmlindex="index.html",
+            ),
+        log:
+            "logs/{date}/outputs/report-empress.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/extract_significance.py"
 
     rule report_files:
         input:
@@ -464,6 +483,7 @@ if config["DADA2"] == True:
             "results/{date}/visual/report/multiqc.html",
             "results/{date}/visual/absolute-taxabar-plot.html",
             "results/{date}/visual/allfilter.html",
+            "results/{date}/visual/report/sample.tsv",
         output:
             "results/{date}/out/report.zip",
         params:
@@ -614,6 +634,8 @@ if config["DADA2"] == False:
             "results/{date}/visual/report/multiqc.html",
             "results/{date}/visual/absolute-taxabar-plot.html",
             "results/{date}/visual/allfilter.html",
+            "results/{date}/visual/report/empress-community",
+            "results/{date}/visual/report/sample.tsv",
         output:
             "results/{date}/out/report.zip",
         params:

@@ -167,3 +167,11 @@ A list of the tools used in this pipeline:
 | gneiss       | www.doi.org/10.1128/mSystems.00162-16             |
 | qurro        | www.doi.org/10.1093/nargab/lqaa023                |
 | Rescript     | www.doi.org/10.1371/journal.pcbi.1009581          |
+| EMPeror      | www.doi.org/10.1186/2047-217X-2-16                |
+| EMPress      | www.doi.org/10.1128/msystems.01216-20             |
+
+## Citation
+
+If you use RiboSnake in your work, please cite the paper:
+
+Dörr A, Welling J, Dörr A, Gosch J, Möhlen H, Schmithausen R, Kehrmann J, Meyer F, Kraiselburd I. RiboSnake – a user-friendly, robust, reproducible, multipurpose and documentation-extensive pipeline for 16S rRNA gene microbiome analysis. bioRxiv 2024.08.06.606757; doi: doi.org/10.1101/2024.08.06.606757

@@ -24,6 +24,20 @@ for i in df_reduced_second.index:
 df_reduced_second.replace(-np.inf, 0, inplace=True)
 df_log10 = np.log10(df_reduced_second)
 
+metadata = pd.read_csv(
+    str(snakemake.params.metadata), delimiter="\t", header=0, index_col="sample-ID"
+)
+metadata.drop("#q2:types", axis=0, inplace=True)
+
+dropdown_options = [{"label": col, "value": col} for col in metadata.columns]
+initial_x = metadata.columns[0]  # Set initial x-axis label
+
+# Generate initial x-axis labels
+x_labels = [
+    f"{sample_id}: {metadata.at[sample_id, initial_x]}"
+    for sample_id in df_reduced_second.columns
+]
+
 # Initialize the figure
 fig = go.Figure()
 
@@ -31,6 +45,24 @@ color_map = {}
 for i, bacterium_name in enumerate(df_reduced_second.index):
     color_map[bacterium_name] = f"rgb({i * 30 % 256}, {i * 50 % 256}, {i * 70 % 256})"
 
+
+def add_traces(fig, x_labels):
+    fig.data = []  # Clear existing traces
+    for bacterium_name, row in df_reduced_second.iterrows():
+        fig.add_trace(
+            go.Bar(
+                x=x_labels,  # x-axis labels from dropdown
+                y=row.values,  # Values for the current bacterium
+                name=bacterium_name,  # Bacterium name as legend label
+                marker_color=[color_map[bacterium_name] for _ in x_labels],
+                marker=dict(line=dict(width=0)),  # Remove the bar outline
+            )
+        )
+
+
+# Add initial traces
+add_traces(fig, x_labels)
+"""
 # Loop through each row in the DataFrame
 for bacterium_name, row in df_reduced_second.iterrows():
     # Add a bar trace for each bacterium
@@ -45,6 +77,7 @@ for bacterium_name, row in df_reduced_second.iterrows():
             marker=dict(line=dict(width=0)),  # Remove the bar outline
         )
     )
+"""
 
 # Update layout for the plot
 fig.update_layout(
@@ -53,6 +86,34 @@ fig.update_layout(
     yaxis_title="Logarithmic absolute bacterial abundance",
     barmode="stack",  # Stacked bar mode
     legend_title="Bacterial names",  # Legend title
+    updatemenus=[
+        {
+            "buttons": [
+                {
+                    "args": [
+                        {
+                            "x": [
+                                [
+                                    f"{sample_id}: {metadata.at[sample_id, col]}"
+                                    for sample_id in df_reduced_second.columns
+                                ]
+                            ]
+                        }
+                    ],
+                    "label": col,
+                    "method": "restyle",
+                }
+                for col in metadata.columns
+            ],
+            "direction": "down",
+            "showactive": True,
+            "x": 1.15,
+            "xanchor": "left",
+            "y": 1.2,
+            "yanchor": "top",
+            "type": "dropdown",
+        }
+    ],
     legend=dict(
         orientation="v",
         yanchor="top",
@@ -82,5 +143,31 @@ fig.update_layout(
         b=80,  # Add bottom margin to accommodate tick text
     ),
 )
+"""
+# Update layout
+fig.update_layout(
+    title="Barplot logarithmic absolute bacterial abundances",
+    xaxis_title="Sample",
+    yaxis_title="Logarithmic absolute bacterial abundance",
+    barmode="stack",  # Stacked bar mode
+    legend_title="Bacterial names",
+    updatemenus=[{
+        "buttons": [
+            {
+                "args": [{"x": [metadata[col].values]}],
+                "label": col,
+                "method": "restyle"
+            } for col in metadata.columns
+        ],
+        "direction": "down",
+        "showactive": True,
+        "x": 1.15,
+        "xanchor": "left",
+        "y": 1.2,
+        "yanchor": "top",
+        "type": "dropdown"
+    }]
+)
+"""
 # Save the figure as an HTML file
 fig.write_html(str(snakemake.output))
