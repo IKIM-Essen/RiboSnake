@@ -104,7 +104,7 @@ rule unzip_reports:
         "results/{date}/visual/paired-seqs.qzv",
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/visual/heatmap_gneiss.qzv",
-        "results/{date}/visual/empress-community.qzv"
+        "results/{date}/visual/empress-community.qzv",
     output:
         temp(directory("results/{date}/visual/unzipped")),
     log:

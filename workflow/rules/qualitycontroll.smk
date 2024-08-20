@@ -57,8 +57,7 @@ rule fastqc:
 rule multiqc_report:
     input:
         expand(
-            "results/{{date}}/out/fastqc/{names}_fastqc.zip",
-            names=get_filenames(),
+            "results/{{date}}/out/fastqc/{names}_fastqc.zip", names=get_filenames(),
         ),
         expand(
             "results/{{date}}/out/kraken/{sample}.kreport2",

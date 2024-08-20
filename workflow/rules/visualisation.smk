@@ -396,8 +396,8 @@ rule absolute_taxa:
             subcategory="Taxa Barplot",
         ),
     params:
-        samplename = config["metadata-parameters"]["absolute-taxa-name"],
-        metadata = "config/pep/sample.tsv",
+        samplename=config["metadata-parameters"]["absolute-taxa-name"],
+        metadata="config/pep/sample.tsv",
     log:
         "logs/{date}/visualisation/absolute_taxabarplot.log",
     conda:
@@ -636,7 +636,7 @@ rule empress_tree:
         tree="results/{date}/visual/rooted-tree.qza",
         table="results/{date}/out/table-cluster-filtered.qza",
     output:
-        "results/{date}/visual/empress-community.qzv"
+        "results/{date}/visual/empress-community.qzv",
     log:
         "logs/{date}/visualisation/empress-treeviewer.log",
     params:
@@ -656,13 +656,13 @@ rule empress_tree:
 
 rule include_metadata:
     input:
-        "config/pep/sample.tsv"
+        "config/pep/sample.tsv",
     output:
         report(
-                "results/{date}/visual/report/sample.tsv",
-                caption="../report/metadata.rst",
-                category="4. Qualitycontrol",
-            ),
+            "results/{date}/visual/report/sample.tsv",
+            caption="../report/metadata.rst",
+            category="4. Qualitycontrol",
+        ),
     log:
         "logs/{date}/visualisation/metadata.log",
     conda:
