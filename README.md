@@ -174,4 +174,4 @@ A list of the tools used in this pipeline:
 
 If you use RiboSnake in your work, please cite the paper:
 
-Dörr A, Welling J, Dörr A, Gosch J, Möhlen H, Schmithausen R, Kehrmann J, Meyer F, Kraiselburd I. RiboSnake – a user-friendly, robust, reproducible, multipurpose and documentation-extensive pipeline for 16S rRNA gene microbiome analysis. bioRxiv 2024.08.06.606757; doi: doi.org/10.1101/2024.08.06.606757
+Ann-Kathrin Dörr,Josefa Welling,Adrian Dörr,Jule Gosch,Hannah Möhlen,Ricarda Schmithausen,Jan Kehrmann,Folker Meyer,Ivana Kraiselburd,RiboSnake – a user-friendly, robust, reproducible, multipurpose and documentation-extensive pipeline for 16S rRNA gene microbiome analysis,Gigabyte,2024 https://doi.org/10.46471/gigabyte.132
