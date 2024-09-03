@@ -174,4 +174,4 @@ A list of the tools used in this pipeline:
 
 If you use RiboSnake in your work, please cite the paper:
 
-Ann-Kathrin Dörr,Josefa Welling,Adrian Dörr,Jule Gosch,Hannah Möhlen,Ricarda Schmithausen,Jan Kehrmann,Folker Meyer,Ivana Kraiselburd,RiboSnake – a user-friendly, robust, reproducible, multipurpose and documentation-extensive pipeline for 16S rRNA gene microbiome analysis,Gigabyte,2024 https://doi.org/10.46471/gigabyte.132
+Ann-Kathrin Dörr,Josefa Welling,Adrian Dörr,Jule Gosch,Hannah Möhlen,Ricarda Schmithausen,Jan Kehrmann,Folker Meyer,Ivana Kraiselburd,RiboSnake – a user-friendly, robust, reproducible, multipurpose and documentation-extensive pipeline for 16S rRNA gene microbiome analysis,Gigabyte,2024 www.doi.org/10.46471/gigabyte.132
