@@ -88,6 +88,7 @@ metadata-parameters:
   taxa-heatmap-column: extract_group_no
   beta-metadata-column: extract_group_no
   gneiss-metadata-column: site_name
+  absolute-taxa-name: name_abbreviation
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification
@@ -214,5 +215,10 @@ longitudinal-params:
   # Column to name the samples
   individual_id_column: "name_abbreviation"
   # Formula for linear-mixed-effect analysis
-  #formula: faith-pd~temperature
-  metric: extraction_date
+  metric: weight_after
+  # Comma-separated list to use as independent covariates to
+  # determine mean structure of "metric"
+  group: "weight_before,bmi_before,waist_before"
+  # Comma-separated list to use as independent covariates to
+  # determine variance and covariance of "metric"
+  random-effects: "blood_before,blood_after"

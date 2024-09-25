@@ -222,12 +222,7 @@ rule abundance_frequency:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
     output:
         abundance="results/{date}/out/abundance.txt",
-        feature_table=report(
-            directory("results/{date}/visual/table-cluster-lengthfilter/data"),
-            caption="../report/feature-table.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
+        feature_table=directory("results/{date}/visual/table-cluster-lengthfilter/data"),
     params:
         relative_abundance=config["filtering"]["relative-abundance-filter"],
     log:
@@ -279,17 +274,19 @@ rule unzip_frequency:
         "../scripts/rename_qzv.py"
 
 
-rule unzip_frequency_chimera:
-    input:
-        "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
-    output:
-        temp(directory("results/{date}/visual/chimera_unzipped")),
-    log:
-        "logs/{date}/outputs/unzip-chimera.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/rename_qzv.py"
+if config["DADA2"] == False:
+
+    rule unzip_frequency_chimera:
+        input:
+            "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
+        output:
+            temp(directory("results/{date}/visual/chimera_unzipped")),
+        log:
+            "logs/{date}/outputs/unzip-chimera.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/rename_qzv.py"
 
 
 if config["reduced-analysis"] == True:
@@ -314,12 +311,7 @@ rule frequency_after_abundancefilter:
     input:
         "results/{date}/visual/frequency_unzipped",
     output:
-        report(
-            directory("results/{date}/visual/report/table-cluster-filtered"),
-            caption="../report/feature-table-afterabundance.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
+        directory("results/{date}/visual/report/table-cluster-filtered"),
     log:
         "logs/{date}/filtering/after_abundance-frequency.log",
     conda:
@@ -343,7 +335,7 @@ if config["DADA2"] == False:
             threads=config["threads"],
             perc_identity=config["filtering"]["perc-identity"],
             perc_query_aligned=config["filtering"]["perc-query-aligned"],
-        threads: 50
+        threads: config["threads"]
         log:
             "logs/{date}/filtering/filter-human.log",
         conda:

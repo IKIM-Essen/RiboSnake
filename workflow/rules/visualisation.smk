@@ -43,20 +43,22 @@ rule unzip_frequency_length:
         "../scripts/rename_qzv.py"
 
 
-rule visualise_beforeChimera:
-    input:
-        "results/{date}/out/table-nonchimeric-wo-borderline.qza",
-    output:
-        "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
-    log:
-        "logs/{date}/visualisation/visualise-chimera.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime feature-table summarize "
-        "--i-table {input} "
-        "--o-visualization {output} "
-        "--verbose 2> {log}"
+if config["DADA2"] == False:
+
+    rule visualise_beforeChimera:
+        input:
+            "results/{date}/out/table-nonchimeric-wo-borderline.qza",
+        output:
+            "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
+        log:
+            "logs/{date}/visualisation/visualise-chimera.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table summarize "
+            "--i-table {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
 
 
 rule visualise_afterab:
@@ -393,6 +395,9 @@ rule absolute_taxa:
             category="2. Taxonomy",
             subcategory="Taxa Barplot",
         ),
+    params:
+        samplename=config["metadata-parameters"]["absolute-taxa-name"],
+        metadata="config/pep/sample.tsv",
     log:
         "logs/{date}/visualisation/absolute_taxabarplot.log",
     conda:
@@ -502,17 +507,13 @@ rule ancom:
         "--verbose 2> {log}"
 
 
-if config["bowtie"] == False:
+if config["bowtie"] == False and config["DADA2"] == False:
 
     rule hum_filter_difference:
         input:
             "results/{date}/visual/unzipped/",
         output:
-            report(
-                "results/{date}/visual/sample_frequencys_difference.csv",
-                caption="../report/hum_filter_difference.rst",
-                category="4. Qualitycontrol",
-            ),
+            "results/{date}/visual/sample_frequencys_difference.csv",
         params:
             visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
             visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
@@ -584,23 +585,87 @@ rule rank_abundance:
         "../scripts/rank-abundance.py"
 
 
-rule all_filter:
+if config["DADA2"] == False:
+
+    rule all_filter:
+        input:
+            first="results/{date}/visual/report/demux-joined-filter-stats/",
+            human="results/{date}/visual/sample_frequencys_difference.csv",
+            wo_chimera="results/{date}/visual/chimera_unzipped/",
+            length="results/{date}/visual/lengthfilter_unzip/",
+            before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
+            final="results/{date}/visual/report/table-cluster-filtered/",
+        output:
+            report(
+                "results/{date}/visual/allfilter.html",
+                caption="../report/all-filter.rst",
+                category="4. Qualitycontrol",
+            ),
+        log:
+            "logs/{date}/visualisation/all-filter.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/complete_filter.py"
+
+
+if config["DADA2"] == True:
+
+    rule all_filter:
+        input:
+            dada2="results/{date}/visual/unzipped/",
+            length="results/{date}/visual/lengthfilter_unzip/",
+            before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
+            final="results/{date}/visual/report/table-cluster-filtered/",
+        output:
+            report(
+                "results/{date}/visual/allfilter.html",
+                caption="../report/all-filter.rst",
+                category="4. Qualitycontrol",
+            ),
+        log:
+            "logs/{date}/visualisation/all-filter.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/complete_filter_DADA2.py"
+
+
+rule empress_tree:
     input:
-        first="results/{date}/visual/report/demux-joined-filter-stats/",
-        human="results/{date}/visual/sample_frequencys_difference.csv",
-        wo_chimera="results/{date}/visual/chimera_unzipped/",
-        length="results/{date}/visual/lengthfilter_unzip/",
-        before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
-        final="results/{date}/visual/report/table-cluster-filtered/",
+        tree="results/{date}/visual/rooted-tree.qza",
+        table="results/{date}/out/table-cluster-filtered.qza",
+    output:
+        "results/{date}/visual/empress-community.qzv",
+    log:
+        "logs/{date}/visualisation/empress-treeviewer.log",
+    params:
+        metadata="config/pep/sample.tsv",
+        taxonomy="results/{date}/out/taxonomy.qza",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime empress community-plot "
+        "--i-tree {input.tree} "
+        "--i-feature-table {input.table} "
+        "--m-sample-metadata-file {params.metadata} "
+        "--m-feature-metadata-file {params.taxonomy} "
+        "--p-filter-extra-samples "
+        "--o-visualization {output} "
+
+
+rule include_metadata:
+    input:
+        "config/pep/sample.tsv",
     output:
         report(
-            "results/{date}/visual/allfilter.html",
-            caption="../report/all-filter.rst",
+            "results/{date}/visual/report/sample.tsv",
+            caption="../report/metadata.rst",
             category="4. Qualitycontrol",
         ),
     log:
-        "logs/{date}/visualisation/rank-abundance.log",
+        "logs/{date}/visualisation/metadata.log",
     conda:
         "../envs/python.yaml"
-    script:
-        "../scripts/complete_filter.py"
+    shell:
+        "cp {input} {output}"

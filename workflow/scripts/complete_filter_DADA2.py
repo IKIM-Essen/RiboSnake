@@ -12,32 +12,33 @@ import sys
 sys.stderr = open(snakemake.log[0], "w")
 
 
-first = pd.read_csv(
-    str(snakemake.input.first) + "/metadata.tsv", sep="\t", header=0, index_col=0
-)
-first.drop(["#q2:types"], axis=0, inplace=True)
-first.drop(
-    [
-        "reads-truncated",
-        "reads-too-short-after-truncation",
-        "reads-exceeding-maximum-ambiguous-bases",
-    ],
-    axis=1,
-    inplace=True,
-)
-human = pd.read_csv(str(snakemake.input.human), sep=",", header=0, index_col=0)
-
-if "difference" in human.columns:
-    human.drop(["difference"], axis=1, inplace=True)
-
-wo_chimera = pd.read_csv(
-    str(snakemake.input.wo_chimera)
-    + "/table-nonchimeric-wo-borderline/data/sample-frequency-detail.csv",
-    sep=",",
+dada2 = pd.read_csv(
+    str(snakemake.input.dada2) + "/dada2-stats-visual/data/metadata.tsv",
+    sep="\t",
     header=0,
     index_col=0,
 )
-wo_chimera.rename(columns={"0": "Reads after chimera filtering"}, inplace=True)
+dada2.drop(["#q2:types"], axis=0, inplace=True)
+
+if "percentage of input merged" in dada2.columns:
+    dada2.drop(
+        [
+            "percentage of input passed filter",
+            "percentage of input merged",
+            "percentage of input non-chimeric",
+        ],
+        axis=1,
+        inplace=True,
+    )
+else:
+    dada2.drop(
+        [
+            "percentage of input passed filter",
+            "percentage of input non-chimeric",
+        ],
+        axis=1,
+        inplace=True,
+    )
 length = pd.read_csv(
     str(snakemake.input.length)
     + "/table-cluster-lengthfilter/data/sample-frequency-detail.csv",
@@ -61,9 +62,7 @@ complete = pd.read_csv(
 )
 complete.rename(columns={"0": "Reads after abundance filter"}, inplace=True)
 
-merged_df = pd.concat(
-    [first, human, wo_chimera, length, before_abundance, complete], axis=1
-)
+merged_df = pd.concat([dada2, length, before_abundance, complete], axis=1)
 
 merged_df = merged_df.fillna(0)
 

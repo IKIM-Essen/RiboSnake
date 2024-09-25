@@ -14,7 +14,7 @@ if config["bowtie"] == True:
             "../envs/python.yaml"
         shell:
             "mkdir {output.dirc} \n"
-            "bowtie2-build {input} {output.dirc}/{params.filename} -p {params.threads}"
+            "bowtie2-build {input} {output.dirc}/{params.filename} --threads {params.threads}"
 
     if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
@@ -156,11 +156,7 @@ if config["bowtie"] == True:
                 names=get_reads_for_kraken(),
             ),
         output:
-            report(
-                "results/{date}/visual/sample_frequencys_difference.csv",
-                caption="../report/hum_filter_difference.rst",
-                category="4. Qualitycontrol",
-            ),
+            "results/{date}/visual/sample_frequencys_difference.csv",
         log:
             "logs/{date}/bowtie/humanreads_complete.log",
         conda:

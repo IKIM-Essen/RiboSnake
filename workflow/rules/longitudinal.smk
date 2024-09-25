@@ -1,3 +1,94 @@
+rule longitudinal_first_difference:
+    input:
+        table="results/{date}/out/taxa_collapsed_relative.qza",
+        alpha=expand(
+            "results/{{date}}/out/alpha-diversity-{metric}-normal.qza",
+            metric=get_metric("alpha"),
+        ),
+        alpha_phylo=expand(
+            "results/{{date}}/out/alpha-diversity-{metric}-phylogenetic.qza",
+            metric=get_phylogenetic_metric("alpha"),
+        ),
+    output:
+        "results/{date}/out/first-difference.qza",
+    params:
+        metadata="config/pep/sample.tsv",
+        state_column=config["longitudinal-params"]["state_column"],
+        individual_id_column=config["longitudinal-params"]["individual_id_column"],
+        metric=config["longitudinal-params"]["metric"],
+    log:
+        "logs/{date}/visualisation/first-difference.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime longitudinal first-differences "
+        "--i-table {input.table} "
+        "--m-metadata-file {params.metadata} "
+        "--m-metadata-file {input.alpha} "
+        "--m-metadata-file {input.alpha_phylo} "
+        "--p-state-column {params.state_column} "
+        "--p-individual-id-column {params.individual_id_column}"
+        "--p-metric {params.metric} "
+        "--o-first-differences {output} "
+        "--verbose 2> {log} "
+
+
+rule longitudinal_first_distance:
+    input:
+        distance="results/{date}/out/beta-diversity-{metric}-normal.qza",
+        alpha=expand(
+            "results/{{date}}/out/alpha-diversity-{metric}-normal.qza",
+            metric=get_metric("alpha"),
+        ),
+        alpha_phylo=expand(
+            "results/{{date}}/out/alpha-diversity-{metric}-phylogenetic.qza",
+            metric=get_phylogenetic_metric("alpha"),
+        ),
+    output:
+        "results/{date}/out/first-distances.qza",
+    params:
+        metadata="config/pep/sample.tsv",
+        state_column=config["longitudinal-params"]["state_column"],
+        individual_id_column=config["longitudinal-params"]["individual_id_column"],
+    log:
+        "logs/{date}/visualisation/first-distance.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime longitudinal first-differences "
+        "--i-distance-matrix {input.distance} "
+        "--m-metadata-file {params.metadata} "
+        "--m-metadata-file {input.alpha} "
+        "--m-metadata-file {input.alpha_phylo} "
+        "--p-state-column {params.state_column} "
+        "--p-individual-id-column {params.individual_id_column}"
+        "--p-metric {params.metric} "
+        "--o-first-differences {output} "
+        "--verbose 2> {log} "
+
+
+rule visualise_pairwise:
+    input:
+        distance="results/{date}/out/first-distances.qza",
+        difference="results/{date}/out/first-difference.qza",
+    output:
+        distance="results/{date}/out/first-distances.qzv",
+        difference="results/{date}/out/first-difference.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-distance-diff.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table summarize "
+        "--i-table {input.distance} "
+        "--o-visualization {output.distance} "
+        "--verbose 2> {log} \n "
+        "qiime feature-table summarize "
+        "--i-table {input.difference} "
+        "--o-visualization {output.difference} "
+        "--verbose 2> {log} "
+
+
 rule volatility:
     input:
         table="results/{date}/out/taxa_collapsed_relative.qza",
@@ -91,8 +182,9 @@ rule linear_mixed_effects:
         metadata="config/pep/sample.tsv",
         state_column=config["longitudinal-params"]["state_column"],
         individual_id_column=config["longitudinal-params"]["individual_id_column"],
-        #formula=config["longitudinal"]["formula"],
         metric=config["longitudinal-params"]["metric"],
+        groups=config["longitudinal-params"]["group"],
+        random=config["longitudinal-params"]["random-effects"],
     log:
         "logs/{date}/visualisation/linearmixedeff.log",
     conda:
@@ -106,16 +198,20 @@ rule linear_mixed_effects:
         "--p-state-column {params.state_column} "
         "--p-individual-id-column {params.individual_id_column} "
         "--p-metric {params.metric} "
+        "--p-group-columns {params.groups} "
+        "--p-random-effects {params.random} "
         "--o-visualization {output} "
         "--verbose 2> {log} "
 
 
 rule unzip_longitudinal:
     input:
-        #"results/{date}/visual/lme.qzv",
+        "results/{date}/visual/lme.qzv",
         "results/{date}/visual/volatility.qzv",
         "results/{date}/visual/feature.qzv",
         "results/{date}/visual/accuracy.qzv",
+        "results/{date}/out/first-distances.qzv",
+        "results/{date}/out/first-difference.qzv",
     output:
         directory("results/{date}/visual/longitudinal_unzipped"),
     log:
@@ -151,13 +247,27 @@ rule report_longitudinal:
             subcategory="Longitudinal",
             htmlindex="index.html",
         ),
-        #lme=report(
-        #    "results/{date}/visual/report/lme",
-        #    caption="../report/lme.rst",
-        #    category="3. Analysis",
-        #    subcategory="Longitudinal",
-        #    htmlindex="index.html",
-        #),
+        lme=report(
+            directory("results/{date}/visual/report/lme"),
+            caption="../report/lme.rst",
+            category="3. Analysis",
+            subcategory="Longitudinal",
+            htmlindex="index.html",
+        ),
+        distance=report(
+            directory("results/{date}/visual/report/distance"),
+            caption="../report/distance.rst",
+            category="3. Analysis",
+            subcategory="Longitudinal",
+            htmlindex="index.html",
+        ),
+        difference=report(
+            directory("results/{date}/visual/report/difference"),
+            caption="../report/difference.rst",
+            category="3. Analysis",
+            subcategory="Longitudinal",
+            htmlindex="index.html",
+        ),
     log:
         "logs/{date}/outputs/report-longitudinal.log",
     conda:

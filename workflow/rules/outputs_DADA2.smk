@@ -104,6 +104,7 @@ rule unzip_reports:
         "results/{date}/visual/paired-seqs.qzv",
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/visual/heatmap_gneiss.qzv",
+        "results/{date}/visual/empress-community.qzv",
     output:
         temp(directory("results/{date}/visual/unzipped")),
     log:
@@ -292,6 +293,25 @@ rule report_emperor:
         "../scripts/extract_significance.py"
 
 
+rule report_empress:
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            directory("results/{date}/visual/report/empress-community"),
+            caption="../report/empress.rst",
+            category="2. Taxonomy",
+            subcategory="Phylogenetic Tree",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/outputs/report-empress.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_significance.py"
+
+
 rule report_ancom:
     input:
         "results/{date}/visual/unzipped/",
@@ -324,6 +344,8 @@ if config["longitudinal"] == False:
             "results/{date}/out/qurro_plot",
             "results/{date}/visual/report/rank-abundance/plots",
             "results/{date}/visual/allfilter.html",
+            "results/{date}/visual/report/empress-community",
+            "results/{date}/visual/report/sample.tsv",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_phylogenetic_metric("beta"),
@@ -414,8 +436,11 @@ if config["longitudinal"] == True:
             "results/{date}/visual/report/feature",
             "results/{date}/visual/report/accuracy",
             "results/{date}/visual/report/volatility",
+            "results/{date}/visual/report/lme",
             "results/{date}/visual/report/rank-abundance/plots",
             "results/{date}/visual/allfilter.html",
+            "results/{date}/visual/report/empress-community",
+            "results/{date}/visual/report/sample.tsv",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
                 metric=get_metric("beta"),
