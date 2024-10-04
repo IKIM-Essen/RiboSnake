@@ -356,6 +356,7 @@ rule biom_file:
         "--input-path {output.table_binary} "
         "--output-path {output.binary_biom}"
 
+
 rule empress_tree:
     input:
         tree="results/{date}/visual/rooted-tree.qza",
@@ -378,23 +379,24 @@ rule empress_tree:
         "--p-filter-extra-samples "
         "--o-visualization {output} "
 
+
 rule report_empress:
-        input:
-            "results/{date}/visual/unzipped/",
-        output:
-            report(
-                directory("results/{date}/visual/report/empress-community"),
-                caption="../report/empress.rst",
-                category="2. Taxonomy",
-                subcategory="Phylogenetic Tree",
-                htmlindex="index.html",
-            ),
-        log:
-            "logs/{date}/outputs/report-empress.log",
-        conda:
-            "../envs/python.yaml"
-        script:
-            "../scripts/extract_significance.py"
+    input:
+        "results/{date}/visual/unzipped/",
+    output:
+        report(
+            directory("results/{date}/visual/report/empress-community"),
+            caption="../report/empress.rst",
+            category="2. Taxonomy",
+            subcategory="Phylogenetic Tree",
+            htmlindex="index.html",
+        ),
+    log:
+        "logs/{date}/outputs/report-empress.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_significance.py"
 
 
 if config["DADA2"] == True:
@@ -432,7 +434,6 @@ if config["DADA2"] == True:
             "../envs/python.yaml"
         script:
             "../scripts/rename_qzv.py"
-
 
     rule report_files:
         input:
