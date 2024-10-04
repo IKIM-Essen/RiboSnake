@@ -68,7 +68,7 @@ rule multiqc_report:
         report(
             "results/{date}/visual/report/multiqc.html",
             caption="../report/multiqc.rst",
-            htmlindex="multiqc.htm",
+            htmlindex="multiqc.html",
             category="4. Qualitycontrol",
         ),
     log:
