@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/IKIM-Essen/RiboSnake/compare/v0.10.0...v0.10.1) (2024-10-08)
+
+
+### Bug Fixes
+
+* Fixit ([#142](https://github.com/IKIM-Essen/RiboSnake/issues/142)) ([ed1316f](https://github.com/IKIM-Essen/RiboSnake/commit/ed1316f3a703457096fadd268c9767c0670b6ba5))
+
 ## [0.10.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.9.0...v0.10.0) (2024-08-20)
 
 
