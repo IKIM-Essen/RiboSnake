@@ -14,6 +14,7 @@ rule include_metadata:
     shell:
         "cp {input} {output}"
 
+
 rule rank_abundance:
     input:
         "results/{date}/out/taxa_collapsed_relative.qza",
@@ -371,6 +372,7 @@ rule biom_file:
         "qiime tools export "
         "--input-path {output.table_binary} "
         "--output-path {output.binary_biom}"
+
 
 rule empress_tree:
     input:
