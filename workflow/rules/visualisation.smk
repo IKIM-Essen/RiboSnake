@@ -651,6 +651,7 @@ rule empress_tree:
         "--m-sample-metadata-file {params.metadata} "
         "--m-feature-metadata-file {params.taxonomy} "
         "--p-filter-extra-samples "
+        "--p-filter-missing-features "
         "--o-visualization {output} "
 
 

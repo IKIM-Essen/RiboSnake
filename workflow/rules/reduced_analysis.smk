@@ -1,3 +1,20 @@
+rule include_metadata:
+    input:
+        "config/pep/sample.tsv",
+    output:
+        report(
+            "results/{date}/visual/report/sample.tsv",
+            caption="../report/metadata.rst",
+            category="4. Qualitycontrol",
+        ),
+    log:
+        "logs/{date}/visualisation/metadata.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "cp {input} {output}"
+
+
 rule rank_abundance:
     input:
         "results/{date}/out/taxa_collapsed_relative.qza",
@@ -377,6 +394,7 @@ rule empress_tree:
         "--m-sample-metadata-file {params.metadata} "
         "--m-feature-metadata-file {params.taxonomy} "
         "--p-filter-extra-samples "
+        "--p-filter-missing-features "
         "--o-visualization {output} "
 
 
@@ -605,6 +623,24 @@ if config["DADA2"] == False:
             "../envs/python.yaml"
         script:
             "../scripts/rename_qzv.py"
+
+    rule report_empress:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            report(
+                directory("results/{date}/visual/report/empress-community"),
+                caption="../report/empress.rst",
+                category="2. Taxonomy",
+                subcategory="Phylogenetic Tree",
+                htmlindex="index.html",
+            ),
+        log:
+            "logs/{date}/outputs/report-empress.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/extract_significance.py"
 
     rule report_files:
         input:
