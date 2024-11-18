@@ -1,3 +1,19 @@
+rule include_metadata:
+    input:
+        "config/pep/sample.tsv",
+    output:
+        report(
+            "results/{date}/visual/report/sample.tsv",
+            caption="../report/metadata.rst",
+            category="4. Qualitycontrol",
+        ),
+    log:
+        "logs/{date}/visualisation/metadata.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "cp {input} {output}"
+
 rule rank_abundance:
     input:
         "results/{date}/out/taxa_collapsed_relative.qza",
@@ -315,6 +331,9 @@ rule absolute_taxa:
             category="2. Taxonomy",
             subcategory="Taxa Barplot",
         ),
+    params:
+        samplename=config["metadata-parameters"]["absolute-taxa-name"],
+        metadata="config/pep/sample.tsv",
     log:
         "logs/{date}/visualisation/absolute_taxabarplot.log",
     conda:
@@ -352,6 +371,29 @@ rule biom_file:
         "qiime tools export "
         "--input-path {output.table_binary} "
         "--output-path {output.binary_biom}"
+
+rule empress_tree:
+    input:
+        tree="results/{date}/visual/rooted-tree.qza",
+        table="results/{date}/out/table-cluster-filtered.qza",
+    output:
+        "results/{date}/visual/empress-community.qzv",
+    log:
+        "logs/{date}/visualisation/empress-treeviewer.log",
+    params:
+        metadata="config/pep/sample.tsv",
+        taxonomy="results/{date}/out/taxonomy.qza",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime empress community-plot "
+        "--i-tree {input.tree} "
+        "--i-feature-table {input.table} "
+        "--m-sample-metadata-file {params.metadata} "
+        "--m-feature-metadata-file {params.taxonomy} "
+        "--p-filter-extra-samples "
+        "--p-filter-missing-features "
+        "--o-visualization {output} "
 
 
 if config["DADA2"] == True:
@@ -569,6 +611,7 @@ if config["DADA2"] == False:
             "results/{date}/visual/paired-seqs.qzv",
             "results/{date}/visual/fastq_stats.qzv",
             "results/{date}/visual/demux-joined-filter-stats.qzv",
+            "results/{date}/visual/empress-community.qzv",
         output:
             directory("results/{date}/visual/unzipped"),
         log:
@@ -577,6 +620,24 @@ if config["DADA2"] == False:
             "../envs/python.yaml"
         script:
             "../scripts/rename_qzv.py"
+
+    rule report_empress:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            report(
+                directory("results/{date}/visual/report/empress-community"),
+                caption="../report/empress.rst",
+                category="2. Taxonomy",
+                subcategory="Phylogenetic Tree",
+                htmlindex="index.html",
+            ),
+        log:
+            "logs/{date}/outputs/report-empress.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/extract_significance.py"
 
     rule report_files:
         input:
