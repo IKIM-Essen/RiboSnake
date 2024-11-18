@@ -27,7 +27,7 @@ rule longitudinal_first_difference:
         "--m-metadata-file {input.alpha} "
         "--m-metadata-file {input.alpha_phylo} "
         "--p-state-column {params.state_column} "
-        "--p-individual-id-column {params.individual_id_column}"
+        "--p-individual-id-column {params.individual_id_column} "
         "--p-metric {params.metric} "
         "--o-first-differences {output} "
         "--verbose 2> {log} "
@@ -35,7 +35,10 @@ rule longitudinal_first_difference:
 
 rule longitudinal_first_distance:
     input:
-        distance="results/{date}/out/beta-diversity-{metric}-normal.qza",
+        distance=expand(
+            "results/{{date}}/out/beta-diversity-{metric}-normal.qza",
+            metric=get_metric("beta"),
+        ),
         alpha=expand(
             "results/{{date}}/out/alpha-diversity-{metric}-normal.qza",
             metric=get_metric("alpha"),
@@ -61,7 +64,7 @@ rule longitudinal_first_distance:
         "--m-metadata-file {input.alpha} "
         "--m-metadata-file {input.alpha_phylo} "
         "--p-state-column {params.state_column} "
-        "--p-individual-id-column {params.individual_id_column}"
+        "--p-individual-id-column {params.individual_id_column} "
         "--p-metric {params.metric} "
         "--o-first-differences {output} "
         "--verbose 2> {log} "
