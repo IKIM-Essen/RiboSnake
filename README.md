@@ -23,7 +23,7 @@ When you have the folder structure added on your local machine, please add a "da
 
 ### Step 2: Configure workflow
 
-Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `metadata.txt` to specify your sample setup.
+Configure the workflow according to your needs via editing the files in the `config/` folder. Adjust `config.yaml` to configure the workflow execution, and `metadata.txt` to specify your sample setup. If you want to use one of our many preset config-files holding parameters specific for certain sample types or kits, please choose the most fitting for you and rename it into `config.yaml`.
 
 Some important parameters you should check and set according to your own FASTQ-files in the `config.yaml` are primers for the forward and reverse reads, the `datatype`, that should be used by QIIME2 and the `min-seq-length`. Based on the sequencing, the length of the reads can vary.
 
