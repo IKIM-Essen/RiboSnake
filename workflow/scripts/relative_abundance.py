@@ -42,10 +42,16 @@ datadir = str(snakemake.output.feature_table) + "/"
 csv = datadir + "sample-frequency-detail.csv"
 frequency = pd.read_csv(csv, header=None, delimiter=",")
 frequency.columns = ["Sample", "Abundance"]
-number = frequency["Abundance"].sum()
+# number = frequency["Abundance"].sum()
 # Creating the abundance threshold and storing it in an output file
 abundance = float(str(snakemake.params))
-endnumber = number * abundance
+
+column_sums = frequency.sum()
+
+# Then, calculate the median value of the column sums
+median_of_sums = column_sums.median()
+
+endnumber = median_of_sums * abundance
 endnumber = int(endnumber)
 if endnumber == 0:
     endnumber += 1
