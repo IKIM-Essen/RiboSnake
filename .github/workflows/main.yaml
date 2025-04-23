@@ -67,7 +67,7 @@ jobs:
 
     - name: Check for cache
       id: check-cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: |
           .tests/resources/*
