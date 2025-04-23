@@ -29,6 +29,7 @@ rule longitudinal_first_difference:
         "--p-state-column {params.state_column} "
         "--p-individual-id-column {params.individual_id_column} "
         "--p-metric {params.metric} "
+        "--p-replicate-handling drop "
         "--o-first-differences {output} "
         "--verbose 2> {log} "
 
@@ -58,15 +59,16 @@ rule longitudinal_first_distance:
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
-        "qiime longitudinal first-differences "
+        "qiime longitudinal first-distances "
         "--i-distance-matrix {input.distance} "
         "--m-metadata-file {params.metadata} "
         "--m-metadata-file {input.alpha} "
         "--m-metadata-file {input.alpha_phylo} "
         "--p-state-column {params.state_column} "
         "--p-individual-id-column {params.individual_id_column} "
-        "--p-metric {params.metric} "
-        "--o-first-differences {output} "
+        "--p-replicate-handling drop "
+        #"--p-metric {params.metric} "
+        "--o-first-distances {output} "
         "--verbose 2> {log} "
 
 

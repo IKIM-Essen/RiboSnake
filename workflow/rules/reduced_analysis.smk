@@ -624,24 +624,6 @@ if config["DADA2"] == False:
         script:
             "../scripts/rename_qzv.py"
 
-    rule report_empress:
-        input:
-            "results/{date}/visual/unzipped/",
-        output:
-            report(
-                directory("results/{date}/visual/report/empress-community"),
-                caption="../report/empress.rst",
-                category="2. Taxonomy",
-                subcategory="Phylogenetic Tree",
-                htmlindex="index.html",
-            ),
-        log:
-            "logs/{date}/outputs/report-empress.log",
-        conda:
-            "../envs/python.yaml"
-        script:
-            "../scripts/extract_significance.py"
-
     rule report_files:
         input:
             "results/{date}/visual/unzipped/",
