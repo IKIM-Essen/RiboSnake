@@ -67,7 +67,6 @@ rule longitudinal_first_distance:
         "--p-state-column {params.state_column} "
         "--p-individual-id-column {params.individual_id_column} "
         "--p-replicate-handling drop "
-        #"--p-metric {params.metric} "
         "--o-first-distances {output} "
         "--verbose 2> {log} "
 
