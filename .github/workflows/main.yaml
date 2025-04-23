@@ -65,27 +65,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Check for cache
-      id: check-cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          .tests/resources/*
-          .tests/data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
-        #restore-keys: |
-        #    ${{ runner.os }}-data-cache 
-        #    ${{ runner.os }}-
-      #env:
-      #    CACHE_HIT: ${{ steps.check-cache.outputs.cache-hit }}
-      #run: |
-      #  cache_hit = ${{ steps.check-cache.outputs.cache-hit }}
-      #  echo $cache_hit
-      #  echo "CACHE_HIT=$cache_hit" >> $GITHUB_ENV
-    #- name: Check cache input
-    #  id: cache-check
-    #  run: |
-    #    ls -la .tests/resources/
     - name: Download test dataset
       if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
       run: |
@@ -124,39 +103,6 @@ jobs:
         ls -la
         df -h
 
-    - name: Cache test_data
-      id: cache-test-data
-      uses: actions/cache@v2
-      #if: ${{ steps.check-cache.outputs.cache-hit != 'true' }}
-      with:
-        path: |
-          .tests/resources/*
-          .tests/data/2022-03-17/*
-        key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
-        restore-keys: |
-          ${{ runner.os }}-data-cache 
-          ${{ runner.os }}-
-
-    - name: Check cache input
-      id: cache-check-two
-      run: |
-        ls -la .tests/resources/
-        ls -la .tests/data/2022-03-17/
-
-    #- name: Restore data from cache
-    #  id: restore-cache
-    #  uses: actions/cache@v3
-    #  if: ${{ steps.check-cache.outputs.cache-hit == 'true' }}
-    #  with:
-    #    path: |
-    #      .tests/resources/*
-    #      .tests/data/2022-03-17/*
-    #    key: ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
-    #    restore-keys: |
-    #        ${{ runner.os }}-data-cache-${{ hashFiles('.tests/resources/*') }}-${{ hashFiles('.tests/data/2022-03-17/*') }}
-    #        ${{ runner.os }}-my-cache-
-    #        ${{ runner.os }}-
-
     - name: Test workflow (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
@@ -164,30 +110,3 @@ jobs:
         snakefile: workflow/Snakefile
         args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --dry-run"
 
-    #- name: Get test variable
-    #  id: value_generator
-    #  run: |
-    #    cd .tests/results/2022-03-17/out
-    #    abundancevalue=$(<abundance.txt)
-    #    testvalue=0
-    #    echo $abundancevalue
-    #    echo $testvalue
-    #    echo "ABUNDANCE_VALUE=$abundancevalue" >> $GITHUB_ENV
-    #    echo "TESTVALUE=$testvalue" >> $GITHUB_ENV
-
-    #- name: Test variable value
-    #  if: ${{ env.ABUNDANCE_VALUE <= env.TESTVALUE }}
-    #  #run: |
-      #  echo ${{ env.ABUNDANCE_VALUE }}
-      #  echo ${{ env.TESTVALUE }}
-    #  uses: actions/github-script@v3
-    #  with:
-    #    script: |
-    #      core.setFailed("No abundance filtered!")
-
-    #- name: Test report
-    #  uses: snakemake/snakemake-github-action@v1
-    #  with:
-    #    directory: .tests
-    #    snakefile: workflow/Snakefile
-    #    args: "--report report.zip"
