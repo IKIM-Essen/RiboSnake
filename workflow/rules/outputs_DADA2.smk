@@ -566,7 +566,7 @@ rule zip_report:
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
-        "results/{date}/out/report.zip",
+        report="results/{date}/out/report.zip",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.html",
         "results/{date}/out/kraken.tar.gz",
@@ -611,7 +611,7 @@ rule zip_report:
         mkdir results/{wildcards.date}/16S-report/additional/
         cp -r {input} results/{wildcards.date}/16S-report/additional/
         rm results/{wildcards.date}/16S-report/additional/report.zip
-        cp {params.report} results/{wildcards.date}/16S-report/
+        cp {input.report} results/{wildcards.date}/16S-report/
         tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
         cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
         rm -r results/{wildcards.date}/16S-report

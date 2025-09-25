@@ -554,7 +554,7 @@ if config["DADA2"] == True:
             "results/{date}/visual/heatmap_binary.html",
             "results/{date}/visual/report/heatmap.svg",
             "results/{date}/visual/report/taxonomy.tsv",
-            "results/{date}/out/report.zip",
+            report="results/{date}/out/report.zip",
             "results/{date}/visual/fastq_stats.qzv",
             "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
             "results/{date}/visual/absolute-taxabar-plot.html",
@@ -577,7 +577,7 @@ if config["DADA2"] == True:
             mkdir results/{wildcards.date}/16S-report/additional/
             cp -r {input} results/{wildcards.date}/16S-report/additional/
             rm results/{wildcards.date}/16S-report/additional/report.zip
-            cp {params.report} results/{wildcards.date}/16S-report/
+            cp {input.report} results/{wildcards.date}/16S-report/
             tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
             cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
             rm -r results/{wildcards.date}/16S-report
@@ -733,7 +733,7 @@ if config["DADA2"] == False:
             "results/{date}/visual/heatmap_binary.html",
             "results/{date}/visual/report/heatmap.svg",
             "results/{date}/visual/report/taxonomy.tsv",
-            "results/{date}/out/report.zip",
+            report="results/{date}/out/report.zip",
             "results/{date}/visual/fastq_stats.qzv",
             "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
             "results/{date}/visual/absolute-taxabar-plot.html",
@@ -756,7 +756,7 @@ if config["DADA2"] == False:
             mkdir results/{wildcards.date}/16S-report/additional/
             cp -r {input} results/{wildcards.date}/16S-report/additional/
             rm results/{wildcards.date}/16S-report/additional/report.zip
-            cp {params.report} results/{wildcards.date}/16S-report/
+            cp {input.report} results/{wildcards.date}/16S-report/
             tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
             cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
             rm -r results/{wildcards.date}/16S-report
