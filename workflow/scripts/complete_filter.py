@@ -15,7 +15,7 @@ samples = pd.read_csv(
     str(snakemake.input.samples) + "/paired-seqs/data/per-sample-fastq-counts.tsv",
     sep="\t",
     header=0,
-    index_col=0
+    index_col=0,
 )
 samples.drop(
     ["reverse sequence count"],
@@ -27,7 +27,7 @@ trimmed = pd.read_csv(
     str(snakemake.input.trimmed) + "/trimmed-seqs/data/per-sample-fastq-counts.tsv",
     sep="\t",
     header=0,
-    index_col=0
+    index_col=0,
 )
 trimmed.drop(
     ["reverse sequence count"],
@@ -39,7 +39,7 @@ joined = pd.read_csv(
     str(snakemake.input.joined) + "/joined-seqs/data/per-sample-fastq-counts.tsv",
     sep="\t",
     header=0,
-    index_col=0
+    index_col=0,
 )
 joined.rename(columns={"forward sequence count": "Reads after joining"}, inplace=True)
 
@@ -102,9 +102,9 @@ merged_df = pd.concat(
         wo_chimera,
         length,
         before_abundance,
-        complete
+        complete,
     ],
-    axis=1
+    axis=1,
 )
 
 merged_df = merged_df.fillna(0)
