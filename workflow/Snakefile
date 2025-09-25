@@ -71,7 +71,7 @@ if config["database"]["NCBI"]:
 rule all:
     input:
         expand(
-            "results/{date}/16S-report.tar.gz",
+            "results/{date}/{date}.tar.gz",
             date=get_date(),
         ),
     output:

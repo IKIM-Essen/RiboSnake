@@ -561,7 +561,6 @@ rule zip_report:
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
-        "results/{date}/out/report.zip",
         #"results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.html",
@@ -592,8 +591,9 @@ rule zip_report:
         "results/{date}/out/songbird/",
         "results/{date}/out/differentials_taxonomy.tsv",
         "results/{date}/out/config_parameters.html",
+        report="results/{date}/out/report.zip",
     output:
-        "results/{date}/16S-report.tar.gz",
+        "results/{date}/{date}.tar.gz",
     params:
         outpath=config["output"],
     log:
@@ -602,9 +602,12 @@ rule zip_report:
         "../envs/snakemake.yaml"
     shell:
         """
-        mkdir results/{wildcards.date}/16S-report
-        cp -r {input} results/{wildcards.date}/16S-report/
-        tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
-        cp results/{wildcards.date}/16S-report.tar.gz {params.outpath}
+        mkdir results/{wildcards.date}/16S-report/
+        mkdir results/{wildcards.date}/16S-report/additional/
+        cp -r {input} results/{wildcards.date}/16S-report/additional/
+        rm results/{wildcards.date}/16S-report/additional/report.zip
+        cp {input.report} results/{wildcards.date}/16S-report/
+        tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
+        cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
         rm -r results/{wildcards.date}/16S-report
         """
