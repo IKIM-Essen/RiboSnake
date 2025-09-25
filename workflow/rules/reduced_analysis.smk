@@ -563,19 +563,23 @@ if config["DADA2"] == True:
             "results/{date}/visual/report/rank-abundance/plots",
             "results/{date}/visual/allfilter.html",
         output:
-            "results/{date}/16S-report.tar.gz",
+            "results/{date}/{date}.tar.gz",
         params:
             outpath=config["output"],
+            report="results/{date}/out/report.zip",
         log:
             "logs/{date}/outputs/zip-report.log",
         conda:
             "../envs/snakemake.yaml"
         shell:
             """
-            mkdir results/{wildcards.date}/16S-report
-            cp -r {input} results/{wildcards.date}/16S-report/
-            tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
-            cp results/{wildcards.date}/16S-report.tar.gz {params.outpath}
+            mkdir results/{wildcards.date}/16S-report/
+            mkdir results/{wildcards.date}/16S-report/additional/
+            cp -r {input} results/{wildcards.date}/16S-report/additional/
+            rm results/{wildcards.date}/16S-report/additional/report.zip
+            cp {params.report} results/{wildcards.date}/16S-report/
+            tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
+            cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
             rm -r results/{wildcards.date}/16S-report
             """
 
@@ -738,19 +742,23 @@ if config["DADA2"] == False:
             "results/{date}/visual/report/rank-abundance/plots",
             "results/{date}/visual/allfilter.html",
         output:
-            "results/{date}/16S-report.tar.gz",
+            "results/{date}/{date}.tar.gz",
         params:
             outpath=config["output"],
+            report="results/{date}/out/report.zip",
         log:
             "logs/{date}/outputs/zip-report.log",
         conda:
             "../envs/snakemake.yaml"
         shell:
             """
-            mkdir results/{wildcards.date}/16S-report
-            cp -r {input} results/{wildcards.date}/16S-report/
-            tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
-            cp results/{wildcards.date}/16S-report.tar.gz {params.outpath}
+            mkdir results/{wildcards.date}/16S-report/
+            mkdir results/{wildcards.date}/16S-report/additional/
+            cp -r {input} results/{wildcards.date}/16S-report/additional/
+            rm results/{wildcards.date}/16S-report/additional/report.zip
+            cp {params.report} results/{wildcards.date}/16S-report/
+            tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
+            cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
             rm -r results/{wildcards.date}/16S-report
             """
 
