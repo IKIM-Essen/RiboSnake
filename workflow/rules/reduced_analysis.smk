@@ -554,7 +554,6 @@ if config["DADA2"] == True:
             "results/{date}/visual/heatmap_binary.html",
             "results/{date}/visual/report/heatmap.svg",
             "results/{date}/visual/report/taxonomy.tsv",
-            report="results/{date}/out/report.zip",
             "results/{date}/visual/fastq_stats.qzv",
             "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
             "results/{date}/visual/absolute-taxabar-plot.html",
@@ -562,11 +561,11 @@ if config["DADA2"] == True:
             "results/{date}/out/config_parameters.html",
             "results/{date}/visual/report/rank-abundance/plots",
             "results/{date}/visual/allfilter.html",
+            report="results/{date}/out/report.zip",
         output:
             "results/{date}/{date}.tar.gz",
         params:
             outpath=config["output"],
-            report="results/{date}/out/report.zip",
         log:
             "logs/{date}/outputs/zip-report.log",
         conda:
@@ -733,7 +732,6 @@ if config["DADA2"] == False:
             "results/{date}/visual/heatmap_binary.html",
             "results/{date}/visual/report/heatmap.svg",
             "results/{date}/visual/report/taxonomy.tsv",
-            report="results/{date}/out/report.zip",
             "results/{date}/visual/fastq_stats.qzv",
             "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
             "results/{date}/visual/absolute-taxabar-plot.html",
@@ -741,11 +739,11 @@ if config["DADA2"] == False:
             "results/{date}/out/config_parameters.html",
             "results/{date}/visual/report/rank-abundance/plots",
             "results/{date}/visual/allfilter.html",
+            report="results/{date}/out/report.zip",
         output:
             "results/{date}/{date}.tar.gz",
         params:
             outpath=config["output"],
-            report="results/{date}/out/report.zip",
         log:
             "logs/{date}/outputs/zip-report.log",
         conda:

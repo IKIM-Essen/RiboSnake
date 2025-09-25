@@ -566,7 +566,6 @@ rule zip_report:
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
-        report="results/{date}/out/report.zip",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.html",
         "results/{date}/out/kraken.tar.gz",
@@ -596,11 +595,11 @@ rule zip_report:
         "results/{date}/out/songbird/",
         "results/{date}/out/differentials_taxonomy.tsv",
         "results/{date}/out/config_parameters.html",
+        report="results/{date}/out/report.zip",
     output:
         "results/{date}/{date}.tar.gz",
     params:
         outpath=config["output"],
-        report="results/{date}/out/report.zip",
     log:
         "logs/{date}/outputs/zip-report.log",
     conda:

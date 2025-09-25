@@ -596,7 +596,6 @@ rule zip_report:
         "results/{date}/{date}.tar.gz",
     params:
         outpath=config["output"],
-        #="results/{date}/out/report.zip",
     log:
         "logs/{date}/outputs/zip-report.log",
     conda:
