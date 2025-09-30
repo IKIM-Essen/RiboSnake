@@ -77,7 +77,7 @@ rule all:
         expand(
             "logs/{date}_logs.tar.gz",
             date=get_date(),
-        )
+        ),
     output:
         touch(
             expand(

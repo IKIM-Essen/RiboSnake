@@ -816,11 +816,12 @@ rule export_parameters:
 
 rule concatenate_logs:
     input:
-        "results/{date}/{date}.tar.gz"
+        "results/{date}/{date}.tar.gz",
     output:
-        "logs/{date}_logs.tar.gz"
+        "logs/{date}_logs.tar.gz",
     shell:
         """
         tar -czvf {output} logs/{wildcards.date}/
         rm -r logs/{wildcards.date}
         """
+        
