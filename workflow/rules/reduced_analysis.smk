@@ -572,8 +572,8 @@ if config["DADA2"] == True:
             "../envs/snakemake.yaml"
         shell:
             """
-            mkdir results/{wildcards.date}/16S-report/
-            mkdir results/{wildcards.date}/16S-report/additional/
+            mkdir -p results/{wildcards.date}/16S-report/
+            mkdir -p results/{wildcards.date}/16S-report/additional/
             cp -r {input} results/{wildcards.date}/16S-report/additional/
             rm results/{wildcards.date}/16S-report/additional/report.zip
             cp {input.report} results/{wildcards.date}/16S-report/
@@ -700,6 +700,9 @@ if config["DADA2"] == False:
 
     rule all_filter:
         input:
+            samples="results/{date}/visual/paired-seqs",
+            trimmed="results/{date}/visual/trimmed-seqs",
+            joined="results/{date}/visual/joined-seqs/",
             first="results/{date}/visual/report/demux-joined-filter-stats/",
             human="results/{date}/visual/sample_frequencys_difference.csv",
             wo_chimera="results/{date}/visual/chimera_unzipped/",
@@ -750,8 +753,8 @@ if config["DADA2"] == False:
             "../envs/snakemake.yaml"
         shell:
             """
-            mkdir results/{wildcards.date}/16S-report/
-            mkdir results/{wildcards.date}/16S-report/additional/
+            mkdir -p results/{wildcards.date}/16S-report/
+            mkdir -p results/{wildcards.date}/16S-report/additional/
             cp -r {input} results/{wildcards.date}/16S-report/additional/
             rm results/{wildcards.date}/16S-report/additional/report.zip
             cp {input.report} results/{wildcards.date}/16S-report/
