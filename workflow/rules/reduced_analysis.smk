@@ -50,7 +50,7 @@ rule unzip_frequency_length:
         "../scripts/rename_qzv.py"
 
 
-rule visualise_beforeChimera:
+rule visualize_beforeChimera:
     input:
         "results/{date}/out/table-nonchimeric-wo-borderline.qza",
     output:
@@ -66,7 +66,7 @@ rule visualise_beforeChimera:
         "--verbose 2> {log}"
 
 
-rule visualise_samples:
+rule visualize_samples:
     input:
         "results/{date}/out/demux-paired-end.qza",
     output:
@@ -81,6 +81,7 @@ rule visualise_samples:
         "--o-visualization {output} "
         "--verbose 2> {log}"
 
+
 rule unzip_samples:
     input:
         "results/{date}/visual/paired-seqs.qzv",
@@ -93,7 +94,8 @@ rule unzip_samples:
     script:
         "../scripts/rename_qzv.py"
 
-rule visualise_trimmed:
+
+rule visualize_trimmed:
     input:
         "results/{date}/out/trimmed-seqs.qza",
     output:
@@ -108,6 +110,7 @@ rule visualise_trimmed:
         "--o-visualization {output} "
         "--verbose 2> {log}"
 
+
 rule unzip_trimmed:
     input:
         "results/{date}/visual/trimmed-seqs.qzv",
@@ -120,7 +123,8 @@ rule unzip_trimmed:
     script:
         "../scripts/rename_qzv.py"
 
-rule visualise_joined:
+
+rule visualize_joined:
     input:
         "results/{date}/out/joined-seqs.qza",
     output:
@@ -134,6 +138,7 @@ rule visualise_joined:
         "--i-data {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
+
 
 rule unzip_joined:
     input:
