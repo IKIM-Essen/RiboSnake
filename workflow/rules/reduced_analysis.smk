@@ -50,7 +50,7 @@ rule unzip_frequency_length:
         "../scripts/rename_qzv.py"
 
 
-rule visualise_beforeChimera:
+rule visualize_beforeChimera:
     input:
         "results/{date}/out/table-nonchimeric-wo-borderline.qza",
     output:
@@ -66,7 +66,7 @@ rule visualise_beforeChimera:
         "--verbose 2> {log}"
 
 
-rule visualise_samples:
+rule visualize_samples:
     input:
         "results/{date}/out/demux-paired-end.qza",
     output:
@@ -80,6 +80,77 @@ rule visualise_samples:
         "--i-data {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
+
+
+rule unzip_samples:
+    input:
+        "results/{date}/visual/paired-seqs.qzv",
+    output:
+        temp(directory("results/{date}/visual/paired-seqs")),
+    log:
+        "logs/{date}/outputs/unzip-samples.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
+
+
+rule visualize_trimmed:
+    input:
+        "results/{date}/out/trimmed-seqs.qza",
+    output:
+        "results/{date}/visual/trimmed-seqs.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-trimmed.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime demux summarize "
+        "--i-data {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
+rule unzip_trimmed:
+    input:
+        "results/{date}/visual/trimmed-seqs.qzv",
+    output:
+        temp(directory("results/{date}/visual/trimmed-seqs")),
+    log:
+        "logs/{date}/outputs/unzip-trimmed.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
+
+
+rule visualize_joined:
+    input:
+        "results/{date}/out/joined-seqs.qza",
+    output:
+        "results/{date}/visual/joined-seqs.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-joined.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime demux summarize "
+        "--i-data {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
+rule unzip_joined:
+    input:
+        "results/{date}/visual/joined-seqs.qzv",
+    output:
+        temp(directory("results/{date}/visual/joined-seqs")),
+    log:
+        "logs/{date}/outputs/unzip-joined.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
 
 
 rule visualise_table:
@@ -702,7 +773,7 @@ if config["DADA2"] == False:
         input:
             samples="results/{date}/visual/paired-seqs",
             trimmed="results/{date}/visual/trimmed-seqs",
-            joined="results/{date}/visual/joined-seqs/",
+            joined="results/{date}/visual/joined-seqs",
             first="results/{date}/visual/report/demux-joined-filter-stats/",
             human="results/{date}/visual/sample_frequencys_difference.csv",
             wo_chimera="results/{date}/visual/chimera_unzipped/",
