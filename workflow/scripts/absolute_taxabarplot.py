@@ -132,7 +132,7 @@ fig.update_layout(
         t=50,
         b=150,  # Add bottom margin to accommodate tick text
     ),
-    width=len(df.columns) * 21.5,  # Increase figure width to fit more labels
+    width=250 * np.log(len(df.columns)) if len(df.columns) > 3 else 600 + 100*len(df.columns),  # Increase figure width to fit more labels
     height=1000,  # Increase figure height for better readability
 )
 

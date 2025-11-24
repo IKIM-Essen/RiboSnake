@@ -1,45 +1,43 @@
-if config["DADA2"] == False:
+rule dereplication:
+    input:
+        "results/{date}/out/demux-joined-filtered.qza",
+    output:
+        table="results/{date}/out/derepl-table.qza",
+        seqs="results/{date}/out/derepl-seq.qza",
+    log:
+        "logs/{date}/classification/dereplication.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime vsearch dereplicate-sequences "
+        "--i-sequences {input} "
+        "--o-dereplicated-table {output.table} "
+        "--o-dereplicated-sequences {output.seqs} "
+        "--verbose 2> {log}"
 
-    rule dereplication:
-        input:
-            "results/{date}/out/demux-joined-filtered.qza",
-        output:
-            table="results/{date}/out/derepl-table.qza",
-            seqs="results/{date}/out/derepl-seq.qza",
-        log:
-            "logs/{date}/classification/dereplication.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        shell:
-            "qiime vsearch dereplicate-sequences "
-            "--i-sequences {input} "
-            "--o-dereplicated-table {output.table} "
-            "--o-dereplicated-sequences {output.seqs} "
-            "--verbose 2> {log}"
-
-    rule de_novo_clustering:
-        input:
-            table="results/{date}/out/derep-table-nonhum.qza",
-            seqs="results/{date}/out/derep-seq-nonhum.qza",
-        output:
-            table="results/{date}/out/table-cluster.qza",
-            seqs="results/{date}/out/seq-cluster.qza",
-        params:
-            perc_identity=config["clustering"]["perc-identity"],
-            threads=config["threads"],
-        log:
-            "logs/{date}/classification/de-novo-clustering.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        shell:
-            "qiime vsearch cluster-features-de-novo "
-            "--i-table {input.table} "
-            "--i-sequences {input.seqs} "
-            "--p-perc-identity {params.perc_identity} "
-            "--p-threads {params.threads} "
-            "--o-clustered-table {output.table} "
-            "--o-clustered-sequences {output.seqs} "
-            "--verbose 2> {log}"
+rule de_novo_clustering:
+    input:
+        table="results/{date}/out/derepl-table.qza",
+        seqs="results/{date}/out/derepl-seq.qza",
+    output:
+        table="results/{date}/out/table-cluster.qza",
+        seqs="results/{date}/out/seq-cluster.qza",
+    params:
+        perc_identity=config["clustering"]["perc-identity"],
+        threads=config["threads"],
+    log:
+        "logs/{date}/classification/de-novo-clustering.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime vsearch cluster-features-de-novo "
+        "--i-table {input.table} "
+        "--i-sequences {input.seqs} "
+        "--p-perc-identity {params.perc_identity} "
+        "--p-threads {params.threads} "
+        "--o-clustered-table {output.table} "
+        "--o-clustered-sequences {output.seqs} "
+        "--verbose 2> {log}"
 
 
 rule classification:

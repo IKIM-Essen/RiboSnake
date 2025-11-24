@@ -74,18 +74,12 @@ rule unzip_reports:
             metric=get_phylogenetic_metric("beta"),
             diversity="phylogenetic",
         ),
-        expand(
-            "results/{{date}}/visual/ancom-{metadata_column}.qzv",
-            metadata_column=get_ancom_columns(),
-        ),
         "results/{date}/visual/alpha-rarefaction.qzv",
         "results/{date}/visual/beta-rarefaction.qzv",
         "results/{date}/visual/heatmap.qzv",
         "results/{date}/visual/taxa-bar-plots.qzv",
         "results/{date}/visual/rooted-tree.qza",
         "results/{date}/visual/taxonomy.qzv",
-        "results/{date}/visual/table-whuman.qzv",
-        "results/{date}/visual/table-wohuman.qzv",
         "results/{date}/visual/paired-seqs.qzv",
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/visual/demux-joined-filter-stats.qzv",
@@ -298,236 +292,87 @@ rule report_empress:
         "../scripts/extract_significance.py"
 
 
-rule report_ancom:
+rule snakemake_report:
     input:
-        "results/{date}/visual/unzipped/",
-    output:
-        report(
-            directory("results/{date}/visual/report/ancom-{metadata_column}"),
-            caption="../report/ancom.rst",
-            category="3. Analysis",
-            subcategory="Ancom",
-            htmlindex="index.html",
-        ),
-    log:
-        "logs/{date}/outputs/ancom-{metadata_column}.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/extract_beta_corr.py"
-
-
-if config["longitudinal"] == False:
-
-    rule snakemake_report:
-        input:
-            "results/{date}/visual/heatmap_binary.html",
-            "results/{date}/visual/report/beta-rarefaction.svg",
-            "results/{date}/visual/report/heatmap.svg",
-            "results/{date}/visual/unzipped",
-            "results/{date}/visual/report/multiqc.html",
-            "results/{date}/visual/report/empress-community",
-            "results/{date}/visual/absolute-taxabar-plot.html",
-            "results/{date}/out/qurro_plot",
-            "results/{date}/visual/report/rank-abundance/plots/",
-            "results/{date}/visual/allfilter.html",
-            "results/{date}/visual/report/sample.tsv",
-            expand(
-                "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
-                metric=get_metric("beta"),
-                metadata_column=get_metadata_columns(),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
-                metric=get_phylogenetic_metric("beta"),
-                metadata_column=get_metadata_columns(),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/beta-significance-{metric}-{diversity}-{metadata_column}",
-                metric=get_phylogenetic_metric("beta"),
-                metadata_column=get_metadata_categorical_columns(),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/beta-significance-{metric}-{diversity}-{metadata_column}",
-                metric=get_metric("beta"),
-                metadata_column=get_metadata_categorical_columns(),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/alpha-correlation-{metric_alpha}-{diversity}",
-                metric_alpha=get_metric("alpha"),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/alpha-correlation-{metric_alpha}-{diversity}",
-                metric_alpha=get_phylogenetic_metric("alpha"),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/alpha-significance-{metric_alpha}-{diversity}",
-                metric_alpha=get_metric("alpha"),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/alpha-significance-{metric_alpha}-{diversity}",
-                metric_alpha=get_phylogenetic_metric("alpha"),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/emperor-{metric}-{diversity}",
-                metric=get_phylogenetic_metric("beta"),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/emperor-{metric}-{diversity}",
-                metric=get_metric("beta"),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/ancom-{metadata_column}",
-                metadata_column=get_ancom_columns(),
-            ),
-            expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.html",
-                metric=get_complete_beta_metric(),
-            ),
-        output:
-            "results/{date}/out/report.zip",
-        params:
-            for_testing=get_if_testing("--snakefile ../workflow/Snakefile"),
-        log:
-            "logs/{date}/outputs/snakemake-report.log",
-        conda:
-            "../envs/snakemake.yaml"
-        shell:
-            "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
-            "{params.for_testing} "
-            "> {log} 2>&1"
-
-
-if config["longitudinal"]:
-
-    rule snakemake_report:
-        input:
-            "results/{date}/visual/heatmap_binary.html",
-            "results/{date}/visual/report/beta-rarefaction.svg",
-            "results/{date}/visual/report/heatmap.svg",
-            "results/{date}/visual/unzipped",
-            "results/{date}/visual/longitudinal_unzipped",
-            "results/{date}/visual/report/multiqc.html",
-            "results/{date}/visual/absolute-taxabar-plot.html",
-            "results/{date}/out/qurro_plot",
-            "results/{date}/visual/report/feature",
-            "results/{date}/visual/report/accuracy",
-            "results/{date}/visual/report/volatility",
-            "results/{date}/visual/report/empress-community",
-            "results/{date}/visual/report/lme",
-            "results/{date}/visual/report/rank-abundance/plots/",
-            "results/{date}/visual/allfilter.html",
-            "results/{date}/visual/report/sample.tsv",
-            expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.html",
-                metric=get_metric("beta"),
-            ),
-            expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.html",
-                metric=get_phylogenetic_metric("beta"),
-            ),
-            expand(
-                "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
-                metric=get_metric("beta"),
-                metadata_column=get_metadata_columns(),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
-                metric=get_phylogenetic_metric("beta"),
-                metadata_column=get_metadata_columns(),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/beta-significance-{metric}-{diversity}-{metadata_column}",
-                metric=get_phylogenetic_metric("beta"),
-                metadata_column=get_metadata_categorical_columns(),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/beta-significance-{metric}-{diversity}-{metadata_column}",
-                metric=get_metric("beta"),
-                metadata_column=get_metadata_categorical_columns(),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/alpha-correlation-{metric_alpha}-{diversity}",
-                metric_alpha=get_metric("alpha"),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/alpha-correlation-{metric_alpha}-{diversity}",
-                metric_alpha=get_phylogenetic_metric("alpha"),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/alpha-significance-{metric_alpha}-{diversity}",
-                metric_alpha=get_metric("alpha"),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/alpha-significance-{metric_alpha}-{diversity}",
-                metric_alpha=get_phylogenetic_metric("alpha"),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/emperor-{metric}-{diversity}",
-                metric=get_phylogenetic_metric("beta"),
-                diversity="phylogenetic",
-            ),
-            expand(
-                "results/{{date}}/visual/report/emperor-{metric}-{diversity}",
-                metric=get_metric("beta"),
-                diversity="normal",
-            ),
-            expand(
-                "results/{{date}}/visual/report/ancom-{metadata_column}",
-                metadata_column=get_ancom_columns(),
-            ),
-            expand(
-                "results/{{date}}/visual/beta-diversity-{metric}.html",
-                metric=get_complete_beta_metric(),
-            ),
-        output:
-            "results/{date}/out/report.zip",
-        params:
-            for_testing=get_if_testing("--snakefile ../workflow/Snakefile"),
-        log:
-            "logs/{date}/outputs/snakemake-report.log",
-        conda:
-            "../envs/snakemake.yaml"
-        shell:
-            "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
-            "{params.for_testing} "
-            "> {log} 2>&1"
-
-
-rule compress_kraken:
-    input:
+        "results/{date}/visual/heatmap_binary.html",
+        "results/{date}/visual/report/beta-rarefaction.svg",
+        "results/{date}/visual/report/heatmap.svg",
+        "results/{date}/visual/unzipped",
+        "results/{date}/visual/report/empress-community",
+        "results/{date}/visual/absolute-taxabar-plot.html",
+        "results/{date}/visual/report/rank-abundance/plots/",
+        "results/{date}/visual/allfilter.html",
+        "results/{date}/visual/report/sample.tsv",
         expand(
-            "results/{{date}}/out/kraken/{sample}.kreport2",
-            sample=get_reads_for_kraken(),
+            "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
+            metric=get_metric("beta"),
+            metadata_column=get_metadata_columns(),
+            diversity="normal",
+        ),
+        expand(
+            "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
+            metric=get_phylogenetic_metric("beta"),
+            metadata_column=get_metadata_columns(),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/beta-significance-{metric}-{diversity}-{metadata_column}",
+            metric=get_phylogenetic_metric("beta"),
+            metadata_column=get_metadata_categorical_columns(),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/beta-significance-{metric}-{diversity}-{metadata_column}",
+            metric=get_metric("beta"),
+            metadata_column=get_metadata_categorical_columns(),
+            diversity="normal",
+        ),
+        expand(
+            "results/{{date}}/visual/report/alpha-correlation-{metric_alpha}-{diversity}",
+            metric_alpha=get_metric("alpha"),
+            diversity="normal",
+        ),
+        expand(
+            "results/{{date}}/visual/report/alpha-correlation-{metric_alpha}-{diversity}",
+            metric_alpha=get_phylogenetic_metric("alpha"),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/alpha-significance-{metric_alpha}-{diversity}",
+            metric_alpha=get_metric("alpha"),
+            diversity="normal",
+        ),
+        expand(
+            "results/{{date}}/visual/report/alpha-significance-{metric_alpha}-{diversity}",
+            metric_alpha=get_phylogenetic_metric("alpha"),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/emperor-{metric}-{diversity}",
+            metric=get_phylogenetic_metric("beta"),
+            diversity="phylogenetic",
+        ),
+        expand(
+            "results/{{date}}/visual/report/emperor-{metric}-{diversity}",
+            metric=get_metric("beta"),
+            diversity="normal",
+        ),
+        expand(
+            "results/{{date}}/visual/beta-diversity-{metric}.html",
+            metric=get_complete_beta_metric(),
         ),
     output:
-        "results/{date}/out/kraken.tar.gz",
+        "results/{date}/out/report.zip",
     params:
-        directory="results/{date}/out/kraken/",
+        for_testing=get_if_testing("--snakefile ../workflow/Snakefile"),
     log:
-        "logs/{date}/outputs/kraken-compress.log",
+        "logs/{date}/outputs/snakemake-report.log",
     conda:
         "../envs/snakemake.yaml"
     shell:
-        "tar -czvf {output} {params.directory} "
+        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
+        "{params.for_testing} "
+        "> {log} 2>&1"
 
 
 rule export_parameters:
@@ -556,7 +401,6 @@ rule zip_report:
         "results/{date}/out/biom_table/",
         "results/{date}/out/taxonomy_biom/",
         "results/{date}/out/binary_biom/",
-        "results/{date}/visual/report/multiqc.html",
         "results/{date}/visual/heatmap_binary.html",
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
@@ -564,8 +408,6 @@ rule zip_report:
         #"results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.html",
-        "results/{date}/out/kraken.tar.gz",
-        "results/{date}/out/qurro_plot/",
         "results/{date}/visual/report/rank-abundance/plots/",
         "results/{date}/visual/allfilter.html",
         expand(
@@ -588,8 +430,6 @@ rule zip_report:
             metadata_column=get_metadata_columns(),
             diversity="phylogenetic",
         ),
-        "results/{date}/out/songbird/",
-        "results/{date}/out/differentials_taxonomy.tsv",
         "results/{date}/out/config_parameters.html",
         report="results/{date}/out/report.zip",
     output:

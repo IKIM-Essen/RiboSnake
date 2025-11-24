@@ -1,2 +1,2 @@
 sample-ID,run_date,path1,path2
-NAME,2022-03-01,path/file1,path/file2
+test1,2025-10-28,/local/work/adrian/test_16s/incoming/test1_1_L001_R1_001.fastq.gz,/local/work/adrian/test_16s/incoming/test1_1_L001_R2_001.fastq.gz

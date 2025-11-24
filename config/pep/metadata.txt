@@ -1,3 +1,3 @@
-sample_name,subject,year,month,day,age,sex,medication,swab_site,run_date
-#q2:types,categorical,numeric,numeric,numeric,numeric,categorical,categorical,categorical,categorical
-NAME,subject,2022,03,01,d,,,arm,2022-03-01
+sample_name,subject,run_date,
+#q2:types,categorical,categorical,
+test1,16S,2025-10-28,
