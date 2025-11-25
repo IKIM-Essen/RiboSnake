@@ -31,14 +31,14 @@ if config["database"]["Silva"]:
 
 rule all:
     input:
-        expand(
+        local(expand(
             "results/{date}/{date}.tar.gz",
             date=get_date(),
-        ),
+        )),
     output:
         touch(
-            expand(
+            local(expand(
                 "results/archive-indicator/{date}.archived",
                 date=get_date(),
-            ),
+            )),
         ),

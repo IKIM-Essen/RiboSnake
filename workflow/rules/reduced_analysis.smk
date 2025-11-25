@@ -572,7 +572,7 @@ rule zip_report:
         "results/{date}/visual/allfilter.html",
         report="results/{date}/out/report.zip",
     output:
-        "results/{date}/{date}.tar.gz",
+        local("results/{date}/{date}.tar.gz"),
     params:
         outpath=config["output"],
     log:
