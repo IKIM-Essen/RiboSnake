@@ -20,25 +20,8 @@ include: "rules/common.smk"
 include: "rules/preprocessing.smk"
 include: "rules/filtering.smk"
 include: "rules/classification.smk"
-include: "rules/statistic_analysis.smk"
 include: "rules/preparedata.smk"
-
-
-if config["reduced-analysis"]:
-
-    include: "rules/reduced_analysis.smk"
-
-
-if config["reduced-analysis"] == False and config["DADA2"] == False:
-
-    include: "rules/outputs_vsearch.smk"
-    include: "rules/visualisation.smk"
-
-
-if config["reduced-analysis"] == False and config["DADA2"] == True:
-
-    include: "rules/outputs_DADA2.smk"
-    include: "rules/visualisation.smk"
+include: "rules/reduced_analysis.smk"
 
 
 if config["database"]["Silva"]:
