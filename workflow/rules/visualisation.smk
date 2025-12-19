@@ -30,20 +30,34 @@ rule visualise_trimmed:
         "--verbose 2> {log}"
 
 
-rule visualise_joined:
-    input:
-        "results/{date}/out/joined-seqs.qza",
-    output:
-        "results/{date}/visual/joined-seqs.qzv",
-    log:
-        "logs/{date}/visualisation/visualise-joined.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime demux summarize "
-        "--i-data {input} "
-        "--o-visualization {output} "
-        "--verbose 2> {log}"
+if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+
+    rule visualise_joined:
+        input:
+            "results/{date}/out/joined-seqs.qza",
+        output:
+            "results/{date}/visual/joined-seqs.qzv",
+        log:
+            "logs/{date}/visualisation/visualise-joined.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime demux summarize "
+            "--i-data {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+    rule unzip_joined:
+        input:
+            "results/{date}/visual/joined-seqs.qzv",
+        output:
+            temp(directory("results/{date}/visual/joined-seqs")),
+        log:
+            "logs/{date}/outputs/unzip-joined.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/rename_qzv.py"
 
 
 rule unzip_samples:
@@ -66,19 +80,6 @@ rule unzip_trimmed:
         temp(directory("results/{date}/visual/trimmed-seqs")),
     log:
         "logs/{date}/outputs/unzip-trimmed.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/rename_qzv.py"
-
-
-rule unzip_joined:
-    input:
-        "results/{date}/visual/joined-seqs.qzv",
-    output:
-        temp(directory("results/{date}/visual/joined-seqs")),
-    log:
-        "logs/{date}/outputs/unzip-joined.log",
     conda:
         "../envs/python.yaml"
     script:
@@ -656,13 +657,45 @@ rule rank_abundance:
         "../scripts/rank-abundance.py"
 
 
-if config["DADA2"] == False:
+if (
+    config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
+    and config["DADA2"] == False
+):
 
     rule all_filter:
         input:
             samples="results/{date}/visual/paired-seqs",
             trimmed="results/{date}/visual/trimmed-seqs",
             joined="results/{date}/visual/joined-seqs/",
+            first="results/{date}/visual/report/demux-joined-filter-stats/",
+            human="results/{date}/visual/sample_frequencys_difference.csv",
+            wo_chimera="results/{date}/visual/chimera_unzipped/",
+            length="results/{date}/visual/lengthfilter_unzip/",
+            before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
+            final="results/{date}/visual/report/table-cluster-filtered/",
+        output:
+            report(
+                "results/{date}/visual/allfilter.html",
+                caption="../report/all-filter.rst",
+                category="4. Qualitycontrol",
+            ),
+        log:
+            "logs/{date}/visualisation/all-filter.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/complete_filter.py"
+
+
+if (
+    config["datatype"] == "SampleData[SequencesWithQuality]"
+    and config["DADA2"] == False
+):
+
+    rule all_filter:
+        input:
+            samples="results/{date}/visual/paired-seqs",
+            trimmed="results/{date}/visual/trimmed-seqs",
             first="results/{date}/visual/report/demux-joined-filter-stats/",
             human="results/{date}/visual/sample_frequencys_difference.csv",
             wo_chimera="results/{date}/visual/chimera_unzipped/",
