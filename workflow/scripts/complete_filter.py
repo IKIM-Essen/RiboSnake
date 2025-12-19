@@ -47,7 +47,9 @@ if datatype == "SampleData[PairedEndSequencesWithQuality]":
         header=0,
         index_col=0,
     )
-    joined.rename(columns={"forward sequence count": "Reads after joining"}, inplace=True)
+    joined.rename(
+        columns={"forward sequence count": "Reads after joining"}, inplace=True
+    )
 
 first = pd.read_csv(
     str(snakemake.input.first) + "/metadata.tsv", sep="\t", header=0, index_col=0

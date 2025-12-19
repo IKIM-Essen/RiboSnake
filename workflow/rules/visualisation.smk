@@ -29,6 +29,7 @@ rule visualise_trimmed:
         "--o-visualization {output} "
         "--verbose 2> {log}"
 
+
 if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
     rule visualise_joined:
@@ -45,7 +46,6 @@ if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
             "--i-data {input} "
             "--o-visualization {output} "
             "--verbose 2> {log}"
-
 
     rule unzip_joined:
         input:
@@ -686,6 +686,7 @@ if (
         script:
             "../scripts/complete_filter.py"
 
+
 if (
     config["datatype"] == "SampleData[SequencesWithQuality]"
     and config["DADA2"] == False
@@ -713,6 +714,7 @@ if (
             "../envs/python.yaml"
         script:
             "../scripts/complete_filter.py"
+
 
 if config["DADA2"] == True:
 
