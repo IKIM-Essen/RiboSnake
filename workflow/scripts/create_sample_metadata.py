@@ -131,3 +131,11 @@ while i < len(sample_info.index):
     i = i + 1
 if not os.path.exists(str(snakemake.output.sample_info)):
     sample_info.to_csv(snakemake.output.sample_info, sep=",", mode="w")
+
+missing = sample_info.isnull()
+
+if missing.any().any():
+    rows = sample_info[missing.any(axis=1)]
+    raise ValueError(
+        f"sample_info.txt file contains missing values in the following rows:\n{rows}"
+    )
