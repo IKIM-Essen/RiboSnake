@@ -3,28 +3,64 @@
 # one row per sample. It can be parsed easily via pandas.
 pepfile: config/pep/config.yaml
 
+# ===============================
+# General settings
+# ===============================
+
 # If testing set true
 testing: False
 # If data-preparation should be enabled
-include-data-prep: True
-# Modus: If true, analysis will be done with DADA2 instead of vsearch
-DADA2: False
+include-data-prep: False
+# Modus: Can be set to "DADA2", "vsearch" or "reduced"
+Modus: "reduced"
 # Longitudinal analysis, for further parameters look at line 204 of this document
 longitudinal: False
-# Shorter analysis for small number of samples or samples without metadata
-reduced-analysis: False
 # Whether to use bowtie2 for excluding human host contamination or not
-bowtie: True
-# Set if environmental or human data is processed
-data-type: human
+bowtie: False
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/
 output: ../report/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
+
+# ===============================
+# Metadata information
+# ===============================
+
 # Remove columns from analysis
-remove-columns: ["site_name"]
+remove-columns: []
+# Parameters for plots
+metadata-parameters:
+  taxa-heatmap-column: subject
+  beta-metadata-column: subject
+  gneiss-metadata-column: subject
+  absolute-taxa-name: subject
+  # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
+  cluster: features
+# Feature classification with ancom
+ancom:
+  # Catgorical metadata column to analyse
+  metadata-column: ["extract_group_no"]
+# Parameters for longitudinal analysis, used when longitudinal is set to True
+longitudinal-params:
+  # Column with continuous data to use primarily
+  state_column: "temperature"
+  # Column to name the samples
+  individual_id_column: "name_abbreviation"
+  # Formula for linear-mixed-effect analysis
+  metric: weight_after
+  # Comma-separated list to use as independent covariates to
+  # determine mean structure of "metric"
+  group: "weight_before,bmi_before,waist_before"
+  # Comma-separated list to use as independent covariates to
+  # determine variance and covariance of "metric"
+  random-effects: "blood_before,blood_after"
+
+# ===============================
+# Databases and reference sequences
+# ===============================
+
 # Paths to the databases used for classification and taxonomy
 database:
   Silva: True 
@@ -42,6 +78,11 @@ adapter1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 adapter2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
 # Type of data, single-end: 'SampleData[SequencesWithQuality]' or paired-end: 'SampleData[PairedEndSequencesWithQuality]'
 datatype: 'SampleData[PairedEndSequencesWithQuality]'
+
+# ===============================
+# Analysis parameters, based on QIIME2 
+# ===============================
+
 #Primertrimming parameters
 primertrimming:
   forward: CCTACGGGNGGCWGCAG
@@ -68,10 +109,13 @@ threads: 15
 # Parameters necessary for filtering
 filtering:
   # Relative threshold for the abundance filtering
+  # In case of environmental samples: 0.0005
   relative-abundance-filter: 0.001
   # Minimum length of a sequence to be retained
+  # In case of shorter sequences: 140
   min-seq-length: 200
   # Minimum quality score for sequences to pass filter
+  # This can also be 15
   phred-score: 20
   # Maximum number of undetermined base calls ("N")
   max-ambiguity: 50
@@ -83,14 +127,6 @@ filtering:
   perc-identity: 0.93
   # Percent of query sequence that must align to reference in order to be accepted as a hit
   perc-query-aligned: 0.93
-# Parameters for plots
-metadata-parameters:
-  taxa-heatmap-column: extract_group_no
-  beta-metadata-column: extract_group_no
-  gneiss-metadata-column: site_name
-  absolute-taxa-name: name_abbreviation
-  # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
-  cluster: features
 # Parameters for classification
 classification:
   # Reject match if percent identity to query is lower
@@ -115,7 +151,11 @@ rarefaction:
   sampling_depth: 100
   # How often rarefaction should be repeated
   repeats: 50
-  # The beta diversity metric to be computed
+  # The beta diversity metric to be computed. Possible metrics are: 'aitchison', 'braycurtis', 'canberra',
+  # 'canberra_adkins', 'chebyshev', 'cityblock', 'correlation', 'cosine',
+  # 'dice', 'euclidean', 'hamming', 'jaccard', 'jensenshannon', 'kulsinski',
+  # 'matching', 'minkowski', 'rogerstanimoto', 'russellrao', 'seuclidean',
+  # 'sokalmichener', 'sokalsneath', 'sqeuclidean', 'yule'
   metric: euclidean
   # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
   clustering_method: nj
@@ -123,7 +163,12 @@ rarefaction:
 diversity:
   # Parameters for alpha-diversity analysis
   alpha:
-    # Metric to be computed
+    # Metric to be computed. Possible metrics are: 'ace', 'berger_parker_d', 'brillouin_d', 'chao1',
+    # 'chao1_ci', 'dominance', 'doubles', 'enspie', 'esty_ci', 'fisher_alpha',
+    # 'gini_index', 'goods_coverage', 'heip_e', 'kempton_taylor_q',
+    # 'lladser_pe', 'margalef', 'mcintosh_d', 'mcintosh_e', 'menhinick',
+    # 'michaelis_menten_fit', 'observed_features', 'osd', 'pielou_e', 'robbins',
+    # 'shannon', 'simpson', 'simpson_e', 'singles', 'strong'
     diversity-metric: ["pielou_e"]
     # Metric to be computed
     phylogeny-metric: ["faith_pd"]
@@ -131,7 +176,11 @@ diversity:
     correlation-method: 'spearman'
   # Parameters for beta-diversity analysis
   beta:
-    # Metric to be computed
+    # Metric to be computed. Possible metrics are: 'aitchison', 'braycurtis', 'canberra',
+    # 'canberra_adkins', 'chebyshev', 'cityblock', 'correlation', 'cosine',
+    # 'dice', 'euclidean', 'hamming', 'jaccard', 'jensenshannon', 'kulsinski',
+    # 'matching', 'minkowski', 'rogerstanimoto', 'russellrao', 'seuclidean',
+    # 'sokalmichener', 'sokalsneath', 'sqeuclidean', 'yule'
     diversity-metric: ["euclidean"]
     # A pseudocount to handle zeros for compositional metrics
     diversity-pseudocount: 1
@@ -192,6 +241,11 @@ dada2-single:
   min-fold-parent-over-abundance: 1.0
   # The number of reads to use when training the errormodel
   n-reads-learn: 1000000
+
+# ===============================
+# Feature rankings, please add present metadata columns to the "formula"
+# ===============================
+
 # Creating rankings for feature impact on specific metadata
 songbird:
   # Specifies the width of the prior distribution of the differentials
@@ -204,21 +258,3 @@ songbird:
   summary_interval: 1
   # Formula
   formula: "sex+age"
-# Feature classification with ancom
-ancom:
-  # Catgorical metadata column to analyse
-  metadata-column: ["extract_group_no"]
-# Parameters for longitudinal analysis, used when longitudinal is set to True
-longitudinal-params:
-  # Column with continuous data to use primarily
-  state_column: "temperature"
-  # Column to name the samples
-  individual_id_column: "name_abbreviation"
-  # Formula for linear-mixed-effect analysis
-  metric: weight_after
-  # Comma-separated list to use as independent covariates to
-  # determine mean structure of "metric"
-  group: "weight_before,bmi_before,waist_before"
-  # Comma-separated list to use as independent covariates to
-  # determine variance and covariance of "metric"
-  random-effects: "blood_before,blood_after"

@@ -1,4 +1,4 @@
-if config["DADA2"] == False:
+if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule dereplication:
         input:

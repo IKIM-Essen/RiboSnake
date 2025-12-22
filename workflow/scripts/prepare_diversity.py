@@ -21,15 +21,12 @@ j = 0
 while j < len(zipped_files):
     with zipfile.ZipFile(zipped_files[j], "r") as zip_ref:
         name = zipped_files[j].split("/")[-1]
-        # print(name)
         new_dir = str(snakemake.output) + "/" + name
-        # print(new_dir)
         zip_ref.extractall(os.path.splitext(new_dir)[0] + "/")
         os.remove(new_dir)
     j = j + 1
 
 directory = os.listdir(str(snakemake.output))
-# print(directory)
 
 z = 0
 while z < len(directory):
