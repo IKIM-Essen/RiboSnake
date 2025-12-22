@@ -1,6 +1,7 @@
 if (
     config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
-    and config["DADA2"] == False
+    and (config["Modus"] == "vsearch" 
+    or config["Modus"] == "reduced")
 ):
 
     rule fastq_score:
@@ -31,7 +32,8 @@ if (
 
 if (
     config["datatype"] == "SampleData[SequencesWithQuality]"
-    and config["DADA2"] == False
+    and (config["Modus"] == "vsearch" 
+    or config["Modus"] == "reduced")
 ):
 
     rule fastq_score:
@@ -60,7 +62,7 @@ if (
             "--verbose 2> {log}"
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule chimera_filtering:
         input:
@@ -122,7 +124,7 @@ if config["DADA2"] == False:
 
 if (
     config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
-    and config["DADA2"] == True
+    and config["Modus"] == "DADA2"
 ):
 
     rule dada2:
@@ -174,7 +176,7 @@ if (
             "--verbose 2> {log}"
 
 
-if config["datatype"] == "SampleData[SequencesWithQuality]" and config["DADA2"] == True:
+if config["datatype"] == "SampleData[SequencesWithQuality]" and config["Modus"] == "DADA2":
 
     rule dada2:
         input:
@@ -274,7 +276,7 @@ rule unzip_frequency:
         "../scripts/rename_qzv.py"
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule unzip_frequency_chimera:
         input:
@@ -289,7 +291,7 @@ if config["DADA2"] == False:
             "../scripts/rename_qzv.py"
 
 
-if config["reduced-analysis"] == True:
+if config["Modus"] == "reduced":
 
     rule visualise_afterab:
         input:
@@ -320,7 +322,7 @@ rule frequency_after_abundancefilter:
         "../scripts/extract_significance.py"
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule filter_human:
         input:

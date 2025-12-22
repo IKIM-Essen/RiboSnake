@@ -182,7 +182,7 @@ if (
             "2> {log} "
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule trim_paired:
         input:
@@ -239,7 +239,8 @@ if config["DADA2"] == False:
 
 if (
     config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
-    and config["DADA2"] == False
+    and config["Modus"] == "vsearch" 
+    or config["Modus"] == "reduced"
 ):
 
     rule join_ends:

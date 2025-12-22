@@ -10,13 +10,11 @@ pepfile: config/pep/config.yaml
 # If testing set true
 testing: False
 # If data-preparation should be enabled
-include-data-prep: True
-# Modus: If true, analysis will be done with DADA2 instead of vsearch
-DADA2: False
+include-data-prep: False
+# Modus: Can be set to "DADA2", "vsearch" or "reduced"
+Modus: "reduced"
 # Longitudinal analysis, for further parameters look at line 204 of this document
 longitudinal: False
-# Shorter analysis for small number of samples or samples without metadata
-reduced-analysis: False
 # Whether to use bowtie2 for excluding human host contamination or not
 bowtie: False
 # Paths to the directories holding the fastqs
