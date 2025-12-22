@@ -207,7 +207,6 @@ with open(INPUT_YAML) as file:
             if PRINT_HTML:
                 body_st.append("<h2>" + key + "</h2>")
             else:
-                print("=> " + key + ":")
 
         table = prettyTable.get_html_string(
             attributes={
