@@ -50,7 +50,23 @@ rule unzip_frequency_length:
         "../scripts/rename_qzv.py"
 
 
-rule visualise_samples:
+rule visualize_beforeChimera:
+    input:
+        "results/{date}/out/table-nonchimeric-wo-borderline.qza",
+    output:
+        "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-chimera.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table summarize "
+        "--i-table {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
+rule visualize_samples:
     input:
         "results/{date}/out/demux-paired-end.qza",
     output:
@@ -65,61 +81,6 @@ rule visualise_samples:
         "--o-visualization {output} "
         "--verbose 2> {log}"
 
-rule filter_seq_length:
-    input:
-        seq="results/{date}/out/seq-cluster.qza",
-        table="results/{date}/out/table-cluster.qza"
-    output:
-        seq="results/{date}/out/seq-cluster-lengthfilter.qza",
-        table="results/{date}/out/table-cluster-lengthfilter.qza",
-    params:
-        min_length=config["filtering"]["min-seq-length"],
-    log:
-        "logs/{date}/filtering/filter-seq-length.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime feature-table filter-seqs "
-        "--i-data {input.seq} "
-        "--m-metadata-file {input.seq} "
-        "--p-where 'length(sequence) > {params.min_length}' "
-        "--o-filtered-data {output.seq} \n"
-        "qiime feature-table filter-features "
-        "--i-table {input.table} "
-        "--m-metadata-file {output.seq} "
-        "--o-filtered-table {output.table} "
-        "--verbose 2> {log}"
-
-rule visualise_table:
-    input:
-        "results/{date}/out/table-cluster-lengthfilter.qza",
-    output:
-        "results/{date}/visual/table-cluster-lengthfilter.qzv",
-    log:
-        "logs/{date}/visualisation/visualise-table.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime feature-table summarize "
-        "--i-table {input} "
-        "--o-visualization {output} "
-        "--verbose 2> {log}"
-
-
-rule visualise_fastq:
-    input:
-        "results/{date}/out/demux-paired-end.qza",
-    output:
-        "results/{date}/visual/fastq_stats.qzv",
-    log:
-        "logs/{date}/visualisation/visualise-fastq.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime vsearch fastq-stats "
-        "--i-sequences {input} "
-        "--o-visualization {output} "
-        "--verbose 2> {log}"
 
 rule unzip_samples:
     input:
@@ -191,6 +152,39 @@ rule unzip_joined:
     script:
         "../scripts/rename_qzv.py"
 
+
+rule visualise_table:
+    input:
+        "results/{date}/out/table-cluster-lengthfilter.qza",
+    output:
+        "results/{date}/visual/table-cluster-lengthfilter.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-table.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table summarize "
+        "--i-table {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
+rule visualise_fastq:
+    input:
+        "results/{date}/out/demux-paired-end.qza",
+    output:
+        "results/{date}/visual/fastq_stats.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-fastq.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime vsearch fastq-stats "
+        "--i-sequences {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
 rule demux_stats:
     input:
         "results/{date}/out/demux-joined-filter-stats.qza",
@@ -205,6 +199,56 @@ rule demux_stats:
         "--m-input-file {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
+
+
+if config["data-type"] == "human" and config["bowtie"] == False:
+
+    rule visual_humancount:
+        input:
+            "results/{date}/out/human.qza",
+        output:
+            "results/{date}/visual/human-count.qzv",
+        log:
+            "logs/{date}/visualisation/human-count.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table tabulate-seqs "
+            "--i-data {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+    rule unzip_human_count:
+        input:
+            "results/{date}/visual/human-count.qzv",
+        output:
+            human_count=report(
+                directory("results/{date}/visual/report/human-count"),
+                caption="../report/human-count.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+        params:
+            between="results/{date}/visual/report/human-count-unzipped",
+        log:
+            "logs/{date}/visualisation/human-count-unzip.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        script:
+            "../scripts/extract_humancount.py"
+
+
+if config["data-type"] == "environmental" or config["bowtie"] == True:
+
+    rule unzip_human_dummy:
+        output:
+            directory("results/{date}/visual/report/human-count"),
+        log:
+            "logs/{date}/visualisation/human-count-dummy.log",
+        conda:
+            "../envs/snakemake.yaml"
+        shell:
+            "mkdir {output}"
 
 
 rule taxa_heatmap:
@@ -370,6 +414,9 @@ rule absolute_taxa:
         "../scripts/absolute_taxabarplot.py"
 
 
+# if config["DADA2"] == False:
+
+
 rule biom_file:
     input:
         table="results/{date}/out/table-cluster-filtered.qza",
@@ -441,155 +488,387 @@ rule report_empress:
         "../scripts/extract_significance.py"
 
 
-rule unzip_reports:
-    input:
-        "results/{date}/visual/heatmap.qzv",
-        "results/{date}/visual/taxa-bar-plots.qzv",
-        "results/{date}/visual/rooted-tree.qza",
-        "results/{date}/visual/taxonomy.qzv",
-        "results/{date}/visual/paired-seqs.qzv",
-        "results/{date}/visual/fastq_stats.qzv",
-        "results/{date}/visual/demux-joined-filter-stats.qzv",
-        "results/{date}/visual/empress-community.qzv",
-    output:
-        directory("results/{date}/visual/unzipped"),
-    log:
-        "logs/{date}/outputs/unzip-reports.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/rename_qzv.py"
+if config["DADA2"] == True:
 
-rule report_files:
-    input:
-        "results/{date}/visual/unzipped/",
-    output:
-        heatmap=report(
+    rule visualize_dada2_stats:
+        input:
+            "results/{date}/out/dada2-stats.qza",
+        output:
+            "results/{date}/visual/dada2-stats-visual.qzv",
+        log:
+            "logs/{date}/outputs/dada2-stats-visual.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime metadata tabulate "
+            "--m-input-file {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+    rule unzip_reports:
+        input:
+            "results/{date}/visual/heatmap.qzv",
+            "results/{date}/visual/taxa-bar-plots.qzv",
+            "results/{date}/visual/rooted-tree.qza",
+            "results/{date}/visual/taxonomy.qzv",
+            "results/{date}/visual/paired-seqs.qzv",
+            "results/{date}/visual/fastq_stats.qzv",
+            "results/{date}/visual/dada2-stats-visual.qzv",
+            "results/{date}/visual/empress-community.qzv",
+        output:
+            directory("results/{date}/visual/unzipped"),
+        log:
+            "logs/{date}/outputs/unzip-reports.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/rename_qzv.py"
+
+    rule report_files:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            heatmap=report(
+                "results/{date}/visual/report/heatmap.svg",
+                caption="../report/heatmap.rst",
+                category="1. Heatmap",
+                subcategory="Relative abundances",
+            ),
+            taxonomy_tsv=report(
+                "results/{date}/visual/report/taxonomy.tsv",
+                caption="../report/taxonomy-tsv.rst",
+                category="2. Taxonomy",
+                subcategory="Taxonomy Table",
+            ),
+            taxa_barplot=report(
+                directory("results/{date}/visual/report/taxa_barplot_data"),
+                caption="../report/taxa-barplot.rst",
+                category="2. Taxonomy",
+                subcategory="Taxa Barplot",
+                htmlindex="index.html",
+            ),
+            paired_seqs=report(
+                directory("results/{date}/visual/report/paired_seqs"),
+                caption="../report/paired-seqs.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+            fastq_stats=report(
+                directory("results/{date}/visual/report/fastq_stats"),
+                caption="../report/fastq-stats.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+            dada2=report(
+                directory("results/{date}/visual/report/dada2-stats-visual"),
+                caption="../report/demux-filter-stats.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+        log:
+            "logs/{date}/outputs/report-files.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/extract_reports.py"
+
+    rule all_filter:
+        input:
+            dada2="results/{date}/visual/unzipped/",
+            length="results/{date}/visual/lengthfilter_unzip/",
+            before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
+            final="results/{date}/visual/report/table-cluster-filtered/",
+        output:
+            report(
+                "results/{date}/visual/allfilter.html",
+                caption="../report/all-filter.rst",
+                category="4. Qualitycontrol",
+            ),
+        log:
+            "logs/{date}/visualisation/all-filter.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/complete_filter_DADA2.py"
+
+    rule snakemake_report:
+        input:
+            "results/{date}/visual/heatmap_binary.html",
             "results/{date}/visual/report/heatmap.svg",
-            caption="../report/heatmap.rst",
-            category="1. Heatmap",
-            subcategory="Relative abundances",
-        ),
-        taxonomy_tsv=report(
-            "results/{date}/visual/report/taxonomy.tsv",
-            caption="../report/taxonomy-tsv.rst",
-            category="2. Taxonomy",
-            subcategory="Taxonomy Table",
-        ),
-        taxa_barplot=report(
-            directory("results/{date}/visual/report/taxa_barplot_data"),
-            caption="../report/taxa-barplot.rst",
-            category="2. Taxonomy",
-            subcategory="Taxa Barplot",
-            htmlindex="index.html",
-        ),
-        paired_seqs=report(
-            directory("results/{date}/visual/report/paired_seqs"),
-            caption="../report/paired-seqs.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
-        fastq_stats=report(
-            directory("results/{date}/visual/report/fastq_stats"),
-            caption="../report/fastq-stats.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
-        demux_filter_stats=report(
-            directory("results/{date}/visual/report/demux-joined-filter-stats"),
-            caption="../report/demux-filter-stats.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
-    log:
-        "logs/{date}/outputs/report-files.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/extract_reports.py"
-
-rule snakemake_report:
-    input:
-        "results/{date}/visual/heatmap_binary.html",
-        "results/{date}/visual/report/heatmap.svg",
-        "results/{date}/visual/unzipped",
-        "results/{date}/visual/absolute-taxabar-plot.html",
-        "results/{date}/visual/allfilter.html",
-        "results/{date}/visual/report/empress-community",
-        "results/{date}/visual/report/sample.tsv",
-    output:
-        "results/{date}/out/report.zip",
-    params:
-        for_testing=get_if_testing("--snakefile ../workflow/Snakefile"),
-    log:
-        "logs/{date}/outputs/snakemake-report.log",
-    conda:
-        "../envs/snakemake.yaml"
-    shell:
-        "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
-        "{params.for_testing} "
-        "> {log} 2>&1"
-
-rule all_filter:
-    input:
-        samples="results/{date}/visual/paired-seqs",
-        trimmed="results/{date}/visual/trimmed-seqs",
-        joined="results/{date}/visual/joined-seqs",
-        first="results/{date}/visual/report/demux-joined-filter-stats/",
-        length="results/{date}/visual/lengthfilter_unzip/",
-        before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
-        final="results/{date}/visual/report/table-cluster-filtered/",
-    output:
-        report(
+            "results/{date}/visual/unzipped",
+            "results/{date}/visual/report/multiqc.html",
+            "results/{date}/visual/absolute-taxabar-plot.html",
             "results/{date}/visual/allfilter.html",
-            caption="../report/all-filter.rst",
-            category="4. Qualitycontrol",
-        ),
-    log:
-        "logs/{date}/visualisation/all-filter.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/complete_filter.py"
+            "results/{date}/visual/report/sample.tsv",
+        output:
+            "results/{date}/out/report.zip",
+        params:
+            for_testing=get_if_testing("--snakefile ../workflow/Snakefile"),
+        log:
+            "logs/{date}/outputs/snakemake-report.log",
+        conda:
+            "../envs/snakemake.yaml"
+        shell:
+            "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
+            "{params.for_testing} "
+            "> {log} 2>&1"
 
-rule zip_report:
+    rule zip_report:
+        input:
+            "results/{date}/visual/table-cluster-lengthfilter.qzv",
+            "results/{date}/visual/rooted-tree.qza",
+            "results/{date}/out/taxonomy.qza",
+            "results/{date}/out/aligned-rep-seqs.qza",
+            "results/{date}/out/biom_table/",
+            "results/{date}/out/binary_biom/",
+            "results/{date}/visual/report/multiqc.html",
+            "results/{date}/visual/heatmap_binary.html",
+            "results/{date}/visual/report/heatmap.svg",
+            "results/{date}/visual/report/taxonomy.tsv",
+            "results/{date}/visual/fastq_stats.qzv",
+            "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+            "results/{date}/visual/absolute-taxabar-plot.html",
+            "results/{date}/out/kraken.tar.gz",
+            "results/{date}/out/config_parameters.html",
+            "results/{date}/visual/report/rank-abundance/plots",
+            "results/{date}/visual/allfilter.html",
+            report="results/{date}/out/report.zip",
+        output:
+            "results/{date}/{date}.tar.gz",
+        params:
+            outpath=config["output"],
+        log:
+            "logs/{date}/outputs/zip-report.log",
+        conda:
+            "../envs/snakemake.yaml"
+        shell:
+            """
+            mkdir -p results/{wildcards.date}/16S-report/
+            mkdir -p results/{wildcards.date}/16S-report/additional/
+            cp -r {input} results/{wildcards.date}/16S-report/additional/
+            rm results/{wildcards.date}/16S-report/additional/report.zip
+            cp {input.report} results/{wildcards.date}/16S-report/
+            tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
+            cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
+            rm -r results/{wildcards.date}/16S-report
+            """
+
+
+if config["DADA2"] == False:
+
+    rule table_compare_human:
+        input:
+            table_wh="results/{date}/out/derepl-table.qza",
+            table_woh="results/{date}/out/derep-table-nonhum.qza",
+        output:
+            visual_wh="results/{date}/visual/table-whuman.qzv",
+            visual_woh="results/{date}/visual/table-wohuman.qzv",
+        log:
+            "logs/{date}/visualisation/table-compare-human.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table summarize "
+            "--i-table {input.table_wh} "
+            "--o-visualization {output.visual_wh} "
+            "--verbose 2> {log} \n"
+            "qiime feature-table summarize "
+            "--i-table {input.table_woh} "
+            "--o-visualization {output.visual_woh} "
+            "--verbose 2> {log}"
+
+    rule unzip_reports:
+        input:
+            "results/{date}/visual/heatmap.qzv",
+            "results/{date}/visual/taxa-bar-plots.qzv",
+            "results/{date}/visual/rooted-tree.qza",
+            "results/{date}/visual/taxonomy.qzv",
+            "results/{date}/visual/table-whuman.qzv",
+            "results/{date}/visual/table-wohuman.qzv",
+            "results/{date}/visual/paired-seqs.qzv",
+            "results/{date}/visual/fastq_stats.qzv",
+            "results/{date}/visual/demux-joined-filter-stats.qzv",
+            "results/{date}/visual/empress-community.qzv",
+        output:
+            directory("results/{date}/visual/unzipped"),
+        log:
+            "logs/{date}/outputs/unzip-reports.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/rename_qzv.py"
+
+    rule report_files:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            heatmap=report(
+                "results/{date}/visual/report/heatmap.svg",
+                caption="../report/heatmap.rst",
+                category="1. Heatmap",
+                subcategory="Relative abundances",
+            ),
+            taxonomy_tsv=report(
+                "results/{date}/visual/report/taxonomy.tsv",
+                caption="../report/taxonomy-tsv.rst",
+                category="2. Taxonomy",
+                subcategory="Taxonomy Table",
+            ),
+            taxa_barplot=report(
+                directory("results/{date}/visual/report/taxa_barplot_data"),
+                caption="../report/taxa-barplot.rst",
+                category="2. Taxonomy",
+                subcategory="Taxa Barplot",
+                htmlindex="index.html",
+            ),
+            paired_seqs=report(
+                directory("results/{date}/visual/report/paired_seqs"),
+                caption="../report/paired-seqs.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+            fastq_stats=report(
+                directory("results/{date}/visual/report/fastq_stats"),
+                caption="../report/fastq-stats.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+            demux_filter_stats=report(
+                directory("results/{date}/visual/report/demux-joined-filter-stats"),
+                caption="../report/demux-filter-stats.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+        log:
+            "logs/{date}/outputs/report-files.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/extract_reports.py"
+
+    rule snakemake_report:
+        input:
+            "results/{date}/visual/heatmap_binary.html",
+            "results/{date}/visual/report/heatmap.svg",
+            "results/{date}/visual/unzipped",
+            "results/{date}/visual/report/multiqc.html",
+            "results/{date}/visual/absolute-taxabar-plot.html",
+            "results/{date}/visual/allfilter.html",
+            "results/{date}/visual/report/empress-community",
+            "results/{date}/visual/report/sample.tsv",
+        output:
+            "results/{date}/out/report.zip",
+        params:
+            for_testing=get_if_testing("--snakefile ../workflow/Snakefile"),
+        log:
+            "logs/{date}/outputs/snakemake-report.log",
+        conda:
+            "../envs/snakemake.yaml"
+        shell:
+            "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
+            "{params.for_testing} "
+            "> {log} 2>&1"
+
+    rule all_filter:
+        input:
+            samples="results/{date}/visual/paired-seqs",
+            trimmed="results/{date}/visual/trimmed-seqs",
+            joined="results/{date}/visual/joined-seqs",
+            first="results/{date}/visual/report/demux-joined-filter-stats/",
+            human="results/{date}/visual/sample_frequencys_difference.csv",
+            wo_chimera="results/{date}/visual/chimera_unzipped/",
+            length="results/{date}/visual/lengthfilter_unzip/",
+            before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
+            final="results/{date}/visual/report/table-cluster-filtered/",
+        output:
+            report(
+                "results/{date}/visual/allfilter.html",
+                caption="../report/all-filter.rst",
+                category="4. Qualitycontrol",
+            ),
+        log:
+            "logs/{date}/visualisation/all-filter.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/complete_filter.py"
+
+    rule zip_report:
+        input:
+            "results/{date}/visual/table-cluster-lengthfilter.qzv",
+            "results/{date}/visual/rooted-tree.qza",
+            "results/{date}/out/taxonomy.qza",
+            "results/{date}/out/aligned-rep-seqs.qza",
+            "results/{date}/out/biom_table/",
+            "results/{date}/out/taxonomy_biom/",
+            "results/{date}/out/binary_biom/",
+            "results/{date}/visual/report/multiqc.html",
+            "results/{date}/visual/heatmap_binary.html",
+            "results/{date}/visual/report/heatmap.svg",
+            "results/{date}/visual/report/taxonomy.tsv",
+            "results/{date}/visual/fastq_stats.qzv",
+            "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+            "results/{date}/visual/absolute-taxabar-plot.html",
+            "results/{date}/out/kraken.tar.gz",
+            "results/{date}/out/config_parameters.html",
+            "results/{date}/visual/report/rank-abundance/plots",
+            "results/{date}/visual/allfilter.html",
+            report="results/{date}/out/report.zip",
+        output:
+            "results/{date}/{date}.tar.gz",
+        params:
+            outpath=config["output"],
+        log:
+            "logs/{date}/outputs/zip-report.log",
+        conda:
+            "../envs/snakemake.yaml"
+        shell:
+            """
+            mkdir -p results/{wildcards.date}/16S-report/
+            mkdir -p results/{wildcards.date}/16S-report/additional/
+            cp -r {input} results/{wildcards.date}/16S-report/additional/
+            rm results/{wildcards.date}/16S-report/additional/report.zip
+            cp {input.report} results/{wildcards.date}/16S-report/
+            tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
+            cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
+            rm -r results/{wildcards.date}/16S-report
+            """
+
+
+rule compress_kraken:
     input:
-        "results/{date}/visual/table-cluster-lengthfilter.qzv",
-        "results/{date}/visual/rooted-tree.qza",
-        "results/{date}/out/taxonomy.qza",
-        "results/{date}/out/aligned-rep-seqs.qza",
-        "results/{date}/out/biom_table/",
-        "results/{date}/out/taxonomy_biom/",
-        "results/{date}/out/binary_biom/",
-        "results/{date}/visual/heatmap_binary.html",
-        "results/{date}/visual/report/heatmap.svg",
-        "results/{date}/visual/report/taxonomy.tsv",
-        "results/{date}/visual/fastq_stats.qzv",
-        "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
-        "results/{date}/visual/absolute-taxabar-plot.html",
-        "results/{date}/out/config_parameters.html",
-        "results/{date}/visual/report/rank-abundance/plots",
-        "results/{date}/visual/allfilter.html",
-        report="results/{date}/out/report.zip",
+        expand(
+            "results/{{date}}/out/kraken/{sample}.kreport2",
+            sample=get_reads_for_kraken(),
+        ),
     output:
-        local("results/{date}/{date}.tar.gz"),
+        "results/{date}/out/kraken.tar.gz",
     params:
-        outpath=config["output"],
+        directory="results/{date}/out/kraken/",
     log:
-        "logs/{date}/outputs/zip-report.log",
+        "logs/{date}/outputs/kraken-compress.log",
     conda:
         "../envs/snakemake.yaml"
     shell:
-        """
-        mkdir -p results/{wildcards.date}/16S-report/
-        mkdir -p results/{wildcards.date}/16S-report/additional/
-        cp -r {input} results/{wildcards.date}/16S-report/additional/
-        rm results/{wildcards.date}/16S-report/additional/report.zip
-        cp {input.report} results/{wildcards.date}/16S-report/
-        tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
-        cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
-        rm -r results/{wildcards.date}/16S-report
-        """
+        "tar -czvf {output} {params.directory} "
+
+
+if config["bowtie"] == False:
+
+    rule hum_filter_difference:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            "results/{date}/visual/sample_frequencys_difference.csv",
+        params:
+            visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
+            visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
+        log:
+            "logs/{date}/visualisation/frequency_difference.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/sample_freq_difference.py"
 
 
 rule export_parameters:
