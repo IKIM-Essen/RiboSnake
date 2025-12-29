@@ -56,19 +56,7 @@ first.drop(
     axis=1,
     inplace=True,
 )
-human = pd.read_csv(str(snakemake.input.human), sep=",", header=0, index_col=0)
 
-if "difference" in human.columns:
-    human.drop(["difference"], axis=1, inplace=True)
-
-wo_chimera = pd.read_csv(
-    str(snakemake.input.wo_chimera)
-    + "/table-nonchimeric-wo-borderline/data/sample-frequency-detail.csv",
-    sep=",",
-    header=0,
-    index_col=0,
-)
-wo_chimera.rename(columns={"0": "Reads after chimera filtering"}, inplace=True)
 length = pd.read_csv(
     str(snakemake.input.length)
     + "/table-cluster-lengthfilter/data/sample-frequency-detail.csv",
@@ -98,8 +86,6 @@ merged_df = pd.concat(
         trimmed,
         joined,
         first,
-        human,
-        wo_chimera,
         length,
         before_abundance,
         complete,
