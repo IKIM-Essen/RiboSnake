@@ -201,56 +201,6 @@ rule demux_stats:
         "--verbose 2> {log}"
 
 
-if config["data-type"] == "human" and config["bowtie"] == False:
-
-    rule visual_humancount:
-        input:
-            "results/{date}/out/human.qza",
-        output:
-            "results/{date}/visual/human-count.qzv",
-        log:
-            "logs/{date}/visualisation/human-count.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        shell:
-            "qiime feature-table tabulate-seqs "
-            "--i-data {input} "
-            "--o-visualization {output} "
-            "--verbose 2> {log}"
-
-    rule unzip_human_count:
-        input:
-            "results/{date}/visual/human-count.qzv",
-        output:
-            human_count=report(
-                directory("results/{date}/visual/report/human-count"),
-                caption="../report/human-count.rst",
-                category="4. Qualitycontrol",
-                htmlindex="index.html",
-            ),
-        params:
-            between="results/{date}/visual/report/human-count-unzipped",
-        log:
-            "logs/{date}/visualisation/human-count-unzip.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        script:
-            "../scripts/extract_humancount.py"
-
-
-if config["data-type"] == "environmental" or config["bowtie"] == True:
-
-    rule unzip_human_dummy:
-        output:
-            directory("results/{date}/visual/report/human-count"),
-        log:
-            "logs/{date}/visualisation/human-count-dummy.log",
-        conda:
-            "../envs/snakemake.yaml"
-        shell:
-            "mkdir {output}"
-
-
 rule taxa_heatmap:
     input:
         "results/{date}/out/taxa_collapsed.qza",
@@ -414,9 +364,6 @@ rule absolute_taxa:
         "../scripts/absolute_taxabarplot.py"
 
 
-# if config["DADA2"] == False:
-
-
 rule biom_file:
     input:
         table="results/{date}/out/table-cluster-filtered.qza",
@@ -488,7 +435,7 @@ rule report_empress:
         "../scripts/extract_significance.py"
 
 
-if config["DADA2"] == True:
+if config["Modus"] == "DADA2":
 
     rule visualize_dada2_stats:
         input:
@@ -547,12 +494,12 @@ if config["DADA2"] == True:
                 subcategory="Taxa Barplot",
                 htmlindex="index.html",
             ),
-            paired_seqs=report(
-                directory("results/{date}/visual/report/paired_seqs"),
-                caption="../report/paired-seqs.rst",
-                category="4. Qualitycontrol",
-                htmlindex="index.html",
-            ),
+            #paired_seqs=report(
+            #    directory("results/{date}/visual/report/paired_seqs"),
+            #    caption="../report/paired-seqs.rst",
+            #    category="4. Qualitycontrol",
+            #    htmlindex="index.html",
+            #),
             fastq_stats=report(
                 directory("results/{date}/visual/report/fastq_stats"),
                 caption="../report/fastq-stats.rst",
@@ -572,7 +519,7 @@ if config["DADA2"] == True:
         script:
             "../scripts/extract_reports.py"
 
-    rule all_filter:
+    rule all_filter_DADA2:
         input:
             dada2="results/{date}/visual/unzipped/",
             length="results/{date}/visual/lengthfilter_unzip/",
@@ -654,7 +601,7 @@ if config["DADA2"] == True:
             """
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "reduced":
 
     rule table_compare_human:
         input:

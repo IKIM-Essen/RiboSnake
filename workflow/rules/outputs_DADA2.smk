@@ -348,7 +348,7 @@ if config["longitudinal"] == False:
             "results/{date}/visual/report/sample.tsv",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
-                metric=get_phylogenetic_metric("beta"),
+                metric=get_metric("beta"),
                 metadata_column=get_metadata_columns(),
                 diversity="normal",
             ),

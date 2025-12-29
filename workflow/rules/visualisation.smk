@@ -114,7 +114,7 @@ rule unzip_frequency_length:
         "../scripts/rename_qzv.py"
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule visualise_beforeChimera:
         input:
@@ -200,56 +200,6 @@ rule demux_stats:
         "--m-input-file {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
-
-
-if config["data-type"] == "human" and config["bowtie"] == False:
-
-    rule visual_humancount:
-        input:
-            "results/{date}/out/human.qza",
-        output:
-            "results/{date}/visual/human-count.qzv",
-        log:
-            "logs/{date}/visualisation/human-count.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        shell:
-            "qiime feature-table tabulate-seqs "
-            "--i-data {input} "
-            "--o-visualization {output} "
-            "--verbose 2> {log}"
-
-    rule unzip_human_count:
-        input:
-            "results/{date}/visual/human-count.qzv",
-        output:
-            human_count=report(
-                directory("results/{date}/visual/report/human-count"),
-                caption="../report/human-count.rst",
-                category="4. Qualitycontrol",
-                htmlindex="index.html",
-            ),
-        params:
-            between="results/{date}/visual/report/human-count-unzipped",
-        log:
-            "logs/{date}/visualisation/human-count-unzip.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        script:
-            "../scripts/extract_humancount.py"
-
-
-if config["data-type"] == "environmental" or config["bowtie"] == True:
-
-    rule unzip_human_dummy:
-        output:
-            directory("results/{date}/visual/report/human-count"),
-        log:
-            "logs/{date}/visualisation/human-count-dummy.log",
-        conda:
-            "../envs/snakemake.yaml"
-        shell:
-            "mkdir {output}"
 
 
 rule taxa_heatmap:
@@ -578,7 +528,11 @@ rule ancom:
         "--verbose 2> {log}"
 
 
-if config["bowtie"] == False and config["DADA2"] == False:
+if (
+    config["bowtie"] == False
+    and config["Modus"] == "vsearch"
+    or config["Modus"] == "reduced"
+):
 
     rule hum_filter_difference:
         input:
@@ -656,7 +610,7 @@ rule rank_abundance:
         "../scripts/rank-abundance.py"
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule all_filter:
         input:
@@ -683,7 +637,7 @@ if config["DADA2"] == False:
             "../scripts/complete_filter.py"
 
 
-if config["DADA2"] == True:
+if config["Modus"] == "DADA2":
 
     rule all_filter:
         input:
