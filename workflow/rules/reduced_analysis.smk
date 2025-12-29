@@ -494,12 +494,12 @@ if config["Modus"] == "DADA2":
                 subcategory="Taxa Barplot",
                 htmlindex="index.html",
             ),
-            paired_seqs=report(
-                directory("results/{date}/visual/report/paired_seqs"),
-                caption="../report/paired-seqs.rst",
-                category="4. Qualitycontrol",
-                htmlindex="index.html",
-            ),
+            #paired_seqs=report(
+            #    directory("results/{date}/visual/report/paired_seqs"),
+            #    caption="../report/paired-seqs.rst",
+            #    category="4. Qualitycontrol",
+            #    htmlindex="index.html",
+            #),
             fastq_stats=report(
                 directory("results/{date}/visual/report/fastq_stats"),
                 caption="../report/fastq-stats.rst",
@@ -601,7 +601,7 @@ if config["Modus"] == "DADA2":
             """
 
 
-if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
+if config["Modus"] == "reduced":
 
     rule table_compare_human:
         input:
