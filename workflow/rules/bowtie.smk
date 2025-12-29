@@ -16,6 +16,7 @@ if config["bowtie"] == True:
             "mkdir {output.dirc} \n"
             "bowtie2-build {input} {output.dirc}/{params.filename} --threads {params.threads}"
 
+
     if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
         rule map_sequences:
@@ -38,6 +39,7 @@ if config["bowtie"] == True:
                 "-p {params.threads} "
                 "-S {output} "
                 "2> {log} "
+
 
     if config["datatype"] == "SampleData[SequencesWithQuality]":
 
@@ -69,6 +71,7 @@ if config["bowtie"] == True:
         shell:
             "samtools view -bS {input} > {output} "
             "2> {log} "
+
 
     if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
 
@@ -104,6 +107,7 @@ if config["bowtie"] == True:
                 "-2 {output.read2} "
                 "-0 /dev/null -s /dev/null -n "
                 "2> {log} "
+
 
     if config["datatype"] == "SampleData[SequencesWithQuality]":
 

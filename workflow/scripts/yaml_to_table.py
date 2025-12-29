@@ -209,8 +209,6 @@ with open(INPUT_YAML) as file:
             else:
                 print("=> " + key + ":")
 
-
-
         table = prettyTable.get_html_string(
             attributes={
                 "name": key,

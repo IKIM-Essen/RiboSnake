@@ -118,7 +118,7 @@ fig.update_layout(
     yaxis=dict(
         type="log",  # Set y-axis to logarithmic scale
         tickvals=[
-            10**i for i in range(2, 15)
+            10 ** i for i in range(2, 15)
         ],  # Set tick values to 10^2, 10^3, and so on
         ticktext=[
             f"10^{i}" for i in range(2, 15)

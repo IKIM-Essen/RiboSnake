@@ -1,7 +1,5 @@
-if (
-    config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
-    and (config["Modus"] == "vsearch" 
-    or config["Modus"] == "reduced")
+if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]" and (
+    config["Modus"] == "vsearch" or config["Modus"] == "reduced"
 ):
 
     rule fastq_score:
@@ -30,10 +28,8 @@ if (
             "--verbose 2> {log}"
 
 
-if (
-    config["datatype"] == "SampleData[SequencesWithQuality]"
-    and (config["Modus"] == "vsearch" 
-    or config["Modus"] == "reduced")
+if config["datatype"] == "SampleData[SequencesWithQuality]" and (
+    config["Modus"] == "vsearch" or config["Modus"] == "reduced"
 ):
 
     rule fastq_score:
@@ -176,7 +172,10 @@ if (
             "--verbose 2> {log}"
 
 
-if config["datatype"] == "SampleData[SequencesWithQuality]" and config["Modus"] == "DADA2":
+if (
+    config["datatype"] == "SampleData[SequencesWithQuality]"
+    and config["Modus"] == "DADA2"
+):
 
     rule dada2:
         input:
@@ -224,7 +223,9 @@ rule abundance_frequency:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
     output:
         abundance="results/{date}/out/abundance.txt",
-        feature_table=directory("results/{date}/visual/table-cluster-lengthfilter/data"),
+        feature_table=directory(
+            "results/{date}/visual/table-cluster-lengthfilter/data"
+        ),
     params:
         relative_abundance=config["filtering"]["relative-abundance-filter"],
     log:

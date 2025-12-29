@@ -100,6 +100,7 @@ rule unzip_reports:
     script:
         "../scripts/rename_qzv.py"
 
+
 if config["Modus"] == "vsearch":
 
     rule report_files:

@@ -528,7 +528,11 @@ rule ancom:
         "--verbose 2> {log}"
 
 
-if config["bowtie"] == False and config["Modus"] == "vsearch" or config["Modus"] == "reduced":
+if (
+    config["bowtie"] == False
+    and config["Modus"] == "vsearch"
+    or config["Modus"] == "reduced"
+):
 
     rule hum_filter_difference:
         input:

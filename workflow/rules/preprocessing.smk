@@ -239,7 +239,7 @@ if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
 if (
     config["datatype"] == "SampleData[PairedEndSequencesWithQuality]"
-    and config["Modus"] == "vsearch" 
+    and config["Modus"] == "vsearch"
     or config["Modus"] == "reduced"
 ):
 
