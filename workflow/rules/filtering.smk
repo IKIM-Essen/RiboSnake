@@ -223,9 +223,7 @@ rule abundance_frequency:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
     output:
         abundance="results/{date}/out/abundance.txt",
-        feature_table=directory(
-            "results/{date}/visual/table-cluster-lengthfilter/data"
-        ),
+        feature_table=directory("results/{date}/visual/table-cluster-lengthfilter/data"),
     params:
         relative_abundance=config["filtering"]["relative-abundance-filter"],
     log:

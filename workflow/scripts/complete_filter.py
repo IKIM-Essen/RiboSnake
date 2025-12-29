@@ -18,7 +18,9 @@ samples = pd.read_csv(
     index_col=0,
 )
 samples.drop(
-    ["reverse sequence count"], axis=1, inplace=True,
+    ["reverse sequence count"],
+    axis=1,
+    inplace=True,
 )
 samples.rename(columns={"forward sequence count": "Raw reads"}, inplace=True)
 trimmed = pd.read_csv(
@@ -28,7 +30,9 @@ trimmed = pd.read_csv(
     index_col=0,
 )
 trimmed.drop(
-    ["reverse sequence count"], axis=1, inplace=True,
+    ["reverse sequence count"],
+    axis=1,
+    inplace=True,
 )
 trimmed.rename(columns={"forward sequence count": "Reads after trimming"}, inplace=True)
 joined = pd.read_csv(
