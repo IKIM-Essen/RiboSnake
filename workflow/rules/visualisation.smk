@@ -114,6 +114,24 @@ rule unzip_frequency_length:
         "../scripts/rename_qzv.py"
 
 
+if config["DADA2"] == False:
+
+    rule visualise_beforeChimera:
+        input:
+            "results/{date}/out/table-nonchimeric-wo-borderline.qza",
+        output:
+            "results/{date}/out/table-nonchimeric-wo-borderline.qzv",
+        log:
+            "logs/{date}/visualisation/visualise-chimera.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table summarize "
+            "--i-table {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+
 rule visualise_afterab:
     input:
         "results/{date}/out/table-cluster-filtered.qza",
@@ -128,6 +146,28 @@ rule visualise_afterab:
         "--i-table {input} "
         "--o-visualization {output} "
         "--verbose 2> {log} "
+
+
+rule table_compare_human:
+    input:
+        table_wh="results/{date}/out/derepl-table.qza",
+        table_woh="results/{date}/out/derep-table-nonhum.qza",
+    output:
+        visual_wh="results/{date}/visual/table-whuman.qzv",
+        visual_woh="results/{date}/visual/table-wohuman.qzv",
+    log:
+        "logs/{date}/visualisation/table-compare-human.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime feature-table summarize "
+        "--i-table {input.table_wh} "
+        "--o-visualization {output.visual_wh} "
+        "--verbose 2> {log} \n"
+        "qiime feature-table summarize "
+        "--i-table {input.table_woh} "
+        "--o-visualization {output.visual_woh} "
+        "--verbose 2> {log}"
 
 
 rule visualise_fastq:
@@ -160,6 +200,56 @@ rule demux_stats:
         "--m-input-file {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
+
+
+if config["data-type"] == "human" and config["bowtie"] == False:
+
+    rule visual_humancount:
+        input:
+            "results/{date}/out/human.qza",
+        output:
+            "results/{date}/visual/human-count.qzv",
+        log:
+            "logs/{date}/visualisation/human-count.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime feature-table tabulate-seqs "
+            "--i-data {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+    rule unzip_human_count:
+        input:
+            "results/{date}/visual/human-count.qzv",
+        output:
+            human_count=report(
+                directory("results/{date}/visual/report/human-count"),
+                caption="../report/human-count.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+        params:
+            between="results/{date}/visual/report/human-count-unzipped",
+        log:
+            "logs/{date}/visualisation/human-count-unzip.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        script:
+            "../scripts/extract_humancount.py"
+
+
+if config["data-type"] == "environmental" or config["bowtie"] == True:
+
+    rule unzip_human_dummy:
+        output:
+            directory("results/{date}/visual/report/human-count"),
+        log:
+            "logs/{date}/visualisation/human-count-dummy.log",
+        conda:
+            "../envs/snakemake.yaml"
+        shell:
+            "mkdir {output}"
 
 
 rule taxa_heatmap:
@@ -387,6 +477,125 @@ rule absolute_taxa:
         "../scripts/absolute_taxabarplot.py"
 
 
+rule songbird:
+    input:
+        "results/{date}/out/table.w-taxa-featcount.biom",
+    output:
+        directory("results/{date}/out/songbird/"),
+    params:
+        differential_prior=config["songbird"]["differential_prior"],
+        min_sample_count=config["songbird"]["min_sample_count"],
+        min_feature_count=config["songbird"]["min_feature_count"],
+        summary_interval=config["songbird"]["summary_interval"],
+        formula=config["songbird"]["formula"],
+    log:
+        "logs/{date}/visualisation/songbird.log",
+    conda:
+        "../envs/songbird.yaml"
+    shell:
+        "songbird multinomial "
+        "--input-biom {input} "
+        "--metadata-file config/pep/sample.tsv "
+        "--formula  {params.formula} "
+        "--epochs 10000 "
+        "--differential-prior {params.differential_prior} "
+        "--min-sample-count {params.min_sample_count} "
+        "--min-feature-count {params.min_feature_count} "
+        "--summary-interval {params.summary_interval} "
+        "--summary-dir {output} "
+        "2> {log}"
+
+
+rule feature_biom_songbird:
+    input:
+        direc="results/{date}/out/songbird/",
+        taxa="results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+    output:
+        diff="results/{date}/out/differentials_taxonomy.tsv",
+        feature_meta="results/{date}/out/feature_metadata.tsv",
+    params:
+        "results/{date}/out/songbird/differentials.tsv",
+    log:
+        "logs/{date}/visualisation/songbird_biom.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/featuretable_songbird.py"
+
+
+rule qurro:
+    input:
+        direc="results/{date}/out/songbird/",
+        table="results/{date}/out/table.w-taxa-featcount.biom",
+        feature_metadata="results/{date}/out/feature_metadata.tsv",
+    output:
+        plot=report(
+            directory("results/{date}/out/qurro_plot/"),
+            caption="../report/qurro.rst",
+            htmlindex="index.html",
+            category="3. Analysis",
+            subcategory="Songbird",
+        ),
+    params:
+        differentials="results/{date}/out/songbird/differentials.tsv",
+        metadata_file="config/pep/sample.tsv",
+    log:
+        "logs/{date}/visualisation/qurro.log",
+    conda:
+        "../envs/songbird.yaml"
+    shell:
+        "qurro "
+        "--ranks {params.differentials} "
+        "--table {input.table} "
+        "--sample-metadata {params.metadata_file} "
+        "--feature-metadata {input.feature_metadata} "
+        "--output-dir {output.plot} "
+        "2> {log} "
+
+
+rule ancom:
+    input:
+        "results/{date}/out/taxa_collapsed.qza",
+    output:
+        pseudocount_table="results/{date}/out/pseudocount_table-{metadata_column}.qza",
+        ancom_output="results/{date}/visual/ancom-{metadata_column}.qzv",
+    params:
+        metadata_column="{metadata_column}",
+        metadata_file="config/pep/sample.tsv",
+    log:
+        "logs/{date}/visualisation/ancom-{metadata_column}.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime composition add-pseudocount "
+        "--i-table {input} "
+        "--o-composition-table {output.pseudocount_table} \n"
+        "qiime composition ancom "
+        "--i-table {output.pseudocount_table} "
+        "--m-metadata-file {params.metadata_file} "
+        "--m-metadata-column {params.metadata_column} "
+        "--o-visualization {output.ancom_output} "
+        "--verbose 2> {log}"
+
+
+if config["bowtie"] == False and config["DADA2"] == False:
+
+    rule hum_filter_difference:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            "results/{date}/visual/sample_frequencys_difference.csv",
+        params:
+            visual_wh="results/{date}/visual/unzipped/table-whuman/data/sample-frequency-detail.csv",
+            visual_woh="results/{date}/visual/unzipped/table-wohuman/data/sample-frequency-detail.csv",
+        log:
+            "logs/{date}/visualisation/frequency_difference.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/sample_freq_difference.py"
+
+
 rule copy_diversity:
     input:
         expand(
@@ -455,6 +664,8 @@ if config["DADA2"] == False:
             trimmed="results/{date}/visual/trimmed-seqs",
             joined="results/{date}/visual/joined-seqs/",
             first="results/{date}/visual/report/demux-joined-filter-stats/",
+            human="results/{date}/visual/sample_frequencys_difference.csv",
+            wo_chimera="results/{date}/visual/chimera_unzipped/",
             length="results/{date}/visual/lengthfilter_unzip/",
             before_abundance="results/{date}/visual/table-cluster-lengthfilter/data/",
             final="results/{date}/visual/report/table-cluster-filtered/",

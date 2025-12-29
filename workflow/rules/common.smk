@@ -75,6 +75,18 @@ def get_if_testing(string):
     return string if get_for_testing() else ""
 
 
+def get_reads_for_kraken():
+    incoming_files = get_filenames()
+    names = []
+    for file in incoming_files:
+        name = file.split("_")[0]
+        number = file.split("_")[1]
+        kraken_name = "{name}_{number}".format(name=name, number=number)
+        names.append(kraken_name)
+        names = list(dict.fromkeys(names))
+    return names
+
+
 def get_metadata_columns():
     metadata = pd.read_csv(config["metadata"], header=0, delimiter=",")
     header = metadata.columns[metadata.isin(["numeric"]).any()].values.tolist()
@@ -113,6 +125,10 @@ def get_metadata_categorical_columns():
                     continue
     namelist = [item.lower() for item in namelist]
     return namelist
+
+
+def get_ancom_columns():
+    return config["ancom"]["metadata-column"]
 
 
 def get_metric(diversity):

@@ -7,6 +7,8 @@ dependencies:
   - oyaml
   - biom-format
   - python
+  - kraken2=2.1.2
+  - bowtie2
   - samtools
   - matplotlib
   - seaborn

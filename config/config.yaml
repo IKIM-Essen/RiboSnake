@@ -5,12 +5,16 @@ pepfile: config/pep/config.yaml
 
 # If testing set true
 testing: False
+# If data-preparation should be enabled
+include-data-prep: True
 # Modus: If true, analysis will be done with DADA2 instead of vsearch
 DADA2: False
+# Longitudinal analysis, for further parameters look at line 204 of this document
+longitudinal: False
 # Shorter analysis for small number of samples or samples without metadata
-reduced-analysis: True
+reduced-analysis: False
 # Whether to use bowtie2 for excluding human host contamination or not
-bowtie: False
+bowtie: True
 # Set if environmental or human data is processed
 data-type: human
 # Paths to the directories holding the fastqs
@@ -20,12 +24,19 @@ output: ../report/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
 # Remove columns from analysis
-remove-columns: ['subject']
+remove-columns: ["site_name"]
 # Paths to the databases used for classification and taxonomy
 database:
   Silva: True 
   download-path-seq: https://data.qiime2.org/2022.2/common/silva-138-99-seqs.qza
   download-path-tax: https://data.qiime2.org/2022.2/common/silva-138-99-tax.qza
+  kraken-db: ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/old/minikraken2_v2_8GB_201904.tgz
+  ref-genome: https://ftp.ncbi.nlm.nih.gov/refseq/H_sapiens/annotation/GRCh38_latest/refseq_identifiers/GRCh38_latest_genomic.fna.gz
+  Greengenes: False 
+  gg2-seq: http://ftp.microbio.me/greengenes_release/current/2022.10.backbone.full-length.fna.qza
+  gg2-tax: http://ftp.microbio.me/greengenes_release/current/2022.10.backbone.tax.qza
+  NCBI: False
+  NCBI-query: 33175[BioProject]
 # Forward and reverse adapters used for sequencing
 adapter1: TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
 adapter2: GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
@@ -74,10 +85,10 @@ filtering:
   perc-query-aligned: 0.93
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: run_date
-  beta-metadata-column: run_date
-  gneiss-metadata-column: run_date
-  absolute-taxa-name: subject
+  taxa-heatmap-column: extract_group_no
+  beta-metadata-column: extract_group_no
+  gneiss-metadata-column: site_name
+  absolute-taxa-name: name_abbreviation
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Parameters for classification
@@ -181,4 +192,33 @@ dada2-single:
   min-fold-parent-over-abundance: 1.0
   # The number of reads to use when training the errormodel
   n-reads-learn: 1000000
+# Creating rankings for feature impact on specific metadata
+songbird:
+  # Specifies the width of the prior distribution of the differentials
+  differential_prior: 0.5
+  # Number at which sample with a smaller occurance should be filtered out
+  min_sample_count: 0
+  # Number at which features with a smaller occurance should be filtered out
+  min_feature_count: 0
+  # Impacts how often a "measurement" is taken for these plots
+  summary_interval: 1
+  # Formula
+  formula: "sex+age"
 # Feature classification with ancom
+ancom:
+  # Catgorical metadata column to analyse
+  metadata-column: ["extract_group_no"]
+# Parameters for longitudinal analysis, used when longitudinal is set to True
+longitudinal-params:
+  # Column with continuous data to use primarily
+  state_column: "temperature"
+  # Column to name the samples
+  individual_id_column: "name_abbreviation"
+  # Formula for linear-mixed-effect analysis
+  metric: weight_after
+  # Comma-separated list to use as independent covariates to
+  # determine mean structure of "metric"
+  group: "weight_before,bmi_before,waist_before"
+  # Comma-separated list to use as independent covariates to
+  # determine variance and covariance of "metric"
+  random-effects: "blood_before,blood_after"
