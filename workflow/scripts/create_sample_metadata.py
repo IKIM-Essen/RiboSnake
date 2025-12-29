@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from pathlib import Path
 from os.path import isfile, join
 from os import path, getcwd, listdir
 from os import mkdir
@@ -15,122 +16,59 @@ sys.stderr = open(snakemake.log[0], "w")
 
 config = snakemake.config
 
-DATA_PATH = str(config["data"])
-IN_PATH = str(config["input"])
-incoming_files = []
-# Running through all files in the IN_PATH and checking them
-# Adding the files to a list, when they meet the requirements
-for f in listdir(IN_PATH):
-    if (
-        path.isfile(path.join(IN_PATH, f))
-        and "ndetermined" not in f
-        and ".fastq.gz" in f
-        and os.stat(IN_PATH + f).st_size > 100
-    ):
-        incoming_files.append(f)
-    else:
-        print(f, "not used")
+data_root = Path(os.path.abspath(config["data"]))
+in_path = Path(os.path.abspath(config["input"]))
 metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
-date = metadata["run_date"].iloc[1]
-# print(date)
-# Adding a directory for the specific date as subdirectory to the DATA_PATH
-if not os.path.isdir(DATA_PATH):
-    mkdir(DATA_PATH)
-DATA_PATH += date
-if not os.path.isdir(DATA_PATH):
-    mkdir(DATA_PATH)
-# Checking if some files are already present in the DATA_PATH, those are not copied
-data_files = [f for f in listdir(DATA_PATH) if path.isfile(path.join(DATA_PATH, f))]
-files_not_to_copy = [f for f in data_files if f in incoming_files]
-files_to_copy = [f for f in incoming_files if f not in data_files]
-for file in files_to_copy:
-    if file.endswith(".fastq.gz") and not "ndetermined" in file:
-        copy2(IN_PATH + file, DATA_PATH)
-# print(files_to_copy)
+metadata.dropna(axis=1,inplace=True)
 
-# Reading the sample names and the metadata from the file-names and the metadata.csv file, that needs to be provided
-files = os.listdir(DATA_PATH)
-# print(files)
-sample_list = []
-for name in files:
-    sample = name.split("_")[0]
-    sample_list.append(sample)
-sample_list = list(set(sample_list))
-metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
-metadata.columns = metadata.columns.str.lower()
-# Test parameter names for critical characters
-column_headers = metadata.columns.tolist()
-columns_with_characters = [
-    col for col in column_headers if any(char in col for char in ["/", ".", "-"])
+# 1. collect FASTQ files
+incoming = [
+    f for f in in_path.glob("*.fastq.gz")
+    if f.stat().st_size > 100 and "undetermined" not in f.name.lower()
 ]
-if columns_with_characters:
-    print(
-        "There are unprocessable characters in the metadata headers. Please make sure to eliminate dot, slash or hyphen and try again. \n Please have a look at the following columns"
-    )
-    print(columns_with_characters)
-    raise Exception(
-        "There are unprocessable characters in the metadata headers. Please make sure to eliminate dot, slash or hyphen and try again."
-    )
-# Samples, that are not mentioned in the metadata.csv are excluded from the sample-metadata-sheet
-for name in sample_list:
-    if name not in metadata["sample_name"].tolist():
-        print("No metadata was found for " + name)
-        sample_list.remove(name)
-        # Also remove the fastq file from folder?
 
-# Error if names don't fit
-metadata_name_list = metadata["sample_name"].tolist()
-metadata_name_list.remove("#q2:types")
-if len(sample_list) == len(metadata_name_list):
-    if set(sample_list) != set(metadata_name_list):
-        print(
-            "There seems to be a discrepancy between fastq file and metadata. Please check the spelling in the metadata.txt."
-        )
-        raise Exception(
-            "There seems to be a discrepancy between fastq file and metadata. Please check the spelling in the metadata.txt."
-        )
+# 2. read date
+date = metadata.loc[1, "run_date"]
+data_path = data_root / date
+data_path.mkdir(parents=True,exist_ok=True)
 
-# Replacing empty metadata-columns with 0 and after that removing them from the file
-metadata.fillna(0, inplace=True)
-metadata.rename(columns={"sample_name": "sample-ID"}, inplace=True)
+# 3. copy new files
+existing = {f.name for f in data_path.iterdir() if f.is_file()}
+to_copy = [f for f in incoming]
+
+for f in to_copy:
+    print(f"copying {f} to {data_path}")
+    copy2(f, data_path)
+
+# 4. sample names from filenames
+sample_list = {f.name.split("_")[0] for f in incoming}
+
+# 5. validate against metadata
+metadata_samples = set(metadata["sample_name"])
+
+sample_list = sample_list & metadata_samples
+
+# 6. clean metadata
+metadata = metadata.rename(columns={"sample_name": "sample-ID"}).fillna(0)
 metadata.to_csv(snakemake.output.metadata, sep="\t", index=False)
 
-# Creating a sample_info df, that holds paths to the fastq files and the date.
-# Common functions can read information from sample_info.txt instead from the data directories
-data = [metadata["sample-ID"], metadata["run_date"]]
-header = ["sample-ID", "run_date"]
-sample_info = pd.concat(data, axis=1, keys=header)
-if "SampleData[PairedEndSequencesWithQuality]" in str(snakemake.params.datatype):
-    sample_info["path1"] = ""
-    sample_info["path2"] = ""
-elif "SampleData[SequencesWithQuality]" in str(snakemake.params.datatype):
-    sample_info["path1"] = ""
-sample_info.set_index("sample-ID", inplace=True)
-sample_info.drop(labels=["#q2:types"], axis=0, inplace=True)
-i = 0
-while i < len(sample_info.index):
-    for file in files_to_copy:
-        if sample_info.index[i] in file and len(sample_info.index[i]) == len(
-            file.split("_")[0]
-        ):
-            if "SampleData[PairedEndSequencesWithQuality]" in str(
-                snakemake.params.datatype
-            ):
-                if "R1" in file:
-                    sample_info.loc[sample_info.index[i], "path1"] = (
-                        DATA_PATH + "/" + file
-                    )
-                elif "R2" in file:
-                    sample_info.loc[sample_info.index[i], "path2"] = (
-                        DATA_PATH + "/" + file
-                    )
-            elif "SampleData[SequencesWithQuality]" in str(snakemake.params.datatype):
-                if "R1" in file:
-                    sample_info.loc[sample_info.index[i], "path1"] = (
-                        DATA_PATH + "/" + file
-                    )
-        else:
-            continue
-    i = i + 1
-if not os.path.exists(str(snakemake.output.sample_info)):
-    sample_info.to_csv(snakemake.output.sample_info, sep=",", mode="w")
+
+# 7. build path assignments
+paired = "PairedEnd" in str(config["datatype"])
+fastq_map = {s: {"R1": None, "R2": None} for s in sample_list}
+
+for f in to_copy:
+    sid = f.name.split("_")[0]
+    if sid in fastq_map:
+        if "R1" in f.name:
+            fastq_map[sid]["R1"] = str(f)
+        if "R2" in f.name:
+            fastq_map[sid]["R2"] = str(f)
+
+sample_info = metadata.set_index("sample-ID")[["run_date"]].loc[list(sample_list)]
+
+sample_info["path1"] = sample_info.index.map(lambda s: fastq_map[s]["R1"])
+if paired:
+    sample_info["path2"] = sample_info.index.map(lambda s: fastq_map[s]["R2"])
+
+sample_info.to_csv(snakemake.output.sample_info)

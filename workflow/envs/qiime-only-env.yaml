@@ -70,7 +70,6 @@ dependencies:
   - blast=2.13.0
   - bleach=5.0.1
   - bokeh=3.0.3
-  - bowtie2=2.5.0
   - brotli=1.0.9
   - brotli-bin=1.0.9
   - brotlipy=0.7.0

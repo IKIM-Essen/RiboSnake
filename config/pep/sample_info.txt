@@ -1,2 +1,0 @@
-sample-ID,run_date,path1,path2
-NAME,2022-03-01,path/file1,path/file2
