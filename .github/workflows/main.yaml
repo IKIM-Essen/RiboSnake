@@ -103,10 +103,24 @@ jobs:
         ls -la
         df -h
 
-    - name: Test workflow (local test data)
+    - name: Test workflow for vsearch (local test data)
       uses: snakemake/snakemake-github-action@v1
       with:
         directory: .tests
         snakefile: workflow/Snakefile
-        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --dry-run"
+        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --dry-run --config --config Modus=vsearch"
+
+    - name: Test workflow for DADA2 (local test data)
+      uses: snakemake/snakemake-github-action@v1
+      with:
+        directory: .tests
+        snakefile: workflow/Snakefile
+        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --dry-run --config --config Modus=DADA2"
+    
+    - name: Test workflow for reduced analysis (local test data)
+      uses: snakemake/snakemake-github-action@v1
+      with:
+        directory: .tests
+        snakefile: workflow/Snakefile
+        args: "--use-conda --show-failed-logs -j 2 --conda-cleanup-pkgs cache --dry-run --config --config Modus=reduced"
 

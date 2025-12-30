@@ -13,6 +13,11 @@ Qiime2 workflow for 16S analysis created with snakemake.
 
 If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) repository and, if available, its DOI (see above).
 
+## Requirements
+
+Compatible Snakemake Versions: 7.32 and 8.0 with changes (see Step 4)
+The pipeline has been tested on a linux system with Ubuntu 20.04. To run without problems, 50 GB of free storage would be recommended for the example presented here.
+
 ### Step 1: Obtain a copy of this workflow
 
 If you want to use the workflow, please obtain a copy of it by either:
@@ -175,3 +180,7 @@ A list of the tools used in this pipeline:
 If you use RiboSnake in your work, please cite the paper:
 
 Ann-Kathrin Dörr,Josefa Welling,Adrian Dörr,Jule Gosch,Hannah Möhlen,Ricarda Schmithausen,Jan Kehrmann,Folker Meyer,Ivana Kraiselburd,RiboSnake – a user-friendly, robust, reproducible, multipurpose and documentation-extensive pipeline for 16S rRNA gene microbiome analysis,Gigabyte,2024 www.doi.org/10.46471/gigabyte.132
+
+
+
+

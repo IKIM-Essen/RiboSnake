@@ -348,7 +348,7 @@ if config["longitudinal"] == False:
             "results/{date}/visual/report/sample.tsv",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
-                metric=get_phylogenetic_metric("beta"),
+                metric=get_metric("beta"),
                 metadata_column=get_metadata_columns(),
                 diversity="normal",
             ),
@@ -606,8 +606,8 @@ rule zip_report:
         "../envs/snakemake.yaml"
     shell:
         """
-        mkdir results/{wildcards.date}/16S-report/
-        mkdir results/{wildcards.date}/16S-report/additional/
+        mkdir -p results/{wildcards.date}/16S-report/
+        mkdir -p results/{wildcards.date}/16S-report/additional/
         cp -r {input} results/{wildcards.date}/16S-report/additional/
         rm results/{wildcards.date}/16S-report/additional/report.zip
         cp {input.report} results/{wildcards.date}/16S-report/

@@ -50,7 +50,7 @@ rule unzip_frequency_length:
         "../scripts/rename_qzv.py"
 
 
-rule visualise_beforeChimera:
+rule visualize_beforeChimera:
     input:
         "results/{date}/out/table-nonchimeric-wo-borderline.qza",
     output:
@@ -66,7 +66,7 @@ rule visualise_beforeChimera:
         "--verbose 2> {log}"
 
 
-rule visualise_samples:
+rule visualize_samples:
     input:
         "results/{date}/out/demux-paired-end.qza",
     output:
@@ -80,6 +80,77 @@ rule visualise_samples:
         "--i-data {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
+
+
+rule unzip_samples:
+    input:
+        "results/{date}/visual/paired-seqs.qzv",
+    output:
+        temp(directory("results/{date}/visual/paired-seqs")),
+    log:
+        "logs/{date}/outputs/unzip-samples.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
+
+
+rule visualize_trimmed:
+    input:
+        "results/{date}/out/trimmed-seqs.qza",
+    output:
+        "results/{date}/visual/trimmed-seqs.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-trimmed.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime demux summarize "
+        "--i-data {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
+rule unzip_trimmed:
+    input:
+        "results/{date}/visual/trimmed-seqs.qzv",
+    output:
+        temp(directory("results/{date}/visual/trimmed-seqs")),
+    log:
+        "logs/{date}/outputs/unzip-trimmed.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
+
+
+rule visualize_joined:
+    input:
+        "results/{date}/out/joined-seqs.qza",
+    output:
+        "results/{date}/visual/joined-seqs.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-joined.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime demux summarize "
+        "--i-data {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
+rule unzip_joined:
+    input:
+        "results/{date}/visual/joined-seqs.qzv",
+    output:
+        temp(directory("results/{date}/visual/joined-seqs")),
+    log:
+        "logs/{date}/outputs/unzip-joined.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
 
 
 rule visualise_table:
@@ -128,56 +199,6 @@ rule demux_stats:
         "--m-input-file {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
-
-
-if config["data-type"] == "human" and config["bowtie"] == False:
-
-    rule visual_humancount:
-        input:
-            "results/{date}/out/human.qza",
-        output:
-            "results/{date}/visual/human-count.qzv",
-        log:
-            "logs/{date}/visualisation/human-count.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        shell:
-            "qiime feature-table tabulate-seqs "
-            "--i-data {input} "
-            "--o-visualization {output} "
-            "--verbose 2> {log}"
-
-    rule unzip_human_count:
-        input:
-            "results/{date}/visual/human-count.qzv",
-        output:
-            human_count=report(
-                directory("results/{date}/visual/report/human-count"),
-                caption="../report/human-count.rst",
-                category="4. Qualitycontrol",
-                htmlindex="index.html",
-            ),
-        params:
-            between="results/{date}/visual/report/human-count-unzipped",
-        log:
-            "logs/{date}/visualisation/human-count-unzip.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        script:
-            "../scripts/extract_humancount.py"
-
-
-if config["data-type"] == "environmental" or config["bowtie"] == True:
-
-    rule unzip_human_dummy:
-        output:
-            directory("results/{date}/visual/report/human-count"),
-        log:
-            "logs/{date}/visualisation/human-count-dummy.log",
-        conda:
-            "../envs/snakemake.yaml"
-        shell:
-            "mkdir {output}"
 
 
 rule taxa_heatmap:
@@ -343,9 +364,6 @@ rule absolute_taxa:
         "../scripts/absolute_taxabarplot.py"
 
 
-# if config["DADA2"] == False:
-
-
 rule biom_file:
     input:
         table="results/{date}/out/table-cluster-filtered.qza",
@@ -417,7 +435,7 @@ rule report_empress:
         "../scripts/extract_significance.py"
 
 
-if config["DADA2"] == True:
+if config["Modus"] == "DADA2":
 
     rule visualize_dada2_stats:
         input:
@@ -476,12 +494,12 @@ if config["DADA2"] == True:
                 subcategory="Taxa Barplot",
                 htmlindex="index.html",
             ),
-            paired_seqs=report(
-                directory("results/{date}/visual/report/paired_seqs"),
-                caption="../report/paired-seqs.rst",
-                category="4. Qualitycontrol",
-                htmlindex="index.html",
-            ),
+            #paired_seqs=report(
+            #    directory("results/{date}/visual/report/paired_seqs"),
+            #    caption="../report/paired-seqs.rst",
+            #    category="4. Qualitycontrol",
+            #    htmlindex="index.html",
+            #),
             fastq_stats=report(
                 directory("results/{date}/visual/report/fastq_stats"),
                 caption="../report/fastq-stats.rst",
@@ -501,7 +519,7 @@ if config["DADA2"] == True:
         script:
             "../scripts/extract_reports.py"
 
-    rule all_filter:
+    rule all_filter_DADA2:
         input:
             dada2="results/{date}/visual/unzipped/",
             length="results/{date}/visual/lengthfilter_unzip/",
@@ -572,8 +590,8 @@ if config["DADA2"] == True:
             "../envs/snakemake.yaml"
         shell:
             """
-            mkdir results/{wildcards.date}/16S-report/
-            mkdir results/{wildcards.date}/16S-report/additional/
+            mkdir -p results/{wildcards.date}/16S-report/
+            mkdir -p results/{wildcards.date}/16S-report/additional/
             cp -r {input} results/{wildcards.date}/16S-report/additional/
             rm results/{wildcards.date}/16S-report/additional/report.zip
             cp {input.report} results/{wildcards.date}/16S-report/
@@ -583,7 +601,7 @@ if config["DADA2"] == True:
             """
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "reduced":
 
     rule table_compare_human:
         input:
@@ -700,6 +718,9 @@ if config["DADA2"] == False:
 
     rule all_filter:
         input:
+            samples="results/{date}/visual/paired-seqs",
+            trimmed="results/{date}/visual/trimmed-seqs",
+            joined="results/{date}/visual/joined-seqs",
             first="results/{date}/visual/report/demux-joined-filter-stats/",
             human="results/{date}/visual/sample_frequencys_difference.csv",
             wo_chimera="results/{date}/visual/chimera_unzipped/",
@@ -750,8 +771,8 @@ if config["DADA2"] == False:
             "../envs/snakemake.yaml"
         shell:
             """
-            mkdir results/{wildcards.date}/16S-report/
-            mkdir results/{wildcards.date}/16S-report/additional/
+            mkdir -p results/{wildcards.date}/16S-report/
+            mkdir -p results/{wildcards.date}/16S-report/additional/
             cp -r {input} results/{wildcards.date}/16S-report/additional/
             rm results/{wildcards.date}/16S-report/additional/report.zip
             cp {input.report} results/{wildcards.date}/16S-report/
