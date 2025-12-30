@@ -613,3 +613,15 @@ rule zip_report:
         cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
         rm -r results/{wildcards.date}/16S-report
         """
+
+
+rule concatenate_logs:
+    input:
+        "results/{date}/{date}.tar.gz",
+    output:
+        "logs/{date}_logs.tar.gz",
+    shell:
+        """
+        tar -czvf {output} logs/{wildcards.date}/
+        rm -r logs/{wildcards.date}
+        """

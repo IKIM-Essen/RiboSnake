@@ -30,20 +30,34 @@ rule visualise_trimmed:
         "--verbose 2> {log}"
 
 
-rule visualise_joined:
-    input:
-        "results/{date}/out/joined-seqs.qza",
-    output:
-        "results/{date}/visual/joined-seqs.qzv",
-    log:
-        "logs/{date}/visualisation/visualise-joined.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime demux summarize "
-        "--i-data {input} "
-        "--o-visualization {output} "
-        "--verbose 2> {log}"
+if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+
+    rule visualise_joined:
+        input:
+            "results/{date}/out/joined-seqs.qza",
+        output:
+            "results/{date}/visual/joined-seqs.qzv",
+        log:
+            "logs/{date}/visualisation/visualise-joined.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime demux summarize "
+            "--i-data {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+    rule unzip_joined:
+        input:
+            "results/{date}/visual/joined-seqs.qzv",
+        output:
+            temp(directory("results/{date}/visual/joined-seqs")),
+        log:
+            "logs/{date}/outputs/unzip-joined.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/rename_qzv.py"
 
 
 rule unzip_samples:
@@ -66,19 +80,6 @@ rule unzip_trimmed:
         temp(directory("results/{date}/visual/trimmed-seqs")),
     log:
         "logs/{date}/outputs/unzip-trimmed.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/rename_qzv.py"
-
-
-rule unzip_joined:
-    input:
-        "results/{date}/visual/joined-seqs.qzv",
-    output:
-        temp(directory("results/{date}/visual/joined-seqs")),
-    log:
-        "logs/{date}/outputs/unzip-joined.log",
     conda:
         "../envs/python.yaml"
     script:

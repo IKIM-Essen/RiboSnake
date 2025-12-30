@@ -11,17 +11,21 @@ import sys
 
 sys.stderr = open(snakemake.log[0], "w")
 
+config = snakemake.config
+datatype = str(config["datatype"])
+
 samples = pd.read_csv(
     str(snakemake.input.samples) + "/paired-seqs/data/per-sample-fastq-counts.tsv",
     sep="\t",
     header=0,
     index_col=0,
 )
-samples.drop(
-    ["reverse sequence count"],
-    axis=1,
-    inplace=True,
-)
+if datatype == "SampleData[PairedEndSequencesWithQuality]":
+    samples.drop(
+        ["reverse sequence count"],
+        axis=1,
+        inplace=True,
+    )
 samples.rename(columns={"forward sequence count": "Raw reads"}, inplace=True)
 trimmed = pd.read_csv(
     str(snakemake.input.trimmed) + "/trimmed-seqs/data/per-sample-fastq-counts.tsv",
@@ -29,19 +33,23 @@ trimmed = pd.read_csv(
     header=0,
     index_col=0,
 )
-trimmed.drop(
-    ["reverse sequence count"],
-    axis=1,
-    inplace=True,
-)
+if datatype == "SampleData[PairedEndSequencesWithQuality]":
+    trimmed.drop(
+        ["reverse sequence count"],
+        axis=1,
+        inplace=True,
+    )
 trimmed.rename(columns={"forward sequence count": "Reads after trimming"}, inplace=True)
-joined = pd.read_csv(
-    str(snakemake.input.joined) + "/joined-seqs/data/per-sample-fastq-counts.tsv",
-    sep="\t",
-    header=0,
-    index_col=0,
-)
-joined.rename(columns={"forward sequence count": "Reads after joining"}, inplace=True)
+if datatype == "SampleData[PairedEndSequencesWithQuality]":
+    joined = pd.read_csv(
+        str(snakemake.input.joined) + "/joined-seqs/data/per-sample-fastq-counts.tsv",
+        sep="\t",
+        header=0,
+        index_col=0,
+    )
+    joined.rename(
+        columns={"forward sequence count": "Reads after joining"}, inplace=True
+    )
 
 first = pd.read_csv(
     str(snakemake.input.first) + "/metadata.tsv", sep="\t", header=0, index_col=0
@@ -92,20 +100,35 @@ complete = pd.read_csv(
 )
 complete.rename(columns={"0": "Reads after abundance filter"}, inplace=True)
 
-merged_df = pd.concat(
-    [
-        samples,
-        trimmed,
-        joined,
-        first,
-        human,
-        wo_chimera,
-        length,
-        before_abundance,
-        complete,
-    ],
-    axis=1,
-)
+if datatype == "SampleData[PairedEndSequencesWithQuality]":
+    merged_df = pd.concat(
+        [
+            samples,
+            trimmed,
+            joined,
+            first,
+            human,
+            wo_chimera,
+            length,
+            before_abundance,
+            complete,
+        ],
+        axis=1,
+    )
+elif datatype == "SampleData[SequencesWithQuality]":
+    merged_df = pd.concat(
+        [
+            samples,
+            trimmed,
+            first,
+            human,
+            wo_chimera,
+            length,
+            before_abundance,
+            complete,
+        ],
+        axis=1,
+    )
 
 merged_df = merged_df.fillna(0)
 
