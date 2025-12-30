@@ -1,2 +1,4 @@
 sample_name,subject,run_date
-test1,16S,2025-11-26
+#q2:types,categorical,categorical
+test,16S,2025-11-26
+test2,16S,2025-11-26

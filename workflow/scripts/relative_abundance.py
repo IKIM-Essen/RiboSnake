@@ -30,12 +30,21 @@ directory = os.path.dirname(str(snakemake.input)) + "/" + name
 # Moving the folder inventory one folder up
 b = 0
 subdir = os.listdir(directory)
-while b < len(subdir):
-    orig_dir = directory + "/" + subdir[b]
-    new_dir = directory
+for entry in subdir:
+    orig_dir = os.path.join(directory, entry)
+
+    # Skip files immediately
+    if not os.path.isdir(orig_dir):
+        continue
+
     for f in os.listdir(orig_dir):
-        path = orig_dir + "/" + f
-        shutil.move(path, new_dir)
+        src = os.path.join(orig_dir, f)
+        dst = os.path.join(directory, f)
+
+        if os.path.exists(dst):
+            continue
+
+        shutil.move(src, dst)
     b = b + 1
 # Read the specific csv holding the information, creating a dataframe, adding up all feature frequencies
 datadir = str(snakemake.output.feature_table) + "/"
