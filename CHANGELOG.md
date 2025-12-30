@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.11.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.10.0...v0.11.0) (2025-12-30)
+
+
+### Features
+
+* Report refactor ([#158](https://github.com/IKIM-Essen/RiboSnake/issues/158)) ([f646d94](https://github.com/IKIM-Essen/RiboSnake/commit/f646d94c9324d2f8e465bef6ecc4c6b7e751f3d0))
+
+
+### Bug Fixes
+
+* Actions fix2025 ([#152](https://github.com/IKIM-Essen/RiboSnake/issues/152)) ([abef4b1](https://github.com/IKIM-Essen/RiboSnake/commit/abef4b1f99f15946c640b17e3f8fbaee208768cc))
+* Fixed all filter reduced analysis ([#161](https://github.com/IKIM-Essen/RiboSnake/issues/161)) ([5631890](https://github.com/IKIM-Essen/RiboSnake/commit/5631890ae9a9f12e47850b7f352076ef7461fec7))
+* Fixit ([#142](https://github.com/IKIM-Essen/RiboSnake/issues/142)) ([ed1316f](https://github.com/IKIM-Essen/RiboSnake/commit/ed1316f3a703457096fadd268c9767c0670b6ba5))
+* Fixit2 ([#144](https://github.com/IKIM-Essen/RiboSnake/issues/144)) ([aa073c9](https://github.com/IKIM-Essen/RiboSnake/commit/aa073c90f7fd209c19ad0c4e0b9e6e0860b34091))
+* fixit3 ([#145](https://github.com/IKIM-Essen/RiboSnake/issues/145)) ([a7db817](https://github.com/IKIM-Essen/RiboSnake/commit/a7db8175c7c6f7a2d0d3ef422e6f767eff49020a))
+* Fixit4 ([#148](https://github.com/IKIM-Essen/RiboSnake/issues/148)) ([1f0d071](https://github.com/IKIM-Essen/RiboSnake/commit/1f0d071cf1598052e17ad4004793e01970273660))
+* Fixit4.1 ([#151](https://github.com/IKIM-Essen/RiboSnake/issues/151)) ([8911404](https://github.com/IKIM-Essen/RiboSnake/commit/8911404fd6934acb61807897f186782076358a01))
+* reduced analysis fix and mkdir fix ([#160](https://github.com/IKIM-Essen/RiboSnake/issues/160)) ([6b571c6](https://github.com/IKIM-Essen/RiboSnake/commit/6b571c62dcc7addcb6ba81b33c8ee6e5575a829f))
+
 ## [0.10.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.9.0...v0.10.0) (2024-08-20)
 
 
