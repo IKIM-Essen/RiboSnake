@@ -1,0 +1,29 @@
+Bootstrap: docker
+From: condaforge/miniforge3:latest
+
+%files
+    workflow/envs/plot.yaml /conda-envs/74787bb1797fe05bf24db5c95ac0008b/environment.yaml
+    workflow/envs/python.yaml /conda-envs/411ab9b1238237093a0255400d0b7554/environment.yaml
+    workflow/envs/qiime-only-env.yaml /conda-envs/38e03a875e912f586593efbea6d8b191/environment.yaml
+    workflow/envs/snakemake.yaml /conda-envs/f9bd141b3ba0d913729ac5dd6002cec9/environment.yaml
+
+%post
+    mkdir -p /conda-envs/58abe029d5457de900ac004a36a87fe3
+    mkdir -p /conda-envs/089104bd30fe544117418c33e0298dfb
+    mkdir -p /conda-envs/74787bb1797fe05bf24db5c95ac0008b
+    mkdir -p /conda-envs/411ab9b1238237093a0255400d0b7554
+    mkdir -p /conda-envs/38e03a875e912f586593efbea6d8b191
+    mkdir -p /conda-envs/f9bd141b3ba0d913729ac5dd6002cec9
+
+    apt-get update && apt-get install -y g++ gcc
+
+    wget -q https://raw.githubusercontent.com/snakemake/snakemake-wrappers/v1.3.1/bio/fastqc/environment.yaml -O /conda-envs/58abe029d5457de900ac004a36a87fe3/environment.yaml
+    wget -q https://raw.githubusercontent.com/snakemake/snakemake-wrappers/v3.3.3/bio/multiqc/environment.yaml -O /conda-envs/089104bd30fe544117418c33e0298dfb/environment.yaml
+
+    conda env create --prefix /conda-envs/58abe029d5457de900ac004a36a87fe3 --file /conda-envs/58abe029d5457de900ac004a36a87fe3/environment.yaml
+    conda env create --prefix /conda-envs/089104bd30fe544117418c33e0298dfb --file /conda-envs/089104bd30fe544117418c33e0298dfb/environment.yaml
+    conda env create --prefix /conda-envs/74787bb1797fe05bf24db5c95ac0008b --file /conda-envs/74787bb1797fe05bf24db5c95ac0008b/environment.yaml
+    conda env create --prefix /conda-envs/411ab9b1238237093a0255400d0b7554 --file /conda-envs/411ab9b1238237093a0255400d0b7554/environment.yaml
+    conda env create --prefix /conda-envs/38e03a875e912f586593efbea6d8b191 --file /conda-envs/38e03a875e912f586593efbea6d8b191/environment.yaml
+    conda env create --prefix /conda-envs/f9bd141b3ba0d913729ac5dd6002cec9 --file /conda-envs/f9bd141b3ba0d913729ac5dd6002cec9/environment.yaml
+    conda clean --all -y
