@@ -753,6 +753,8 @@ if config["Modus"] == "reduced":
             "results/{date}/visual/heatmap_binary.html",
             "results/{date}/visual/report/heatmap.svg",
             "results/{date}/visual/report/taxonomy.tsv",
+            "results/{date}/visual/report/taxa_collapsed_relative.tsv",
+            "results/{date}/visual/report/taxa_collapse_absolute.tsv",
             "results/{date}/visual/fastq_stats.qzv",
             "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
             "results/{date}/visual/absolute-taxabar-plot.html",
