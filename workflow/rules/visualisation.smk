@@ -611,6 +611,42 @@ rule rank_abundance:
         "../scripts/rank-abundance.py"
 
 
+rule taxa_collapsed_relative_tsv:
+    input:
+        "results/{date}/out/taxa_collapsed_relative.qza",
+    output:
+        "results/{date}/visual/report/taxa_collapsed_relative.tsv",
+    params:
+        export_dir="results/{date}/visual/report/taxa_collapsed_relative/",
+    log:
+        "logs/{date}/visualisation/taxa_collapsed_relative.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "qiime tools export "
+        "--input-path {input} "
+        "--output-path {params.export_dir} "
+        "2> {log} && "
+        "biom convert "
+        "-i {params.export_dir}/feature-table.biom "
+        "-o {output} "
+        "--to-tsv --header-key taxonomy "
+        "2>> {log}"
+
+
+rule taxa_collapse_absolute:
+    input:
+        "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
+    output:
+        "results/{date}/visual/report/taxa_collapse_absolute.tsv",
+    log:
+        "logs/{date}/visualisation/taxa_collapse_absolute.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "cp {input} {output} 2> {log}"
+
+
 if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule all_filter:
