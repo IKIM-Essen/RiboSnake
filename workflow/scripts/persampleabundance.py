@@ -1,44 +1,50 @@
+import argparse
 import qiime2
 import pandas as pd
-import gzip
-import shutil
-import os
-import zipfile
 import sys
 
 
-sys.stderr = open(snakemake.log[0], "w")
-
-# Load the Qiime2 feature table artifact
-feature_table = qiime2.Artifact.load(str(snakemake.input))
-
-# Convert the feature table to a Pandas DataFrame
-table_df = feature_table.view(pd.DataFrame)
-
-# Function to calculate relative abundance for each sample
 def calculate_relative_abundance(df):
     return df.div(df.sum(axis=1), axis=0)
 
-# Calculate relative abundances for each sample
-relative_abundance_df = calculate_relative_abundance(table_df)
-print(relative_abundance_df)
 
-# Set the minimum threshold for relative abundance in each sample
-min_abundance = float(str(snakemake.params))  # Adjust this as needed
+def filter_feature_table(input_table, output_table, min_abundance, log_path=None):
+    if log_path is not None:
+        sys.stderr = open(log_path, "w")
 
-# Filter out features in each sample that are below the threshold
-filtered_df = relative_abundance_df.applymap(lambda x: x if x >= min_abundance else 0)
+    feature_table = qiime2.Artifact.load(str(input_table))
+    table_df = feature_table.view(pd.DataFrame)
 
-# Filter out rows (features) that are all zeros across samples
-filtered_df = filtered_df.loc[~(filtered_df == 0).all(axis=1)]
+    relative_abundance_df = calculate_relative_abundance(table_df)
+    min_abundance = float(min_abundance)
 
-# Convert back to the original count format (for Qiime2 compatibility)
-filtered_count_df = (filtered_df.mul(table_df.sum(axis=1), axis=0)).astype(int)
+    filtered_df = relative_abundance_df.applymap(lambda x: x if x >= min_abundance else 0)
+    filtered_df = filtered_df.loc[~(filtered_df == 0).all(axis=1)]
+    filtered_count_df = (filtered_df.mul(table_df.sum(axis=1), axis=0)).astype(int)
 
-# Convert the filtered DataFrame back to a Qiime2 Artifact
-filtered_table_artifact = qiime2.Artifact.import_data('FeatureTable[Frequency]', filtered_count_df)
+    filtered_table_artifact = qiime2.Artifact.import_data("FeatureTable[Frequency]", filtered_count_df)
+    filtered_table_artifact.save(str(output_table))
 
-# Save the filtered feature table as a Qiime2 artifact
-filtered_table_artifact.save(str(snakemake.output))
+    print("Filtered feature table saved.")
 
-print("Filtered feature table saved.")
+
+def main():
+    parser = argparse.ArgumentParser(description="Filter a Qiime2 feature table by per-sample relative abundance.")
+    parser.add_argument("input_table", help="Input feature table artifact path")
+    parser.add_argument("min_abundance", help="Minimum relative abundance threshold")
+    parser.add_argument("output_table", help="Output filtered feature table artifact path")
+    parser.add_argument("--log", help="Optional log file path", default=None)
+    args = parser.parse_args()
+
+    filter_feature_table(args.input_table, args.output_table, args.min_abundance, args.log)
+
+
+if __name__ == "__main__":
+    main()
+else:
+    filter_feature_table(
+        snakemake.input.table,
+        snakemake.output.table,
+        snakemake.params.min_abundance,
+        snakemake.log[0],
+    )

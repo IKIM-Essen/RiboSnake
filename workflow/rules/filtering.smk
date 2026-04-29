@@ -235,30 +235,26 @@ rule abundance_frequency:
 
 rule filter_frequency:
     input:
-        table="results/{date}/out/table-cluster-lengthfilter.qza",  #"results/{date}/out/table-cluster.qza", 
-        seqs="results/{date}/out/seq-cluster-lengthfilter.qza",  #"results/{date}/out/seq-cluster.qza", 
+        table="results/{date}/out/table-cluster-lengthfilter.qza",
+        seqs="results/{date}/out/seq-cluster-lengthfilter.qza",
         abundance="results/{date}/out/abundance.txt",
     output:
-        table="results/{date}/out/table-cluster-filtered.qza",  # "results/{date}/out/table-cluster-freq.qza"
-        seqs="results/{date}/out/seq-cluster-filtered.qza",  # "results/{date}/out/seq-cluster-freq.qza"
+        table="results/{date}/out/table-cluster-filtered.qza",
+        seqs="results/{date}/out/seq-cluster-filtered.qza",
+    params:
+        min_abundance=config["filtering"]["relative-abundance-filter"],
     log:
         "logs/{date}/filtering/filter-frequency.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
-        "value=$(<{input.abundance}) \n"
-        "echo $value \n"
-        "qiime feature-table filter-features "
-        "--i-table {input.table} "
-        "--p-min-frequency $value "
-        "--o-filtered-table {output.table} "
-        "--verbose 2> {log} \n"
+        "python ../scripts/persampleabundance.py {input.table} {params.min_abundance} {output.table} --log {log} 2>> {log} \n"
         "qiime feature-table filter-seqs "
         "--i-data {input.seqs} "
         "--i-table {output.table} "
         "--p-no-exclude-ids "
         "--o-filtered-data {output.seqs} "
-        "--verbose 2> {log} "
+        "--verbose 2>> {log} "
 
 
 rule unzip_frequency:
@@ -293,7 +289,7 @@ if config["reduced-analysis"] == True:
 
     rule visualise_afterab:
         input:
-            "results/{date}/out/table-cluster-filtered.qza",
+            "results/{date}/out/table-cluster-filtered-new.qza",
         output:
             "results/{date}/visual/table-cluster-filtered.qzv",
         log:
@@ -359,7 +355,7 @@ if config["DADA2"] == False:
 
 rule taxa_collapse:
     input:
-        table="results/{date}/out/table-cluster-filtered.qza",
+        table="results/{date}/out/table-cluster-filtered-new.qza",
         taxonomy="results/{date}/out/taxonomy.qza",
     output:
         "results/{date}/out/taxa_collapsed.qza",
@@ -378,8 +374,8 @@ rule taxa_collapse:
 
 rule filter_taxonomy:
     input:
-        table="results/{date}/out/table-cluster-filtered.qza",
-        seq="results/{date}/out/seq-cluster-filtered.qza",
+        table="results/{date}/out/table-cluster-filtered-new.qza",
+        seq="results/{date}/out/seq-cluster-filtered-new.qza",
         taxonomy="results/{date}/out/taxonomy.qza",
     output:
         table="results/{date}/out/table-taxa-filtered.qza",
