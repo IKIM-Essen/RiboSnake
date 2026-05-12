@@ -838,6 +838,10 @@ rule export_parameters:
 rule concatenate_logs:
     input:
         "results/{date}/{date}.tar.gz",
+    conda:
+        "../envs/python.yaml"
+    log:
+        "logs/{date}/outputs/logs.log",
     output:
         "logs/{date}_logs.tar.gz",
     shell:
