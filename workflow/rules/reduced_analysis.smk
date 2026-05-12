@@ -538,7 +538,7 @@ if config["DADA2"] == True:
         conda:
             "../envs/snakemake.yaml"
         shell:
-            "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
+            "snakemake --nolock --report {output} "
             "{params.for_testing} "
             "> {log} 2>&1"
 
@@ -623,24 +623,6 @@ if config["DADA2"] == False:
             "../envs/python.yaml"
         script:
             "../scripts/rename_qzv.py"
-
-    rule report_empress:
-        input:
-            "results/{date}/visual/unzipped/",
-        output:
-            report(
-                directory("results/{date}/visual/report/empress-community"),
-                caption="../report/empress.rst",
-                category="2. Taxonomy",
-                subcategory="Phylogenetic Tree",
-                htmlindex="index.html",
-            ),
-        log:
-            "logs/{date}/outputs/report-empress.log",
-        conda:
-            "../envs/python.yaml"
-        script:
-            "../scripts/extract_significance.py"
 
     rule report_files:
         input:

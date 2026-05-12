@@ -403,7 +403,7 @@ if config["longitudinal"] == False:
         conda:
             "../envs/snakemake.yaml"
         shell:
-            "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
+            "snakemake --nolock --report {output} "
             "{params.for_testing} "
             "> {log} 2>&1"
 
@@ -507,7 +507,7 @@ if config["longitudinal"]:
         conda:
             "../envs/snakemake.yaml"
         shell:
-            "snakemake --nolock --report {output} --report-stylesheet resources/custom-stylesheet.css "
+            "snakemake --nolock --report {output} "
             "{params.for_testing} "
             "> {log} 2>&1"
 
