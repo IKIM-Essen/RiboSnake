@@ -50,8 +50,8 @@ def get_data_dir():
     path_list = data["path1"].tolist()
     try:
         path = path_list[0]
-        dir = os.path.dirname(path)
-        return dir
+        direc = os.path.dirname(path)
+        return direc
     except IndexError:
         print("There is no data directory jet known to the workflow.")
 

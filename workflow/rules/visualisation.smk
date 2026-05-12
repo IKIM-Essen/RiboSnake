@@ -14,6 +14,78 @@ rule visualise_samples:
         "--verbose 2> {log}"
 
 
+rule visualise_trimmed:
+    input:
+        "results/{date}/out/trimmed-seqs.qza",
+    output:
+        "results/{date}/visual/trimmed-seqs.qzv",
+    log:
+        "logs/{date}/visualisation/visualise-trimmed.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime demux summarize "
+        "--i-data {input} "
+        "--o-visualization {output} "
+        "--verbose 2> {log}"
+
+
+if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+
+    rule visualise_joined:
+        input:
+            "results/{date}/out/joined-seqs.qza",
+        output:
+            "results/{date}/visual/joined-seqs.qzv",
+        log:
+            "logs/{date}/visualisation/visualise-joined.log",
+        conda:
+            "../envs/qiime-only-env.yaml"
+        shell:
+            "qiime demux summarize "
+            "--i-data {input} "
+            "--o-visualization {output} "
+            "--verbose 2> {log}"
+
+    rule unzip_joined:
+        input:
+            "results/{date}/visual/joined-seqs.qzv",
+        output:
+            temp(directory("results/{date}/visual/joined-seqs")),
+        log:
+            "logs/{date}/outputs/unzip-joined.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/rename_qzv.py"
+
+
+rule unzip_samples:
+    input:
+        "results/{date}/visual/paired-seqs.qzv",
+    output:
+        temp(directory("results/{date}/visual/paired-seqs")),
+    log:
+        "logs/{date}/outputs/unzip-samples.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
+
+
+rule unzip_trimmed:
+    input:
+        "results/{date}/visual/trimmed-seqs.qzv",
+    output:
+        temp(directory("results/{date}/visual/trimmed-seqs")),
+    log:
+        "logs/{date}/outputs/unzip-trimmed.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/rename_qzv.py"
+
+
 rule visualise_table:
     input:
         "results/{date}/out/table-cluster-lengthfilter.qza",
@@ -43,7 +115,7 @@ rule unzip_frequency_length:
         "../scripts/rename_qzv.py"
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule visualise_beforeChimera:
         input:
@@ -129,56 +201,6 @@ rule demux_stats:
         "--m-input-file {input} "
         "--o-visualization {output} "
         "--verbose 2> {log}"
-
-
-if config["data-type"] == "human" and config["bowtie"] == False:
-
-    rule visual_humancount:
-        input:
-            "results/{date}/out/human.qza",
-        output:
-            "results/{date}/visual/human-count.qzv",
-        log:
-            "logs/{date}/visualisation/human-count.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        shell:
-            "qiime feature-table tabulate-seqs "
-            "--i-data {input} "
-            "--o-visualization {output} "
-            "--verbose 2> {log}"
-
-    rule unzip_human_count:
-        input:
-            "results/{date}/visual/human-count.qzv",
-        output:
-            human_count=report(
-                directory("results/{date}/visual/report/human-count"),
-                caption="../report/human-count.rst",
-                category="4. Qualitycontrol",
-                htmlindex="index.html",
-            ),
-        params:
-            between="results/{date}/visual/report/human-count-unzipped",
-        log:
-            "logs/{date}/visualisation/human-count-unzip.log",
-        conda:
-            "../envs/qiime-only-env.yaml"
-        script:
-            "../scripts/extract_humancount.py"
-
-
-if config["data-type"] == "environmental" or config["bowtie"] == True:
-
-    rule unzip_human_dummy:
-        output:
-            directory("results/{date}/visual/report/human-count"),
-        log:
-            "logs/{date}/visualisation/human-count-dummy.log",
-        conda:
-            "../envs/snakemake.yaml"
-        shell:
-            "mkdir {output}"
 
 
 rule taxa_heatmap:
@@ -507,7 +529,11 @@ rule ancom:
         "--verbose 2> {log}"
 
 
-if config["bowtie"] == False and config["DADA2"] == False:
+if (
+    config["bowtie"] == False
+    and config["Modus"] == "vsearch"
+    or config["Modus"] == "reduced"
+):
 
     rule hum_filter_difference:
         input:
@@ -585,10 +611,13 @@ rule rank_abundance:
         "../scripts/rank-abundance.py"
 
 
-if config["DADA2"] == False:
+if config["Modus"] == "vsearch" or config["Modus"] == "reduced":
 
     rule all_filter:
         input:
+            samples="results/{date}/visual/paired-seqs",
+            trimmed="results/{date}/visual/trimmed-seqs",
+            joined="results/{date}/visual/joined-seqs/",
             first="results/{date}/visual/report/demux-joined-filter-stats/",
             human="results/{date}/visual/sample_frequencys_difference.csv",
             wo_chimera="results/{date}/visual/chimera_unzipped/",
@@ -609,7 +638,7 @@ if config["DADA2"] == False:
             "../scripts/complete_filter.py"
 
 
-if config["DADA2"] == True:
+if config["Modus"] == "DADA2":
 
     rule all_filter:
         input:

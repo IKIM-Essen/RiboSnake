@@ -24,19 +24,13 @@ with zipfile.ZipFile(zipped_file, "r") as zip_ref:
     new_dir = str(snakemake.params) + name
     zip_ref.extractall(os.path.splitext(new_dir)[0] + "/")
 
-print(new_dir)
 direc = new_dir.split(".")[0]
 directory_contents = os.listdir(direc)
-print(directory_contents)
 
 datadir = new_dir.split(".")[0] + "/" + directory_contents[0] + "/data/"
-print(datadir)
 # Load the biom table
 table = load_table(datadir + "feature-table.biom")
 
-print(table.matrix_data.toarray())
-print(table.ids(axis="observation"))
-print(table.ids(axis="sample"))
 # Convert biom table to pandas DataFrame
 df = pd.DataFrame(
     table.matrix_data.toarray(),
@@ -44,7 +38,6 @@ df = pd.DataFrame(
     index=table.ids(axis="observation"),
 )
 df = df.T
-print(df)
 
 # Function to create an interactive plot for each bacterial species
 def create_interactive_plot(index):

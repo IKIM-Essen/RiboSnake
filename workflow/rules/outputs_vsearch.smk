@@ -101,79 +101,81 @@ rule unzip_reports:
         "../scripts/rename_qzv.py"
 
 
-rule report_files:
-    input:
-        "results/{date}/visual/unzipped/",
-    output:
-        beta_svg=report(
-            "results/{date}/visual/report/beta-rarefaction.svg",
-            caption="../report/beta-heatmap.rst",
-            category="3. Analysis",
-            subcategory="Beta",
-        ),
-        heatmap=report(
-            "results/{date}/visual/report/heatmap.svg",
-            caption="../report/heatmap.rst",
-            category="1. Heatmap",
-            subcategory="Relative abundances",
-        ),
-        taxonomy_tsv=report(
-            "results/{date}/visual/report/taxonomy.tsv",
-            caption="../report/taxonomy-tsv.rst",
-            category="2. Taxonomy",
-            subcategory="Taxonomy Table",
-        ),
-        taxa_barplot=report(
-            directory("results/{date}/visual/report/taxa_barplot_data"),
-            caption="../report/taxa-barplot.rst",
-            category="2. Taxonomy",
-            subcategory="Taxa Barplot",
-            htmlindex="index.html",
-        ),
-        beta_html=report(
-            directory("results/{date}/visual/report/beta_rarefaction"),
-            caption="../report/beta-rarefaction.rst",
-            category="3. Analysis",
-            subcategory="Beta",
-            htmlindex="index.html",
-        ),
-        alpha_html=report(
-            directory("results/{date}/visual/report/alpha_rarefaction"),
-            caption="../report/alpha-rarefaction.rst",
-            category="3. Analysis",
-            subcategory="Alpha",
-            htmlindex="index.html",
-        ),
-        gneiss=report(
-            "results/{date}/visual/heatmap_gneiss.svg",
-            caption="../report/gneiss.rst",
-            category="3. Analysis",
-            subcategory="Gneiss",
-        ),
-        paired_seqs=report(
-            directory("results/{date}/visual/report/paired-seqs"),
-            caption="../report/paired-seqs.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
-        fastq_stats=report(
-            directory("results/{date}/visual/report/fastq_stats"),
-            caption="../report/fastq-stats.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
-        demux_filter_stats=report(
-            directory("results/{date}/visual/report/demux-joined-filter-stats"),
-            caption="../report/demux-filter-stats.rst",
-            category="4. Qualitycontrol",
-            htmlindex="index.html",
-        ),
-    log:
-        "logs/{date}/outputs/report-files.log",
-    conda:
-        "../envs/python.yaml"
-    script:
-        "../scripts/extract_reports.py"
+if config["Modus"] == "vsearch":
+
+    rule report_files:
+        input:
+            "results/{date}/visual/unzipped/",
+        output:
+            beta_svg=report(
+                "results/{date}/visual/report/beta-rarefaction.svg",
+                caption="../report/beta-heatmap.rst",
+                category="3. Analysis",
+                subcategory="Beta",
+            ),
+            heatmap=report(
+                "results/{date}/visual/report/heatmap.svg",
+                caption="../report/heatmap.rst",
+                category="1. Heatmap",
+                subcategory="Relative abundances",
+            ),
+            taxonomy_tsv=report(
+                "results/{date}/visual/report/taxonomy.tsv",
+                caption="../report/taxonomy-tsv.rst",
+                category="2. Taxonomy",
+                subcategory="Taxonomy Table",
+            ),
+            taxa_barplot=report(
+                directory("results/{date}/visual/report/taxa_barplot_data"),
+                caption="../report/taxa-barplot.rst",
+                category="2. Taxonomy",
+                subcategory="Taxa Barplot",
+                htmlindex="index.html",
+            ),
+            beta_html=report(
+                directory("results/{date}/visual/report/beta_rarefaction"),
+                caption="../report/beta-rarefaction.rst",
+                category="3. Analysis",
+                subcategory="Beta",
+                htmlindex="index.html",
+            ),
+            alpha_html=report(
+                directory("results/{date}/visual/report/alpha_rarefaction"),
+                caption="../report/alpha-rarefaction.rst",
+                category="3. Analysis",
+                subcategory="Alpha",
+                htmlindex="index.html",
+            ),
+            gneiss=report(
+                "results/{date}/visual/heatmap_gneiss.svg",
+                caption="../report/gneiss.rst",
+                category="3. Analysis",
+                subcategory="Gneiss",
+            ),
+            paired_seqs=report(
+                directory("results/{date}/visual/report/paired-seqs"),
+                caption="../report/paired-seqs.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+            fastq_stats=report(
+                directory("results/{date}/visual/report/fastq_stats"),
+                caption="../report/fastq-stats.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+            demux_filter_stats=report(
+                directory("results/{date}/visual/report/demux-joined-filter-stats"),
+                caption="../report/demux-filter-stats.rst",
+                category="4. Qualitycontrol",
+                htmlindex="index.html",
+            ),
+        log:
+            "logs/{date}/outputs/report-files.log",
+        conda:
+            "../envs/python.yaml"
+        script:
+            "../scripts/extract_reports.py"
 
 
 rule report_beta_correlation:
@@ -561,7 +563,6 @@ rule zip_report:
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
-        "results/{date}/out/report.zip",
         #"results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.html",
@@ -592,8 +593,9 @@ rule zip_report:
         "results/{date}/out/songbird/",
         "results/{date}/out/differentials_taxonomy.tsv",
         "results/{date}/out/config_parameters.html",
+        report="results/{date}/out/report.zip",
     output:
-        "results/{date}/16S-report.tar.gz",
+        "results/{date}/{date}.tar.gz",
     params:
         outpath=config["output"],
     log:
@@ -602,9 +604,24 @@ rule zip_report:
         "../envs/snakemake.yaml"
     shell:
         """
-        mkdir results/{wildcards.date}/16S-report
-        cp -r {input} results/{wildcards.date}/16S-report/
-        tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
-        cp results/{wildcards.date}/16S-report.tar.gz {params.outpath}
+        mkdir -p results/{wildcards.date}/16S-report/
+        mkdir -p results/{wildcards.date}/16S-report/additional/
+        cp -r {input} results/{wildcards.date}/16S-report/additional/
+        rm results/{wildcards.date}/16S-report/additional/report.zip
+        cp {input.report} results/{wildcards.date}/16S-report/
+        tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
+        cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
         rm -r results/{wildcards.date}/16S-report
+        """
+
+
+rule concatenate_logs:
+    input:
+        "results/{date}/{date}.tar.gz",
+    output:
+        "logs/{date}_logs.tar.gz",
+    shell:
+        """
+        tar -czvf {output} logs/{wildcards.date}/
+        rm -r logs/{wildcards.date}
         """

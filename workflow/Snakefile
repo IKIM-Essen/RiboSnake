@@ -31,18 +31,18 @@ if config["include-data-prep"]:
     include: "rules/preparedata.smk"
 
 
-if config["reduced-analysis"]:
+if config["Modus"] == "reduced":
 
     include: "rules/reduced_analysis.smk"
 
 
-if config["reduced-analysis"] == False and config["DADA2"] == False:
+if config["Modus"] == "vsearch":
 
     include: "rules/outputs_vsearch.smk"
     include: "rules/visualisation.smk"
 
 
-if config["reduced-analysis"] == False and config["DADA2"] == True:
+if config["Modus"] == "DADA2":
 
     include: "rules/outputs_DADA2.smk"
     include: "rules/visualisation.smk"
@@ -71,7 +71,11 @@ if config["database"]["NCBI"]:
 rule all:
     input:
         expand(
-            "results/{date}/16S-report.tar.gz",
+            "results/{date}/{date}.tar.gz",
+            date=get_date(),
+        ),
+        expand(
+            "logs/{date}_logs.tar.gz",
             date=get_date(),
         ),
     output:

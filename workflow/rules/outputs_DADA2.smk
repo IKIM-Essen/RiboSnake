@@ -348,7 +348,7 @@ if config["longitudinal"] == False:
             "results/{date}/visual/report/sample.tsv",
             expand(
                 "results/{{date}}/visual/report/beta-correlation-scatter-{metric}-{diversity}-{metadata_column}",
-                metric=get_phylogenetic_metric("beta"),
+                metric=get_metric("beta"),
                 metadata_column=get_metadata_columns(),
                 diversity="normal",
             ),
@@ -566,7 +566,6 @@ rule zip_report:
         "results/{date}/visual/report/beta-rarefaction.svg",
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
-        "results/{date}/out/report.zip",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.html",
         "results/{date}/out/kraken.tar.gz",
@@ -596,8 +595,9 @@ rule zip_report:
         "results/{date}/out/songbird/",
         "results/{date}/out/differentials_taxonomy.tsv",
         "results/{date}/out/config_parameters.html",
+        report="results/{date}/out/report.zip",
     output:
-        "results/{date}/16S-report.tar.gz",
+        "results/{date}/{date}.tar.gz",
     params:
         outpath=config["output"],
     log:
@@ -606,9 +606,24 @@ rule zip_report:
         "../envs/snakemake.yaml"
     shell:
         """
-        mkdir results/{wildcards.date}/16S-report
-        cp -r {input} results/{wildcards.date}/16S-report/
-        tar -czvf results/{wildcards.date}/16S-report.tar.gz results/{wildcards.date}/16S-report/
-        cp results/{wildcards.date}/16S-report.tar.gz {params.outpath}
+        mkdir -p results/{wildcards.date}/16S-report/
+        mkdir -p results/{wildcards.date}/16S-report/additional/
+        cp -r {input} results/{wildcards.date}/16S-report/additional/
+        rm results/{wildcards.date}/16S-report/additional/report.zip
+        cp {input.report} results/{wildcards.date}/16S-report/
+        tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
+        cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
         rm -r results/{wildcards.date}/16S-report
+        """
+
+
+rule concatenate_logs:
+    input:
+        "results/{date}/{date}.tar.gz",
+    output:
+        "logs/{date}_logs.tar.gz",
+    shell:
+        """
+        tar -czvf {output} logs/{wildcards.date}/
+        rm -r logs/{wildcards.date}
         """

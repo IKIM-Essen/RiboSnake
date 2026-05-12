@@ -13,10 +13,6 @@ sys.stderr = open(snakemake.log[0], "w")
 
 # Function to extract results from the qiime2 artifacts, already saved in a zip file
 
-"""print("results/2022-02-24/visual/unzipped/")
-os.walk("results/2022-02-24/visual/unzipped/")
-for x in os.walk("results/2022-02-24/visual/unzipped/"):
-    print(x[0])"""
 # Reading the zip-files from the directory
 dirlist = os.listdir(str(snakemake.input))
 # Getting the subdirectories of the files
@@ -30,9 +26,7 @@ while i < len(dirlist):
 while z < len(subdir):
     if path.isdir(subdir[z]):
         dir = os.listdir(subdir[z])
-        print(dir)
         subdir[z] = subdir[z] + dir[0] + "/"
-        print(subdir[z])
         z = 1 + z
     else:
         z = 1 + z"""
