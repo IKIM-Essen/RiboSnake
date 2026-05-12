@@ -849,4 +849,3 @@ rule concatenate_logs:
         tar -czvf {output} logs/{wildcards.date}/
         rm -r logs/{wildcards.date}
         """
-        
