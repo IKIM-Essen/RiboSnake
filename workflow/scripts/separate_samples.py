@@ -31,23 +31,6 @@ def process_file(tsv_file, output_dir, suffix):
         output_file = os.path.join(output_dir, f"{sample}_{suffix}.tsv")
         sample_df.to_csv(output_file, sep='\t', index=False)
         logging.info(f"Saved TSV: {output_file}")
-        
-        # Create plot for top 20 taxa
-        top_n = 20
-        plot_df = sample_df.head(top_n)
-        
-        fig, ax = plt.subplots(figsize=(10, 8))
-        ax.barh(plot_df['taxonomy'], plot_df[sample])
-        ax.set_xlabel('Abundance')
-        ax.set_ylabel('Taxonomy')
-        ax.set_title(f'{sample} {suffix.capitalize()} Abundance - Top {top_n} Taxa')
-        ax.invert_yaxis()  # Highest at top
-        plt.tight_layout()
-        
-        plot_file = os.path.join(output_dir, f"{sample}_{suffix}.png")
-        fig.savefig(plot_file)
-        plt.close(fig)
-        logging.info(f"Saved plot: {plot_file}")
 
 # Main execution
 output_dir = snakemake.output[0]
