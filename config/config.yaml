@@ -12,7 +12,7 @@ testing: False
 # If data-preparation should be enabled
 include-data-prep: False
 # Modus: Can be set to "DADA2", "vsearch" or "reduced"
-Modus: "reduced"
+Modus: "VaSeqIs"
 # Longitudinal analysis, for further parameters look at line 204 of this document
 longitudinal: False
 # Whether to use bowtie2 for excluding human host contamination or not
