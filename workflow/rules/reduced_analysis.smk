@@ -434,6 +434,77 @@ rule report_empress:
     script:
         "../scripts/extract_significance.py"
 
+rule export_taxa_collapsed_relative:
+    input:
+        "results/{date}/out/taxa_collapsed_relative.qza",
+    output:
+        directory("results/{date}/visual/report/taxa_collapsed_relative/"),
+    log:
+        "logs/{date}/visualisation/export_taxa_collapsed_relative.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime tools export "
+        "--input-path {input} "
+        "--output-path {output} "
+        "2> {log}"
+
+rule convert_taxa_collapsed_relative_tsv:
+    input:
+        "results/{date}/visual/report/taxa_collapsed_relative/",
+    output:
+        report(
+            "results/{date}/visual/report/taxa_collapsed_relative.tsv",
+            category="4. Qualitycontrol",
+        ),
+    params:
+        export_dir="results/{date}/visual/report/taxa_collapsed_relative/",
+    log:
+        "logs/{date}/visualisation/taxa_collapsed_relative.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "biom convert "
+        "-i {params.export_dir}/feature-table.biom "
+        "-o {output} "
+        "--to-tsv --header-key taxonomy "
+         "2>> {log}"
+
+
+rule export_taxa_collapsed_absolute:
+    input:
+        "results/{date}/out/taxa_collapsed.qza",
+    output:
+        directory("results/{date}/visual/report/taxa_collapsed_absolute/"),
+    log:
+        "logs/{date}/visualisation/export_taxa_collapsed_absolute.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime tools export "
+        "--input-path {input} "
+        "--output-path {output} "
+        "2> {log}"
+
+rule convert_taxa_collapsed_absolute_tsv:
+    input:
+        "results/{date}/visual/report/taxa_collapsed_absolute/",
+    output:
+        report(
+            "results/{date}/visual/report/taxa_collapsed_absolute.tsv",
+            category="4. Qualitycontrol",
+        ),
+    log:
+        "logs/{date}/visualisation/convert_taxa_collapsed_absolute.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "biom convert "
+        "-i {input}/feature-table.biom "
+        "-o {output} "
+        "--to-tsv --header-key taxonomy "
+        "2> {log}"
+
 
 if config["Modus"] == "DADA2":
 
@@ -754,7 +825,7 @@ if config["Modus"] == "reduced":
             "results/{date}/visual/report/heatmap.svg",
             "results/{date}/visual/report/taxonomy.tsv",
             "results/{date}/visual/report/taxa_collapsed_relative.tsv",
-            "results/{date}/visual/report/taxa_collapse_absolute.tsv",
+            "results/{date}/visual/report/taxa_collapsed_absolute.tsv",
             "results/{date}/visual/fastq_stats.qzv",
             "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
             "results/{date}/visual/absolute-taxabar-plot.html",
@@ -840,6 +911,10 @@ rule export_parameters:
 rule concatenate_logs:
     input:
         "results/{date}/{date}.tar.gz",
+    conda:
+        "../envs/python.yaml"
+    log:
+        "logs/{date}/outputs/logs.log",
     output:
         "logs/{date}_logs.tar.gz",
     shell:

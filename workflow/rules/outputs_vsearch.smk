@@ -564,7 +564,7 @@ rule zip_report:
         "results/{date}/visual/report/heatmap.svg",
         "results/{date}/visual/report/taxonomy.tsv",
         "results/{date}/visual/report/taxa_collapsed_relative.tsv",
-        "results/{date}/visual/report/taxa_collapse_absolute.tsv",
+        "results/{date}/visual/report/taxa_collapsed_absolute.tsv",
         #"results/{date}/visual/fastq_stats.qzv",
         "results/{date}/out/table.from_biom_w_taxonomy-featcount.txt",
         "results/{date}/visual/absolute-taxabar-plot.html",
@@ -620,6 +620,10 @@ rule zip_report:
 rule concatenate_logs:
     input:
         "results/{date}/{date}.tar.gz",
+    conda:
+        "../envs/python.yaml"
+    log:
+        "logs/{date}/outputs/logs.log",
     output:
         "logs/{date}_logs.tar.gz",
     shell:
