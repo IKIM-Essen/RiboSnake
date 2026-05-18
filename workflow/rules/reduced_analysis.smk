@@ -434,6 +434,7 @@ rule report_empress:
     script:
         "../scripts/extract_significance.py"
 
+
 rule export_taxa_collapsed_relative:
     input:
         "results/{date}/out/taxa_collapsed_relative.qza",
@@ -448,6 +449,7 @@ rule export_taxa_collapsed_relative:
         "--input-path {input} "
         "--output-path {output} "
         "2> {log}"
+
 
 rule convert_taxa_collapsed_relative_tsv:
     input:
@@ -468,7 +470,7 @@ rule convert_taxa_collapsed_relative_tsv:
         "-i {params.export_dir}/feature-table.biom "
         "-o {output} "
         "--to-tsv --header-key taxonomy "
-         "2>> {log}"
+        "2>> {log}"
 
 
 rule export_taxa_collapsed_absolute:
@@ -485,6 +487,7 @@ rule export_taxa_collapsed_absolute:
         "--input-path {input} "
         "--output-path {output} "
         "2> {log}"
+        
 
 rule convert_taxa_collapsed_absolute_tsv:
     input:

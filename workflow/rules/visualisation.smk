@@ -626,6 +626,7 @@ rule export_taxa_collapsed_relative:
         "--output-path {output} "
         "2> {log}"
 
+
 rule convert_taxa_collapsed_relative_tsv:
     input:
         "results/{date}/visual/report/taxa_collapsed_relative/",
@@ -645,7 +646,7 @@ rule convert_taxa_collapsed_relative_tsv:
         "-i {params.export_dir}/feature-table.biom "
         "-o {output} "
         "--to-tsv --header-key taxonomy "
-         "2>> {log}"
+        "2>> {log}"
 
 
 rule export_taxa_collapsed_absolute:
@@ -662,6 +663,7 @@ rule export_taxa_collapsed_absolute:
         "--input-path {input} "
         "--output-path {output} "
         "2> {log}"
+
 
 rule convert_taxa_collapsed_absolute_tsv:
     input:
