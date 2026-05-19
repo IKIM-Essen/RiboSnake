@@ -57,7 +57,8 @@ def add_traces(fig, x_labels):
                 marker_color=[color_map[bacterium_name] for _ in x_labels],
                 marker=dict(line=dict(width=0)),  # Remove the bar outline
                 hovertemplate="<b>Bacterium:</b> " 
-                + bacterium_name + "<br>" 
+                + bacterium_name 
+                + "<br>" 
                 + "<b>Sample:</b> %{x}<br>" 
                 + "<b>Abundance (log10):</b> %{y:.2f}<br>" 
                 + "<extra></extra>",  # Remove secondary box
@@ -82,8 +83,8 @@ bottom_margin = max(150, int(max_label_length * 5))
 
 # Calculate right margin for legend based on number of bacteria and label length
 max_bacteria_name_length = (
-    max(len(name) for name in df_reduced_second.index) 
-    if len(df_reduced_second.index) > 0 
+    max(len(name) for name in df_reduced_second.index)
+    if len(df_reduced_second.index) > 0
     else 10
 )
 right_margin = max(250, int(max_bacteria_name_length * 6))
