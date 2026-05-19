@@ -56,11 +56,11 @@ def add_traces(fig, x_labels):
                 name=bacterium_name,  # Bacterium name as legend label
                 marker_color=[color_map[bacterium_name] for _ in x_labels],
                 marker=dict(line=dict(width=0)),  # Remove the bar outline
-                hovertemplate="<b>Bacterium:</b> " 
-                + bacterium_name 
-                + "<br>" 
-                + "<b>Sample:</b> %{x}<br>" 
-                + "<b>Abundance (log10):</b> %{y:.2f}<br>" 
+                hovertemplate="<b>Bacterium:</b> "
+                + bacterium_name
+                + "<br>"
+                + "<b>Sample:</b> %{x}<br>"
+                + "<b>Abundance (log10):</b> %{y:.2f}<br>"
                 + "<extra></extra>",  # Remove secondary box
             )
         )
