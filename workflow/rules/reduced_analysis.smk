@@ -487,7 +487,7 @@ rule export_taxa_collapsed_absolute:
         "--input-path {input} "
         "--output-path {output} "
         "2> {log}"
-        
+
 
 rule convert_taxa_collapsed_absolute_tsv:
     input:
