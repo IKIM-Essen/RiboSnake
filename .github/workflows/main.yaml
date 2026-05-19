@@ -51,7 +51,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Lint workflow
-      uses: snakemake/snakemake-github-action@v1
+      uses: snakemake/snakemake-github-action@v2
       with:
         directory: .
         snakefile: workflow/Snakefile
