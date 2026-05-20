@@ -61,6 +61,8 @@ For installation details, see the [instructions in the Snakemake documentation](
 
 ### Step 4: Execute workflow
 
+#### 4.1 Execution with conda
+
 Activate the conda environment:
 
     conda activate snakemake
@@ -89,6 +91,30 @@ The environment variable can be set like this:
 Then run the snakemake command like above with the addition of the storage flag:
 
     snakemake --cores $N --use-conda --shared-fs-usage none
+
+#### 4.1 Execution with container
+
+If you want to run the workflow by executing the environments inside a container instead of using conda, you can use snakemakes own containerization function. For this, you first need to install apptainer in your snakemake environment of choice. Then run
+
+    snakemake --containerize > containerization/Dockerfile
+
+to create a dockerfile. Then create an apptainer definition file with
+
+    python containerization/dockerfile_to_singularity.py containerization/Dockerfile --output containerization/my_container.def
+
+Now you can generate a .sif file by running
+
+    apptainer build containerization/my_container.sif containerization/my_container.def
+
+To run the workflow activate your snakemake environment (that holds apptainer as well) with conda, as you usually do. Then you can run the workflow with
+
+    snakemake --cores all --software-deployment-method conda apptainer --shared-fs-usage none
+
+If you need to mount a database, that is stored somewhere else then your current working environment you can mount it by adding the flag:
+
+    --singularity-args "--bind /path/to/the/database"
+
+Please note that if you do this, you need to create all the environments once with conda, before using apptainer!
 
 ### Step 5: Investigate results
 
