@@ -861,14 +861,19 @@ rule zip_report:
         "../envs/snakemake.yaml"
     shell:
         """
+        set -euo pipefail
+        exec > {log} 2>&1
+
+        echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] Starting zip_report for {wildcards.date}"
         mkdir -p results/{wildcards.date}/16S-report/
         mkdir -p results/{wildcards.date}/16S-report/additional/
         cp -r {input} results/{wildcards.date}/16S-report/additional/
-        rm results/{wildcards.date}/16S-report/additional/report.zip
+        rm -f results/{wildcards.date}/16S-report/additional/report.zip || true
         cp {input.report} results/{wildcards.date}/16S-report/
-        tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
-        cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
+        tar -czvf {output} results/{wildcards.date}/16S-report/
+        cp {output} {params.outpath}
         rm -r results/{wildcards.date}/16S-report
+        echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] Finished zip_report for {wildcards.date}"
         """
 
 rule snakemake_report:
