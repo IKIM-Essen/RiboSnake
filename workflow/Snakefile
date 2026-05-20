@@ -16,17 +16,6 @@ pepfile: config["pepfile"]
 report: "report/workflow.rst"
 
 
-if config["Modus"] != "VaSeqIs":
-
-    include: "rules/common.smk"
-    include: "rules/preprocessing.smk"
-    include: "rules/filtering.smk"
-    include: "rules/qualitycontroll.smk"
-    include: "rules/classification.smk"
-    include: "rules/chimera_checking.smk"
-    include: "rules/statistic_analysis.smk"
-    include: "rules/bowtie.smk"
-
 if config["Modus"] == "VaSeqIs":
 
     include: "rules/common.smk"
@@ -35,11 +24,6 @@ if config["Modus"] == "VaSeqIs":
 if config["include-data-prep"]:
 
     include: "rules/preparedata.smk"
-
-
-if config["Modus"] == "reduced":
-
-    include: "rules/reduced_analysis.smk"
 
 
 if config["database"]["Silva"]:
