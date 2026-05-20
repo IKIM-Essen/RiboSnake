@@ -13,10 +13,6 @@ testing: False
 include-data-prep: False
 # Modus: Can be set to "DADA2", "vsearch" or "reduced"
 Modus: "VaSeqIs"
-# Longitudinal analysis, for further parameters look at line 204 of this document
-longitudinal: False
-# Whether to use bowtie2 for excluding human host contamination or not
-bowtie: False
 # Paths to the directories holding the fastqs
 input: ../incoming/
 data: data/
@@ -30,14 +26,6 @@ metadata: config/pep/metadata.txt
 
 # Remove columns from analysis
 remove-columns: []
-# Parameters for plots
-metadata-parameters:
-  taxa-heatmap-column: subject
-  beta-metadata-column: subject
-  gneiss-metadata-column: subject
-  absolute-taxa-name: subject
-  # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
-  cluster: features
 # Feature classification with ancom
 ancom:
   # Catgorical metadata column to analyse
@@ -159,102 +147,3 @@ rarefaction:
   metric: euclidean
   # Samples can be clustered with neighbor joining or UPGMA ("nj", "upgma")
   clustering_method: nj
-# Parameters for diversity analysis
-diversity:
-  # Parameters for alpha-diversity analysis
-  alpha:
-    # Metric to be computed. Possible metrics are: 'ace', 'berger_parker_d', 'brillouin_d', 'chao1',
-    # 'chao1_ci', 'dominance', 'doubles', 'enspie', 'esty_ci', 'fisher_alpha',
-    # 'gini_index', 'goods_coverage', 'heip_e', 'kempton_taylor_q',
-    # 'lladser_pe', 'margalef', 'mcintosh_d', 'mcintosh_e', 'menhinick',
-    # 'michaelis_menten_fit', 'observed_features', 'osd', 'pielou_e', 'robbins',
-    # 'shannon', 'simpson', 'simpson_e', 'singles', 'strong'
-    diversity-metric: ["pielou_e"]
-    # Metric to be computed
-    phylogeny-metric: ["faith_pd"]
-    # Alpha-correlation method: spearman or pearson
-    correlation-method: 'spearman'
-  # Parameters for beta-diversity analysis
-  beta:
-    # Metric to be computed. Possible metrics are: 'aitchison', 'braycurtis', 'canberra',
-    # 'canberra_adkins', 'chebyshev', 'cityblock', 'correlation', 'cosine',
-    # 'dice', 'euclidean', 'hamming', 'jaccard', 'jensenshannon', 'kulsinski',
-    # 'matching', 'minkowski', 'rogerstanimoto', 'russellrao', 'seuclidean',
-    # 'sokalmichener', 'sokalsneath', 'sqeuclidean', 'yule'
-    diversity-metric: ["euclidean"]
-    # A pseudocount to handle zeros for compositional metrics
-    diversity-pseudocount: 1
-    # The number of concurrent jobs to use in performing this calculation
-    diversity-n-jobs: 3
-    # Correlation test to be applied ('spearman', 'pearson')
-    correlation-method: 'spearman'
-    # The number of permutations to be run when computing p-values
-    correlation-permutations: 999
-    # The beta diversity metric to be computed ('weighted_normalized_unifrac',
-    # 'generalized_unifrac', 'weighted_unifrac', 'unweighted_unifrac')
-    phylogeny-metric: ['weighted_normalized_unifrac']
-    # Perform variance adjustment based on Chang et al. BMC Bioinformatics 2011
-    phylogeny-variance-adjusted: True
-# If DADA2 is set to true, these parameters are used for denoising and clustering paired-end-data with DADA2
-dada2-paired:
-  # Position at which forward reads should be truncated at the 3' end due to low quality
-  trunc-len-f: 240
-  # Position at which reverse reads should be truncated at the 3' end due to low quality
-  trunc-len-r: 240
-  # Position at which forward reads should be truncated at the 5' end due to low quality
-  trim-left-f: 10
-  # Position at which reverse reads should be truncated at the 5' end due to low quality
-  trim-left-r: 10
-  # Forward reads with number of expected errors higher than this value will be discarded
-  max-ee-f: 2.0
-  # Reverse reads with number of expected errors higher than this value will be discarded.
-  max-ee-r: 2.0
-  # Reads are truncated at the first instance of a quality score less than or equal to this value
-  trunc-q: 5
-  # The minimum length of the overlap required for merging the forward and reverse reads
-  min-overlap: 12
-  # The method used to pool samples for denoising ('independent', 'pseudo')
-  pooling-method: 'independent'
-  # The method used to remove chimeras ('none', 'consensus', 'pooled')
-  chimera-method: 'consensus'
-  # The minimum abundance of potential parents of a sequence being tested as chimeric, expressed as a 
-  # fold-change versus the abundance of the sequence being tested
-  min-fold-parent-over-abundance: 1.0
-  # The number of reads to use when training the errormodel
-  n-reads-learn: 1000000
-# If DADA2 is set to true, these parameters are used for denoising and clustering single-end-data with DADA2
-dada2-single:
-  # Position at which reads should be truncated at the 3' end due to low quality
-  trunc-len: 240
-  # Position at which reads should be truncated at the 5' end due to low quality
-  trim-left: 10
-  # Reads with number of expected errors higher than this value will be discarded
-  max-ee: 2.0
-  # Reads are truncated at the first instance of a quality score less than or equal to this value
-  trunc-q: 5
-  # The method used to pool samples for denoising ('independent', 'pseudo')
-  pooling-method: 'independent'
-  # The method used to remove chimeras ('none', 'consensus', 'pooled')
-  chimera-method: 'consensus'
-  # The minimum abundance of potential parents of a sequence being tested as chimeric, expressed as a 
-  # fold-change versus the abundance of the sequence being tested
-  min-fold-parent-over-abundance: 1.0
-  # The number of reads to use when training the errormodel
-  n-reads-learn: 1000000
-
-# ===============================
-# Feature rankings, please add present metadata columns to the "formula"
-# ===============================
-
-# Creating rankings for feature impact on specific metadata
-songbird:
-  # Specifies the width of the prior distribution of the differentials
-  differential_prior: 0.5
-  # Number at which sample with a smaller occurance should be filtered out
-  min_sample_count: 0
-  # Number at which features with a smaller occurance should be filtered out
-  min_feature_count: 0
-  # Impacts how often a "measurement" is taken for these plots
-  summary_interval: 1
-  # Formula
-  formula: "sex+age"
