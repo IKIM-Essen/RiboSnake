@@ -1,4 +1,4 @@
-# RiboSnake: 16S rRNA analysis workflow with QIIME2 and Snakemake
+# RiboSnake for VaSequIs: 16S rRNA analysis workflow with QIIME2 and Snakemake
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.10-brightgreen.svg)](https://snakemake.bitbucket.io)
 [![Build Status](https://travis-ci.org/snakemake-workflows/16S.svg?branch=master)](https://travis-ci.org/snakemake-workflows/16S)
@@ -12,6 +12,10 @@ Qiime2 workflow for 16S analysis created with snakemake.
 ## Usage
 
 If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) repository and, if available, its DOI (see above).
+
+## WARNING: This branch is special!!!
+
+This branch is created specifically for the VaSeqIs project. This means, that most of the analysis results are cut from this branch. The main output are two tables, holding relative and absolute abundances on genus level, which can be used for further, individual analyses.
 
 ## Requirements
 
