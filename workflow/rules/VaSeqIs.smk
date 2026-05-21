@@ -516,6 +516,7 @@ rule convert_taxa_collapsed_relative_tsv:
     output:
         report(
             "results/{date}/visual/report/taxa_collapsed_relative.tsv",
+            caption="../report/relative-taxa.rst",
             category="1. Abundances",
         ),
     params:
@@ -552,6 +553,7 @@ rule convert_taxa_collapsed_absolute_tsv:
     output:
         report(
             "results/{date}/visual/report/taxa_collapsed_absolute.tsv",
+            caption="../report/absolute-taxa.rst",
             category="1. Abundances",
         ),
     log:
@@ -754,6 +756,7 @@ rule all_filter:
     output:
         report(
             "results/{date}/visual/allfilter.html",
+            caption="../report/all-filter.rst",
             category="1. Abundances",
         ),
     log:
@@ -807,19 +810,19 @@ rule report_files:
         paired_seqs=report(
             directory("results/{date}/visual/report/paired-seqs"),
             caption="../report/paired-seqs.rst",
-            category="4. Qualitycontrol",
+            category="2. Qualitycontrol",
             htmlindex="index.html",
         ),
         demux_filter_stats=report(
             directory("results/{date}/visual/report/demux-joined-filter-stats"),
             caption="../report/demux-filter-stats.rst",
-            category="4. Qualitycontrol",
+            category="2. Qualitycontrol",
             htmlindex="index.html",
         ),
         fastq_stats=report(
             directory("results/{date}/visual/report/fastq_stats"),
             caption="../report/fastq-stats.rst",
-            category="4. Qualitycontrol",
+            category="2. Qualitycontrol",
             htmlindex="index.html",
         ),
     log:
@@ -836,7 +839,7 @@ rule include_metadata:
         report(
             "results/{date}/visual/report/sample.tsv",
             caption="../report/metadata.rst",
-            category="4. Qualitycontrol",
+            category="2. Qualitycontrol",
         ),
     log:
         "logs/{date}/visualisation/metadata.log",
