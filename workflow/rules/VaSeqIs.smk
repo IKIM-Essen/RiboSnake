@@ -580,6 +580,26 @@ rule separate_samples:
     script:
         "../scripts/separate_samples.py"
 
+
+rule compress_samples:
+    input:
+        directory("results/{date}/visual/report/sep_sample")
+    output:
+        report(
+            "results/{date}/visual/report/sep_sample.tar.gz",
+            caption="../report/all-filter.rst",
+            category="1. Abundances",
+        )
+    log:
+        "logs/{date}/outputs/separate-samples.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        """
+        tar -czf {output} {input}
+        """
+
+
 rule visualize_samples:
     input:
         "results/{date}/out/demux-paired-end.qza",
@@ -853,6 +873,7 @@ rule zip_report:
         "results/{date}/visual/table-cluster-lengthfilter.qzv",
         "results/{date}/visual/fastq_stats.qzv",
         "results/{date}/visual/allfilter.html",
+        "results/{date}/visual/report/sep_sample.tar.gz",
         report="results/{date}/out/report.zip",
     output:
         "results/{date}/{date}.tar.gz",
@@ -885,6 +906,7 @@ rule snakemake_report:
         "results/{date}/visual/allfilter.html",
         "results/{date}/visual/report/sample.tsv",
         "results/{date}/visual/report/sep_sample",
+        "results/{date}/visual/report/sep_sample.tar.gz",
     output:
         "results/{date}/out/report.zip",
     params:
@@ -901,6 +923,10 @@ rule snakemake_report:
 rule concatenate_logs:
     input:
         "results/{date}/{date}.tar.gz",
+    conda:
+        "../envs/python.yaml"
+    log:
+        "logs/{date}/outputs/logs.log",
     output:
         "logs/{date}_logs.tar.gz",
     shell:
