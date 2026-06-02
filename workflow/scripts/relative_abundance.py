@@ -33,9 +33,10 @@ subdir = os.listdir(directory)
 while b < len(subdir):
     orig_dir = directory + "/" + subdir[b]
     new_dir = directory
-    for f in os.listdir(orig_dir):
-        path = orig_dir + "/" + f
-        shutil.move(path, new_dir)
+    if os.path.isdir(orig_dir):
+        for f in os.listdir(orig_dir):
+            path = orig_dir + "/" + f
+            shutil.move(path, new_dir)
     b = b + 1
 # Read the specific csv holding the information, creating a dataframe, adding up all feature frequencies
 datadir = str(snakemake.output.feature_table) + "/"
@@ -49,7 +50,7 @@ abundance = float(str(snakemake.params))
 column_sums = frequency.sum()
 
 # Then, calculate the median value of the column sums
-median_of_sums = column_sums.median()
+median_of_sums = frequency["Abundance"].median()
 
 endnumber = median_of_sums * abundance
 endnumber = int(endnumber)

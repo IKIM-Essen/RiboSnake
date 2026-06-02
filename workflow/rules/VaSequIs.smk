@@ -583,7 +583,7 @@ rule separate_samples:
 
 rule compress_samples:
     input:
-        directory("results/{date}/visual/report/sep_sample")
+        "results/{date}/visual/report/sep_sample"
     output:
         report(
             "results/{date}/visual/report/sep_sample.tar.gz",
@@ -916,7 +916,7 @@ rule snakemake_report:
     conda:
         "../envs/snakemake.yaml"
     shell:
-        "snakemake --nolock --report {output} "
+        "snakemake --profile '' --nolock --report {output} "
         "{params.for_testing} "
         "> {log} 2>&1"
 

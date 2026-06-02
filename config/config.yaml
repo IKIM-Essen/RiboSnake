@@ -12,11 +12,11 @@ testing: False
 # If data-preparation should be enabled
 include-data-prep: False
 # Modus: Can be set to "DADA2", "vsearch" or "reduced"
-Modus: "VaSeqIs"
+Modus: "VaSequIs"
 # Paths to the directories holding the fastqs
-input: ../incoming/
+input: /groups/ds/projects/16S/fastq/incoming/
 data: data/
-output: ../report/
+output: report/
 # Path to the sheet holding metadata information
 metadata: config/pep/metadata.txt
 

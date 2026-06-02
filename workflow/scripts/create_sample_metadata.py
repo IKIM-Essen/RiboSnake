@@ -88,7 +88,7 @@ if len(sample_list) == len(metadata_name_list):
         )
 
 # Replacing empty metadata-columns with 0 and after that removing them from the file
-metadata.fillna(0, inplace=True)
+metadata.fillna("0", inplace=True)
 metadata.rename(columns={"sample_name": "sample-ID"}, inplace=True)
 metadata.to_csv(snakemake.output.metadata, sep="\t", index=False)
 

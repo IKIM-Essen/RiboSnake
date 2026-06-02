@@ -133,7 +133,12 @@ elif datatype == "SampleData[SequencesWithQuality]":
 merged_df = merged_df.fillna(0)
 
 # Convert all numbers to integers
-merged_df = merged_df.apply(pd.to_numeric, errors="ignore", downcast="integer")
+for col in merged_df.columns:
+    try:
+        merged_df[col] = pd.to_numeric(merged_df[col], errors="raise").astype("int64")
+    except (ValueError, TypeError):
+        # Falls die Spalte nicht-numerischen Text enthält (z.B. Sample-IDs), einfach überspringen
+        pass
 
 # Generate HTML table
 html_table = merged_df.to_html(index=True, classes="qiime2-table")

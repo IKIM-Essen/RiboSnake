@@ -17,12 +17,12 @@ report: "report/workflow.rst"
 
   
 containerized: "containerization/my_container.sif"
+# envvars: "Q2CLI_CACHE_DIR"
 
-
-if config["Modus"] == "VaSeqIs":
+if config["Modus"] == "VaSequIs":
 
     include: "rules/common.smk"
-    include: "rules/VaSeqIs.smk"
+    include: "rules/VaSequIs.smk"
 
 if config["include-data-prep"]:
 

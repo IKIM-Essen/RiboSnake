@@ -1,2 +1,7 @@
-sample-ID	subject	year	month	day	sex	swab_site	run_date
-NAME	subject	2022	03	01	d	arm	2022-03-01
+sample-ID	subject	year	month	day	age	sex	medication	swab_site	run_date
+#q2:types	categorical	numeric	numeric	numeric	numeric	categorical	categorical	categorical	categorical
+FWEH2609	FWEH2609	2026	06	01	0	0	0	WW	2026-06-01
+FWEH2610	FWEH2610	2026	06	01	0	0	0	WW	2026-06-01
+FWEH2610	FWEH2610	2026	06	01	0	0	0	WW	2026-06-01
+FWEH2611	FWEH2611	2026	06	01	0	0	0	WW	2026-06-01
+FWEH2611	FWEH2611	2026	06	01	0	0	0	WW	2026-06-01

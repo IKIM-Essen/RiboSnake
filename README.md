@@ -15,7 +15,7 @@ If you use this workflow in a paper, don't forget to give credits to the authors
 
 ## WARNING: This branch is special!!!
 
-This branch is created specifically for the VaSeqIs project. This means, that most of the analysis results are cut from this branch. The main output are two tables, holding relative and absolute abundances on genus level, which can be used for further, individual analyses.
+This branch is created specifically for the VaSequIs project. This means, that most of the analysis results are cut from this branch. The main output are two tables, holding relative and absolute abundances on genus level, which can be used for further, individual analyses.
 
 ## Requirements
 

@@ -4,8 +4,6 @@
 !config/pep/*
 !.tests
 !.tests/**/*
-!resources
-!resources/*
 !workflow
 !workflow/**
 .gitignore
@@ -17,3 +15,6 @@
 !.github
 !.github/**
 !contributions
+!report
+!report/
+

@@ -1,13 +1,14 @@
 channels:
   - conda-forge
   - bioconda
+  - nodefaults
 dependencies:
-  - pandas=1.2.5
+  - pandas
   - prettytable
   - oyaml
   - biom-format
   - python
-  - kraken2=2.1.2
+  - kraken2
   - bowtie2
   - samtools
   - matplotlib
