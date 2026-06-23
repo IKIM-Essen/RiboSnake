@@ -1,0 +1,1 @@
+Table holding the absolute abundances of the taxa on genus level.
