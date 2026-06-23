@@ -373,6 +373,7 @@ rule export_taxa_collapsed_absolute:
         "--output-path {output} "
         "2> {log}"
 
+
 rule convert_taxa_collapsed_absolute_tsv:
     input:
         "results/{date}/visual/report/taxa_collapsed_absolute/",
