@@ -6,7 +6,7 @@ from os import mkdir
 from shutil import move, copy2
 from datetime import date, datetime
 import sys
-
+import re
 
 sys.stderr = open(snakemake.log[0], "w")
 
@@ -49,8 +49,12 @@ for file in files_to_copy:
 # Reading the sample names and the metadata from the file-names and the metadata.csv file, that needs to be provided
 files = os.listdir(DATA_PATH)
 sample_list = []
+# Strip the standardized Illumina suffix (_S<n>_L<lane>_R<1|2>_<chunk>.fastq.gz)
+# instead of splitting on the first underscore, so sample names that contain
+# underscores (e.g. ZA6_2_S) are preserved instead of collapsing to their prefix.
+ILLUMINA_SUFFIX = re.compile(r"_S\d+_L\d+_R[12]_\d+\.fastq\.gz$")
 for name in files:
-    sample = name.split("_")[0]
+    sample = ILLUMINA_SUFFIX.sub("", name)
     sample_list.append(sample)
 sample_list = list(set(sample_list))
 metadata = pd.read_csv(str(snakemake.input), header=0, delimiter=",")
@@ -107,9 +111,7 @@ sample_info.drop(labels=["#q2:types"], axis=0, inplace=True)
 i = 0
 while i < len(sample_info.index):
     for file in files_to_copy:
-        if sample_info.index[i] in file and len(sample_info.index[i]) == len(
-            file.split("_")[0]
-        ):
+        if sample_info.index[i] == ILLUMINA_SUFFIX.sub("", file):   
             if "SampleData[PairedEndSequencesWithQuality]" in str(
                 snakemake.params.datatype
             ):
