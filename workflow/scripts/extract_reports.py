@@ -51,19 +51,21 @@ while b < len(subdir):
     elif "heatmap_gneiss" in subdir[b]:
         svg = datadir + "heatmap.svg"
         shutil.copy(svg, snakemake.output.gneiss)
-    if "alpha-rarefaction" in subdir[b]:
+    elif "alpha-rarefaction" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.alpha_html)
-    if "paired-seqs" in subdir[b]:
+    elif "paired-seqs" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.paired_seqs)
-    if "fastq_stats" in subdir[b]:
+    elif "fastq_stats" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.fastq_stats)
-    if "demux-joined-filter-stats" in subdir[b]:
+    elif "demux-joined-filter-stats" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.demux_filter_stats)
-    if "dada2-stats" in subdir[b]:
+    elif "dada2-stats" in subdir[b]:
         html = datadir
         shutil.copytree(html, snakemake.output.dada2)
+    else:
+        print("No matching report found for " + subdir[b])
     b = b + 1

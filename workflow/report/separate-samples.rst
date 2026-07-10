@@ -1,0 +1,1 @@
+Compressed directory holding files for relative and absolute abundances for taxa on genus level for every sample separately.

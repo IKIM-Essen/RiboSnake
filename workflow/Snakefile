@@ -15,45 +15,18 @@ pepfile: config["pepfile"]
 
 report: "report/workflow.rst"
 
-
+  
 containerized: "containerization/my_container.sif"
 
 
-include: "rules/common.smk"
-include: "rules/preprocessing.smk"
-include: "rules/filtering.smk"
-include: "rules/qualitycontroll.smk"
-include: "rules/classification.smk"
-include: "rules/chimera_checking.smk"
-include: "rules/statistic_analysis.smk"
-include: "rules/bowtie.smk"
+if config["Modus"] == "VaSeqIs":
 
+    include: "rules/common.smk"
+    include: "rules/VaSeqIs.smk"
 
 if config["include-data-prep"]:
 
     include: "rules/preparedata.smk"
-
-
-if config["Modus"] == "reduced":
-
-    include: "rules/reduced_analysis.smk"
-
-
-if config["Modus"] == "vsearch":
-
-    include: "rules/outputs_vsearch.smk"
-    include: "rules/visualisation.smk"
-
-
-if config["Modus"] == "DADA2":
-
-    include: "rules/outputs_DADA2.smk"
-    include: "rules/visualisation.smk"
-
-
-if config["longitudinal"]:
-
-    include: "rules/longitudinal.smk"
 
 
 if config["database"]["Silva"]:
