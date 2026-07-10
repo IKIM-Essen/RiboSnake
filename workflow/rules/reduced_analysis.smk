@@ -670,9 +670,52 @@ if config["Modus"] == "DADA2":
             rm results/{wildcards.date}/16S-report/additional/report.zip
             cp {input.report} results/{wildcards.date}/16S-report/
             tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
+            mkdir -p $(dirname {params.outpath})
             cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
             rm -r results/{wildcards.date}/16S-report
             """
+
+
+        "-i {params.export_dir}/feature-table.biom "
+        "-o {output} "
+        "--to-tsv --header-key taxonomy "
+        "2>> {log}"
+
+
+rule export_taxa_collapsed_absolute:
+    input:
+        "results/{date}/out/taxa_collapsed.qza",
+    output:
+        directory("results/{date}/visual/report/taxa_collapsed_absolute/"),
+    log:
+        "logs/{date}/visualisation/export_taxa_collapsed_absolute.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime tools export "
+        "--input-path {input} "
+        "--output-path {output} "
+        "2> {log}"
+
+rule convert_taxa_collapsed_absolute_tsv:
+    input:
+        "results/{date}/visual/report/taxa_collapsed_absolute/",
+    output:
+        report(
+            "results/{date}/visual/report/taxa_collapsed_absolute.tsv",
+            caption="../report/absolute-taxa.rst",
+            category="2. Taxonomy",
+        ),
+    log:
+        "logs/{date}/visualisation/convert_taxa_collapsed_absolute.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "biom convert "
+        "-i {input}/feature-table.biom "
+        "-o {output} "
+        "--to-tsv --header-key taxonomy "
+        "2> {log}"
 
 
 if config["Modus"] == "reduced":
@@ -769,6 +812,8 @@ if config["Modus"] == "reduced":
 
     rule snakemake_report:
         input:
+            "results/{date}/visual/report/taxa_collapsed_absolute.tsv",
+            "results/{date}/visual/report/taxa_collapsed_relative.tsv",
             "results/{date}/visual/heatmap_binary.html",
             "results/{date}/visual/report/heatmap.svg",
             "results/{date}/visual/unzipped",
@@ -853,6 +898,7 @@ if config["Modus"] == "reduced":
             rm results/{wildcards.date}/16S-report/additional/report.zip
             cp {input.report} results/{wildcards.date}/16S-report/
             tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
+            mkdir -p $(dirname {params.outpath})
             cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
             rm -r results/{wildcards.date}/16S-report
             """
