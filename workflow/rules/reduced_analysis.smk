@@ -676,48 +676,6 @@ if config["Modus"] == "DADA2":
             """
 
 
-        "-i {params.export_dir}/feature-table.biom "
-        "-o {output} "
-        "--to-tsv --header-key taxonomy "
-        "2>> {log}"
-
-
-rule export_taxa_collapsed_absolute:
-    input:
-        "results/{date}/out/taxa_collapsed.qza",
-    output:
-        directory("results/{date}/visual/report/taxa_collapsed_absolute/"),
-    log:
-        "logs/{date}/visualisation/export_taxa_collapsed_absolute.log",
-    conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime tools export "
-        "--input-path {input} "
-        "--output-path {output} "
-        "2> {log}"
-
-rule convert_taxa_collapsed_absolute_tsv:
-    input:
-        "results/{date}/visual/report/taxa_collapsed_absolute/",
-    output:
-        report(
-            "results/{date}/visual/report/taxa_collapsed_absolute.tsv",
-            caption="../report/absolute-taxa.rst",
-            category="2. Taxonomy",
-        ),
-    log:
-        "logs/{date}/visualisation/convert_taxa_collapsed_absolute.log",
-    conda:
-        "../envs/python.yaml"
-    shell:
-        "biom convert "
-        "-i {input}/feature-table.biom "
-        "-o {output} "
-        "--to-tsv --header-key taxonomy "
-        "2> {log}"
-
-
 if config["Modus"] == "reduced":
 
     rule table_compare_human:
