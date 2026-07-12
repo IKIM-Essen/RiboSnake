@@ -670,7 +670,7 @@ if config["Modus"] == "DADA2":
             rm results/{wildcards.date}/16S-report/additional/report.zip
             cp {input.report} results/{wildcards.date}/16S-report/
             tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
-            mkdir -p $(dirname {params.outpath})
+            mkdir -p {params.outpath}
             cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
             rm -r results/{wildcards.date}/16S-report
             """
@@ -856,7 +856,7 @@ if config["Modus"] == "reduced":
             rm results/{wildcards.date}/16S-report/additional/report.zip
             cp {input.report} results/{wildcards.date}/16S-report/
             tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
-            mkdir -p $(dirname {params.outpath})
+            mkdir -p {params.outpath}
             cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
             rm -r results/{wildcards.date}/16S-report
             """
