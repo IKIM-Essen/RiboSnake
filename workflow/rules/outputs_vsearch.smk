@@ -596,8 +596,6 @@ rule zip_report:
             metadata_column=get_metadata_columns(),
             diversity="phylogenetic",
         ),
-        "results/{date}/out/songbird/",
-        "results/{date}/out/differentials_taxonomy.tsv",
         "results/{date}/out/config_parameters.html",
         report="results/{date}/out/report.zip",
     output:
