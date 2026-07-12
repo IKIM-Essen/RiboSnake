@@ -32,10 +32,10 @@ metadata: config/pep/metadata.txt
 remove-columns: []
 # Parameters for plots
 metadata-parameters:
-  taxa-heatmap-column: subject
-  beta-metadata-column: subject
-  gneiss-metadata-column: subject
-  absolute-taxa-name: subject
+  taxa-heatmap-column: unique
+  beta-metadata-column: unique
+  gneiss-metadata-column: unique
+  absolute-taxa-name: unique
   # Specify which axes to cluster: ('features', 'samples', 'both', 'none')
   cluster: features
 # Feature classification with ancom
@@ -110,7 +110,7 @@ threads: 15
 filtering:
   # Relative threshold for the abundance filtering
   # In case of environmental samples: 0.0005
-  relative-abundance-filter: 0.001
+  relative-abundance-filter: 0.000001
   # Minimum length of a sequence to be retained
   # In case of shorter sequences: 140
   min-seq-length: 200
@@ -241,20 +241,3 @@ dada2-single:
   min-fold-parent-over-abundance: 1.0
   # The number of reads to use when training the errormodel
   n-reads-learn: 1000000
-
-# ===============================
-# Feature rankings, please add present metadata columns to the "formula"
-# ===============================
-
-# Creating rankings for feature impact on specific metadata
-songbird:
-  # Specifies the width of the prior distribution of the differentials
-  differential_prior: 0.5
-  # Number at which sample with a smaller occurance should be filtered out
-  min_sample_count: 0
-  # Number at which features with a smaller occurance should be filtered out
-  min_feature_count: 0
-  # Impacts how often a "measurement" is taken for these plots
-  summary_interval: 1
-  # Formula
-  formula: "sex+age"
