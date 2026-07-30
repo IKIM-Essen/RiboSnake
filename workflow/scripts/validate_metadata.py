@@ -65,19 +65,23 @@ def _check_empty_values(frame, label):
             + bad_rows.to_string(index=False)
         )
 
-    empty_columns = [col for col in frame.columns if frame[col].astype(str).str.strip().eq("").all()]
+    empty_columns = [
+        col for col in frame.columns if frame[col].astype(str).str.strip().eq("").all()
+    ]
     if empty_columns:
-        errors.append(
-            f"{label} contains empty columns: " + ", ".join(empty_columns)
-        )
+        errors.append(f"{label} contains empty columns: " + ", ".join(empty_columns))
 
     return errors
 
 
 def main():
     inputs = snakemake.input if "snakemake" in globals() else {}
-    sample_tsv_path = _resolve_path(inputs, ["sample_tsv", "sample.tsv", "metadata", "sample_metadata"])
-    sample_info_path = _resolve_path(inputs, ["sample_info", "sample_info.txt", "sample_info_file"])
+    sample_tsv_path = _resolve_path(
+        inputs, ["sample_tsv", "sample.tsv", "metadata", "sample_metadata"]
+    )
+    sample_info_path = _resolve_path(
+        inputs, ["sample_info", "sample_info.txt", "sample_info_file"]
+    )
 
     if not sample_tsv_path:
         sample_tsv_path = "config/pep/sample.tsv"

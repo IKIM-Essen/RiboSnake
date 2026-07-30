@@ -47,7 +47,9 @@ def get_filenames():
             if ".fastq.gz" in file:
                 incoming_files.append(filename)
     except AttributeError:
-        print("Error: It seems there are missing values in sample_info.txt. Please check!")
+        print(
+            "Error: It seems there are missing values in sample_info.txt. Please check!"
+        )
     return incoming_files
 
 
