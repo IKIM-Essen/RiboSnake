@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.11.0...v0.12.0) (2026-07-30)
+
+
+### Features
+
+* Remove songbird ([#180](https://github.com/IKIM-Essen/RiboSnake/issues/180)) ([7f4a560](https://github.com/IKIM-Essen/RiboSnake/commit/7f4a560702f6b2edecbba9bb72b5b88b86a59ba3))
+
+
+### Bug Fixes
+
+* Fix report again ([#181](https://github.com/IKIM-Essen/RiboSnake/issues/181)) ([5bc4917](https://github.com/IKIM-Essen/RiboSnake/commit/5bc4917972554dbde484a36c502f016d46a58075))
+* report error ([#178](https://github.com/IKIM-Essen/RiboSnake/issues/178)) ([2889cbf](https://github.com/IKIM-Essen/RiboSnake/commit/2889cbf459ca068bb7d287ff6e21d8c8b08261fd))
+
 ## [0.11.0](https://github.com/IKIM-Essen/RiboSnake/compare/v0.10.0...v0.11.0) (2026-07-10)
 
 
