@@ -21,27 +21,35 @@ def get_date():
 def get_samples():
     incoming_files = get_filenames()
     names = []
-    for file in incoming_files:
-        name = file.split("_")[0]
-        names.append(name)
+    try:
+        for file in incoming_files:
+            name = file.split("_")[0]
+            names.append(name)
+    except IndexError:
+        print("There are no samples in this file.")
     return names
 
 
 def get_filenames():
     # read files from sample_info
-    data = pd.read_csv("config/pep/sample_info.txt")
-    if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
-        path_list1 = data["path1"].tolist()
-        path_list2 = data["path2"].tolist()
-        allpaths = path_list1 + path_list2
-    elif config["datatype"] == "SampleData[SequencesWithQuality]":
-        path_list1 = data["path1"].tolist()
-        allpaths = path_list1
-    incoming_files = []
-    for file in allpaths:
-        filename = file.split("/")[-1]
-        if ".fastq.gz" in file:
-            incoming_files.append(filename)
+    try:
+        data = pd.read_csv("config/pep/sample_info.txt")
+        if config["datatype"] == "SampleData[PairedEndSequencesWithQuality]":
+            path_list1 = data["path1"].tolist()
+            path_list2 = data["path2"].tolist()
+            allpaths = path_list1 + path_list2
+        elif config["datatype"] == "SampleData[SequencesWithQuality]":
+            path_list1 = data["path1"].tolist()
+            allpaths = path_list1
+        incoming_files = []
+        for file in allpaths:
+            filename = file.split("/")[-1]
+            if ".fastq.gz" in file:
+                incoming_files.append(filename)
+    except AttributeError:
+        print(
+            "Error: It seems there are missing values in sample_info.txt. Please check!"
+        )
     return incoming_files
 
 
@@ -53,7 +61,7 @@ def get_data_dir():
         direc = os.path.dirname(path)
         return direc
     except IndexError:
-        print("There is no data directory jet known to the workflow.")
+        print("Error: There is no data directory yet known to the workflow.")
 
 
 def get_file_dir(name):
@@ -73,6 +81,21 @@ def get_for_testing():
 
 def get_if_testing(string):
     return string if get_for_testing() else ""
+
+
+rule validate_metadata:
+    input:
+        sample_tsv="config/pep/sample.tsv",
+        sample_info="config/pep/sample_info.txt",
+    output:
+        touch("results/validate_metadata.ok"),
+    priority: 1000
+    log:
+        "logs/validate_metadata.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/validate_metadata.py"
 
 
 def get_reads_for_kraken():

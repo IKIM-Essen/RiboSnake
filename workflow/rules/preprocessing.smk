@@ -32,6 +32,7 @@ rule get_database:
 rule unzip_ref_gen:
     input:
         "resources/ref-genome.fna.gz",
+        "results/validate_metadata.ok",
     output:
         temp("resources/ref-genome.fna"),
     log:

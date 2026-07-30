@@ -81,6 +81,7 @@ rule all:
             "logs/{date}_logs.tar.gz",
             date=get_date(),
         ),
+        "results/validate_metadata.ok",
     output:
         touch(
             expand(
