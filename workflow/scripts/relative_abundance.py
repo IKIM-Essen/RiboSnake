@@ -12,21 +12,21 @@ sys.stderr = open(snakemake.log[0], "w")
 # Multiplying the number with the relative abundance filtering value to create a threshold for the
 # qiime filtering.
 
-# Reading the sample-table, creating a zip file
+# Reading the sample-table. The qiime2 artifact already IS a zip archive, so it is
+# read in place -- it used to be copied to a sibling "<name>.zip" first, which
+# collided with unzip_frequency_length reading the same artifact through the same
+# temp name (see rename_qzv.py for the full story: parallel rules, EOFError on
+# large artifacts).
 file = str(snakemake.input)
-name = os.path.splitext(file)[0]
-shutil.copy(file, name + ".zip")
-filename = name + ".zip"
-# Extract zip files to folder
-with zipfile.ZipFile(filename, "r") as zip_ref:
-    name = filename.split("/")[-1]
-    dir_name = os.path.dirname(str(snakemake.input))
-    new_dir = dir_name + "/" + name
-    if os.path.isdir(new_dir) and os.path.exists(new_dir):
-        shutil.rmtree(new_dir)
-    zip_ref.extractall(os.path.splitext(new_dir)[0] + "/")
-name = name.split(".")[0]
-directory = os.path.dirname(str(snakemake.input)) + "/" + name
+# Extract the artifact to a folder next to it
+dir_name = os.path.dirname(file)
+name = os.path.splitext(os.path.basename(file))[0]
+new_dir = dir_name + "/" + name
+if os.path.isdir(new_dir) and os.path.exists(new_dir):
+    shutil.rmtree(new_dir)
+with zipfile.ZipFile(file, "r") as zip_ref:
+    zip_ref.extractall(new_dir + "/")
+directory = new_dir
 # Moving the folder inventory one folder up
 b = 0
 subdir = os.listdir(directory)
