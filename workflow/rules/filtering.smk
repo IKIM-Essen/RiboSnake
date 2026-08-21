@@ -220,7 +220,7 @@ if (
 
 rule abundance_frequency:
     input:
-        "results/{date}/visual/table-cluster-lengthfilter.qzv",
+        qzv="results/{date}/visual/table-cluster-lengthfilter.qzv",
     output:
         abundance="results/{date}/out/abundance.txt",
         feature_table=directory("results/{date}/visual/table-cluster-lengthfilter/data"),
@@ -230,8 +230,15 @@ rule abundance_frequency:
         "logs/{date}/filtering/abundance-frequency.log",
     conda:
         "../envs/python.yaml"
-    script:
-        "../scripts/relative_abundance.py"
+    shell:
+        """
+        python workflow/scripts/relative_abundance.py \
+            --input "{input}" \
+            --relative-abundance "{params.relative_abundance}" \
+            --output-abundance "{output.abundance}" \
+            --feature-table "{output.feature_table}" \
+            > "{log}" 2>&1
+        """
 
 
 rule filter_frequency:

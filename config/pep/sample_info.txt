@@ -1,2 +1,14 @@
 sample-ID,run_date,path1,path2
-NAME,2022-03-01,path/file1,path/file2
+A.Keyboard,2022-02-24,data/2022-02-24/A.Keyboard_S5_L001_R1_001.fastq.gz,data/2022-02-24/A.Keyboard_S5_L001_R2_001.fastq.gz
+A.Left,2022-02-24,data/2022-02-24/A.Left_S3_L001_R1_001.fastq.gz,data/2022-02-24/A.Left_S3_L001_R2_001.fastq.gz
+A.Right,2022-02-24,data/2022-02-24/A.Right_S4_L001_R1_001.fastq.gz,data/2022-02-24/A.Right_S4_L001_R2_001.fastq.gz
+ext.positive,2022-02-24,data/2022-02-24/ext.positive_S11_L001_R1_001.fastq.gz,data/2022-02-24/ext.positive_S11_L001_R2_001.fastq.gz
+I.Left,2022-02-24,data/2022-02-24/I.Left_S1_L001_R1_001.fastq.gz,data/2022-02-24/I.Left_S1_L001_R2_001.fastq.gz
+I.Right,2022-02-24,data/2022-02-24/I.Right_S2_L001_R1_001.fastq.gz,data/2022-02-24/I.Right_S2_L001_R2_001.fastq.gz
+J.Left,2022-02-24,data/2022-02-24/J.Left_S6_L001_R1_001.fastq.gz,data/2022-02-24/J.Left_S6_L001_R2_001.fastq.gz
+J.Right,2022-02-24,data/2022-02-24/J.Right_S7_L001_R1_001.fastq.gz,data/2022-02-24/J.Right_S7_L001_R2_001.fastq.gz
+J.Keyboard,2022-02-24,data/2022-02-24/J.Keyboard_S8_L001_R1_001.fastq.gz,data/2022-02-24/J.Keyboard_S8_L001_R2_001.fastq.gz
+Swab.negative,2022-02-24,data/2022-02-24/Swab.negative_S9_L001_R1_001.fastq.gz,data/2022-02-24/Swab.negative_S9_L001_R2_001.fastq.gz
+ext.negative,2022-02-24,data/2022-02-24/ext.negative_S10_L001_R1_001.fastq.gz,data/2022-02-24/ext.negative_S10_L001_R2_001.fastq.gz
+PCR.negative,2022-02-24,data/2022-02-24/PCR.negative_S12_L001_R1_001.fastq.gz,data/2022-02-24/PCR.negative_S12_L001_R2_001.fastq.gz
+PCR.positive,2022-02-24,data/2022-02-24/PCR.positive_S13_L001_R1_001.fastq.gz,data/2022-02-24/PCR.positive_S13_L001_R2_001.fastq.gz

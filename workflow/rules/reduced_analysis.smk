@@ -28,13 +28,20 @@ rule rank_abundance:
         ),
         file="results/{date}/visual/report/rank-abundance/plots/rank-abundance.html",
     params:
-        "results/{date}/visual/report/rank-abundance/",
+        output_dir="results/{date}/visual/report/rank-abundance/",
     log:
         "logs/{date}/visualisation/rank-abundance.log",
     conda:
         "../envs/plot.yaml"
-    script:
-        "../scripts/rank-abundance.py"
+    shell:
+        """
+        python workflow/scripts/rank-abundance.py \
+            --input "{input}" \
+            --output-folder "{output.folder}" \
+            --output-file "{output.file}" \
+            --output-dir "{params.output_dir}" \
+            > "{log}" 2>&1
+        """
 
 
 rule unzip_frequency_length:
@@ -360,8 +367,15 @@ rule absolute_taxa:
         "logs/{date}/visualisation/absolute_taxabarplot.log",
     conda:
         "../envs/plot.yaml"
-    script:
-        "../scripts/absolute_taxabarplot.py"
+    shell:
+        """
+        python workflow/scripts/absolute_taxabarplot.py \
+            --input "{input}" \
+            --output "{output}" \
+            --samplename "{params.samplename}" \
+            --metadata "{params.metadata}" \
+            > "{log}" 2>&1
+        """
 
 
 rule biom_file:
@@ -602,6 +616,38 @@ if config["Modus"] == "DADA2":
             """
 
 
+rule export_taxa_collapsed_relative:
+    input:
+        "results/{date}/out/taxa_collapsed_relative.qza",
+    output:
+        directory("results/{date}/visual/report/taxa_collapsed_relative/"),
+    log:
+        "logs/{date}/visualisation/export_taxa_collapsed_relative.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime tools export "
+        "--input-path {input} "
+        "--output-path {output} "
+        "2> {log}"
+
+rule convert_taxa_collapsed_relative_tsv:
+    input:
+        "results/{date}/visual/report/taxa_collapsed_relative/",
+    output:
+        report(
+            "results/{date}/visual/report/taxa_collapsed_relative.tsv",
+            caption="../report/relative-taxa.rst",
+            category="2. Taxonomy",
+        ),
+    params:
+        export_dir="results/{date}/visual/report/taxa_collapsed_relative/",
+    log:
+        "logs/{date}/visualisation/taxa_collapsed_relative.log",
+    conda:
+        "../envs/python.yaml"
+    shell:
+        "biom convert "
         "-i {params.export_dir}/feature-table.biom "
         "-o {output} "
         "--to-tsv --header-key taxonomy "
@@ -822,7 +868,7 @@ if config["Modus"] == "reduced":
             rm results/{wildcards.date}/16S-report/additional/report.zip
             cp {input.report} results/{wildcards.date}/16S-report/
             tar -czvf results/{wildcards.date}/{wildcards.date}.tar.gz results/{wildcards.date}/16S-report/
-            mkdir -p $(dirname {params.outpath})
+            mkdir -p {params.outpath}
             cp results/{wildcards.date}/{wildcards.date}.tar.gz {params.outpath}
             rm -r results/{wildcards.date}/16S-report
             """
@@ -860,8 +906,14 @@ if config["bowtie"] == False:
             "logs/{date}/visualisation/frequency_difference.log",
         conda:
             "../envs/python.yaml"
-        script:
-            "../scripts/sample_freq_difference.py"
+        shell:
+            """
+            python workflow/scripts/sample_freq_difference.py \
+                --whuman "{params.visual_wh}" \
+                --wohuman "{params.visual_woh}" \
+                --output "{output}" \
+                > "{log}" 2>&1
+            """
 
 
 rule export_parameters:

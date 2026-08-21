@@ -1,2 +1,15 @@
-sample-ID	subject	year	month	day	sex	swab_site	run_date
-NAME	subject	2022	03	01	d	arm	2022-03-01
+sample-ID	subject	year	month	day	age	sex	swab-site	run_date
+#q2:types	categorical	numeric	numeric	numeric	numeric	categorical	categorical	categorical
+A.Left	Adrian	2022	02	16	28	m	LeftHand	2022-02-24
+A.Right	Adrian	2022	02	16	28	m	RightHand	2022-02-24
+A.Keyboard	Adrian	2022	02	16	28	m	KeyboardHand	2022-02-24
+ext.positive	ext-pos	2022	02	16	0	0	control	2022-02-24
+I.Left	Ivana	2022	02	16	35	w	LeftHand	2022-02-24
+I.Right	Ivana	2022	02	16	35	w	RightHand	2022-02-24
+J.Left	Jule	2022	02	16	25	w	LeftHand	2022-02-24
+J.Right	Jule	2022	02	16	25	w	RightHand	2022-02-24
+J.Keyboard	Jule	2022	02	16	25	w	KeyboardHand	2022-02-24
+Swab.negative	Swab-neg	2022	02	16	0	0	control	2022-02-24
+ext.negative	ext-neg	2022	02	16	0	0	control	2022-02-24
+PCR.negative	PCR-neg	2022	02	16	0	0	control	2022-02-24
+PCR.positive	PCR-pos	2022	02	16	0	0	control	2022-02-24
