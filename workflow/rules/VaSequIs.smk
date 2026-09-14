@@ -323,39 +323,145 @@ rule filter_frequency:
         "--o-filtered-data {output.seqs} "
         "--verbose 2> {log} "
 
+# --- filter_human: chunked, indexed BLAST -----------------------------------
+# Replaces the single `qiime quality-control exclude-seqs` call, which always
+# shells out to `blastn -subject` (no index) and silently DROPS --p-threads --
+# _blast.py's _blast() does not even take a threads argument. Measured on the
+# ECMO cohort (1,316,325 dereplicated sequences, job 168039): 154.7 core-hours
+# on ONE core = 4+ days of wall time on an exclusively allocated 64-core node.
+#
+# The index does NOT reduce the work (171.7 vs 154.7 core-hours) -- it only
+# makes it distributable, and blastn's own threading tops out near 4 cores.
+# The win therefore comes from running many INDEPENDENT blastn processes:
+# ~172 core-hours / 64 cores is under 3 hours.
+#
+# Why chunking is exactly equivalent, not just close: the decision is per
+# SEQUENCE. _extract_hits is a set union over independent output lines, so
+# concatenating N chunk outputs yields the identical hit set by construction.
+# Verified end-to-end on a 2000-sequence sample -- indexed and -subject agree
+# on 1132 raw hits AND on 1085 sequences after the perc_query_aligned rule.
+# The COHORT is never split: dereplication has already merged all samples into
+# one feature set, so the shared ASV table and the diversity metrics downstream
+# are untouched.
+BLAST_CHUNKS = int(config["filtering"].get("human-blast-chunks", 16))
+BLAST_CHUNK_THREADS = int(config["filtering"].get("human-blast-threads", 4))
+
+
+rule makeblastdb_human:
+    # 34 s on the human genome. Deliberately NOT cached in the shared repo:
+    # the runner rsyncs resources/ node-local on every run, and shipping a
+    # 3-4 GB index over JuiceFS costs far more than rebuilding it locally.
+    input:
+        "resources/ref-genome_upper.fna",
+    output:
+        temp(directory("resources/human_blastdb")),
+    log:
+        "logs/makeblastdb_human.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "mkdir -p {output} && "
+        "makeblastdb -in {input} -dbtype nucl "
+        "-out {output}/human -title human > {log} 2>&1"
+
+
+rule export_derepl_seqs:
+    input:
+        "results/{date}/out/derepl-seq.qza",
+    output:
+        temp("results/{date}/out/blast_human/query.fasta"),
+    params:
+        outdir=lambda w, output: os.path.dirname(output[0]),
+    log:
+        "logs/{date}/filtering/export-derepl-seq.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "qiime tools export --input-path {input} "
+        "--output-path {params.outdir} --verbose > {log} 2>&1 && "
+        "mv {params.outdir}/dna-sequences.fasta {output}"
+
+
+rule split_query_fasta:
+    input:
+        "results/{date}/out/blast_human/query.fasta",
+    output:
+        temp(expand("results/{{date}}/out/blast_human/chunk_{i}.fasta",
+                    i=range(BLAST_CHUNKS))),
+    log:
+        "logs/{date}/filtering/split-query.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/split_fasta.py"
+
+
+rule blast_human_chunk:
+    # Flags are byte-for-byte what q2_quality_control._blast._blast() builds,
+    # with -subject swapped for -db and -num_threads added. NOTE: no -evalue --
+    # _blast() appends it only `if evalue is not None`, and the rule passes no
+    # --p-evalue, so the production run had none. Adding one here would
+    # silently change which alignments are reported.
+    input:
+        query="results/{date}/out/blast_human/chunk_{i}.fasta",
+        db="resources/human_blastdb",
+    output:
+        temp("results/{date}/out/blast_human/chunk_{i}.tsv"),
+    params:
+        # _blast(): "blast uses float format but vsearch uses int" -> x100.
+        perc_identity=config["filtering"]["perc-identity"] * 100,
+    threads: BLAST_CHUNK_THREADS
+    log:
+        "logs/{date}/filtering/blast-chunk-{i}.log",
+    conda:
+        "../envs/qiime-only-env.yaml"
+    shell:
+        "blastn -query {input.query} -strand both "
+        "-outfmt '6 qseqid sseqid qlen qstart qend' "
+        "-db {input.db}/human -perc_identity {params.perc_identity} "
+        "-max_target_seqs 1 -num_threads {threads} -out {output} 2> {log}"
+
+
+rule human_hit_ids:
+    input:
+        expand("results/{{date}}/out/blast_human/chunk_{i}.tsv",
+               i=range(BLAST_CHUNKS)),
+    output:
+        "results/{date}/out/blast_human/human-ids.tsv",
+    params:
+        perc_query_aligned=config["filtering"]["perc-query-aligned"],
+    log:
+        "logs/{date}/filtering/human-hit-ids.log",
+    conda:
+        "../envs/python.yaml"
+    script:
+        "../scripts/blast_human_hits.py"
+
+
 rule filter_human:
     input:
         seq="results/{date}/out/derepl-seq.qza",
         table="results/{date}/out/derepl-table.qza",
-        ref_seq="resources/ref-genome_upper.qza",
+        ids="results/{date}/out/blast_human/human-ids.tsv",
     output:
         seq="results/{date}/out/derep-seq-nonhum.qza",
         table="results/{date}/out/derep-table-nonhum.qza",
         human_hit="results/{date}/out/human.qza",
-    params:
-        threads=config["threads"],
-        perc_identity=config["filtering"]["perc-identity"],
-        perc_query_aligned=config["filtering"]["perc-query-aligned"],
-    threads: config["threads"]
     log:
         "logs/{date}/filtering/filter-human.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
-        "qiime quality-control exclude-seqs "
-        "--i-query-sequences {input.seq} "
-        "--i-reference-sequences {input.ref_seq} "
-        "--p-threads {params.threads} "
-        "--p-perc-identity {params.perc_identity} "
-        "--p-perc-query-aligned {params.perc_query_aligned} "
-        "--o-sequence-hits {output.human_hit} "
-        "--o-sequence-misses {output.seq} "
-        "--verbose 2> {log} \n"
+        "qiime feature-table filter-seqs "
+        "--i-data {input.seq} --m-metadata-file {input.ids} "
+        "--o-filtered-data {output.human_hit} --verbose > {log} 2>&1 \n"
+        "qiime feature-table filter-seqs "
+        "--i-data {input.seq} --m-metadata-file {input.ids} --p-exclude-ids "
+        "--o-filtered-data {output.seq} --verbose >> {log} 2>&1 \n"
         "qiime feature-table filter-features "
-        "--i-table {input.table} "
-        "--m-metadata-file {output.seq} "
-        "--o-filtered-table {output.table} "
-        "--verbose 2> {log} "
+        "--i-table {input.table} --m-metadata-file {output.seq} "
+        "--o-filtered-table {output.table} --verbose >> {log} 2>&1"
+
 
 rule dereplication:
     input:
