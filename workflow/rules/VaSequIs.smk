@@ -366,20 +366,20 @@ rule makeblastdb_human:
 
 
 rule export_derepl_seqs:
+    # Reads the .qza as the ZIP it is, rather than starting the container and
+    # QIIME2 to copy one file out -- the repo idiom since 0c69404. The previous
+    # `qiime tools export` version also passed --verbose, which the tools
+    # commands (unlike plugin actions) do not accept.
     input:
         "results/{date}/out/derepl-seq.qza",
     output:
         temp("results/{date}/out/blast_human/query.fasta"),
-    params:
-        outdir=lambda w, output: os.path.dirname(output[0]),
     log:
         "logs/{date}/filtering/export-derepl-seq.log",
     conda:
-        "../envs/qiime-only-env.yaml"
-    shell:
-        "qiime tools export --input-path {input} "
-        "--output-path {params.outdir} --verbose > {log} 2>&1 && "
-        "mv {params.outdir}/dna-sequences.fasta {output}"
+        "../envs/python.yaml"
+    script:
+        "../scripts/extract_qza_fasta.py"
 
 
 rule split_query_fasta:
