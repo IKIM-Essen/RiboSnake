@@ -439,6 +439,17 @@ rule human_hit_ids:
 
 
 rule filter_human:
+    # A cohort WITHOUT a single human hit is a valid result, not an error:
+    # 16S-26-05 (drinking water, freshwater, activated sludge; no clinical
+    # samples on the run) had 0 of 197k-396k sequences, its 96 wastewater
+    # samples 2. QIIME refuses metadata without IDs ("Metadata must contain at
+    # least one ID"), which killed three cohorts in filter_human. With no IDs
+    # there is nothing to remove, so the inputs pass through unchanged -- the
+    # same result exclude-ids would give.
+    #
+    # human.qza is no longer produced: nothing in the workflow read it, and it
+    # cannot be built for an empty hit list. human-ids.tsv is the record of
+    # which sequences were human (with derepl-seq.qza it determines human.qza).
     input:
         seq="results/{date}/out/derepl-seq.qza",
         table="results/{date}/out/derepl-table.qza",
@@ -446,21 +457,26 @@ rule filter_human:
     output:
         seq="results/{date}/out/derep-seq-nonhum.qza",
         table="results/{date}/out/derep-table-nonhum.qza",
-        human_hit="results/{date}/out/human.qza",
     log:
         "logs/{date}/filtering/filter-human.log",
     conda:
         "../envs/qiime-only-env.yaml"
     shell:
-        "qiime feature-table filter-seqs "
-        "--i-data {input.seq} --m-metadata-file {input.ids} "
-        "--o-filtered-data {output.human_hit} --verbose > {log} 2>&1 \n"
-        "qiime feature-table filter-seqs "
+        "n_hits=$(awk 'NR > 1 && NF' {input.ids} | wc -l) \n"
+        "if [ \"$n_hits\" -eq 0 ]; then \n"
+        "    echo 'no human hits in {input.ids}: sequences and table passed "
+        "through unchanged' > {log} \n"
+        "    cp {input.seq} {output.seq} \n"
+        "    cp {input.table} {output.table} \n"
+        "else \n"
+        "    echo \"$n_hits human sequence(s) removed\" > {log} \n"
+        "    qiime feature-table filter-seqs "
         "--i-data {input.seq} --m-metadata-file {input.ids} --p-exclude-ids "
         "--o-filtered-data {output.seq} --verbose >> {log} 2>&1 \n"
-        "qiime feature-table filter-features "
+        "    qiime feature-table filter-features "
         "--i-table {input.table} --m-metadata-file {output.seq} "
-        "--o-filtered-table {output.table} --verbose >> {log} 2>&1"
+        "--o-filtered-table {output.table} --verbose >> {log} 2>&1 \n"
+        "fi"
 
 
 rule dereplication:
